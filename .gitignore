@@ -1,0 +1,94 @@
+## Git ignore for Visual Studio and .NET projects
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.cache
+*.vcxproj.user
+*.psess
+*.vsp
+*.vspx
+*.pdb
+
+# Visual Studio Code (keep common shared configs)
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Build output
+[Bb]in/
+[Oo]bj/
+**/bin/
+**/obj/
+**/out/
+**/[Dd]ebug*/
+**/[Rr]elease*/
+**/x64/
+**/x86/
+
+# Logs and diagnostics
+*.log
+*.tlog
+TestResults/
+*.trx
+*.cov
+*.coverage
+*.coveragexml
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+
+# Publish profiles and artifacts
+*.pubxml
+*.publishsettings
+**/Properties/PublishProfiles/*
+
+# Resharper / Rider
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+.idea/
+
+# StyleCop
+StyleCop.Cache
+
+# BenchmarkDotNet
+BenchmarkDotNet.Artifacts/
+
+# ASP.NET (IIS)
+App_Data/
+
+# Temporary, backups, locks
+*.tmp
+*.bak
+*.swp
+*.lock
+
+# Node / Frontend
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Template sample (ensure node_modules there is ignored)
+wwwroot/.themplate_sample/node_modules/
+
+# Rider / JetBrains caches
+.idea/
+
+# Optional: ignore local tooling folders
+.tools/
+.cache/
