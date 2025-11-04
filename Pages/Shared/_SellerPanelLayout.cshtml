@@ -40,8 +40,10 @@
                         پیشخوان
                         <span class="ms-auto w-2 h-2 rounded-full bg-primary-600 dark:bg-primary-400"></span>
                     </a>
-                    <!-- Profile (placeholder link) -->
-                    <a href="#" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">پروفایل فروشگاه</a>
+                    <!-- Profile -->
+                    <a asp-page="/seller-panel/Profile" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">پروفایل فروشگاه</a>
+                    <!-- Orders -->
+                    <a asp-page="/seller-panel/orders/Index" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">سفارش‌ها</a>
 
                     <!-- Products Management -->
                     <div class="space-y-1 mt-2">
@@ -57,6 +59,7 @@
                             </svg>
                         </button>
                         <div id="seller-products-menu" class="hidden me-6 space-y-1">
+                            <a asp-page="/seller-panel/products/Index" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">لیست محصولات</a>
                             <a asp-page="/seller-panel/products/Create" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">ایجاد محصول</a>
                         </div>
                     </div>
@@ -122,9 +125,11 @@
     </header>
     <nav class="p-4 space-y-1">
         <a asp-page="/seller-panel/Index" class="block px-4 py-3 text-sm font-medium rounded-lg bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">پیشخوان</a>
-        <a href="#" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">پروفایل فروشگاه</a>
+        <a asp-page="/seller-panel/Profile" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">پروفایل فروشگاه</a>
+        <a asp-page="/seller-panel/orders/Index" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">سفارش‌ها</a>
         <div class="mt-2">
             <div class="text-xs font-bold text-gray-500 dark:text-gray-400 mb-2">محصولات</div>
+            <a asp-page="/seller-panel/products/Index" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">مدیریت محصولات</a>
             <a asp-page="/seller-panel/products/Create" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">ایجاد محصول</a>
         </div>
         <div class="mt-2">

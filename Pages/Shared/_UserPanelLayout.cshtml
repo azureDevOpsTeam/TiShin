@@ -40,8 +40,14 @@
                         پیشخوان
                         <span class="ms-auto w-2 h-2 rounded-full bg-primary-600 dark:bg-primary-400"></span>
                     </a>
-                    <!-- Profile (placeholder link) -->
-                    <a href="#" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">پروفایل</a>
+                    <!-- Orders -->
+                    <a asp-page="/user-panel/orders/Index" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">سفارش‌ها</a>
+                    <!-- Addresses -->
+                    <a asp-page="/user-panel/addresses/Index" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">آدرس‌ها</a>
+                    <!-- Wallet -->
+                    <a asp-page="/user-panel/wallet/Index" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">کیف پول</a>
+                    <!-- Profile -->
+                    <a asp-page="/user-panel/Profile" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">پروفایل</a>
                 </nav>
             </div>
         </div>
@@ -84,7 +90,10 @@
     </header>
     <nav class="p-4 space-y-1">
         <a asp-page="/user-panel/Index" class="block px-4 py-3 text-sm font-medium rounded-lg bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">پیشخوان</a>
-        <a href="#" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">پروفایل</a>
+        <a asp-page="/user-panel/orders/Index" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">سفارش‌ها</a>
+        <a asp-page="/user-panel/addresses/Index" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">آدرس‌ها</a>
+        <a asp-page="/user-panel/wallet/Index" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">کیف پول</a>
+        <a asp-page="/user-panel/Profile" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">پروفایل</a>
     </nav>
 </div>
 <div id="mobile-sidebar-overlay" class="overlay transition fixed inset-0 z-40 bg-black/70 hidden" onclick="closeMobileSidebar()" role="presentation" aria-hidden="true"></div>

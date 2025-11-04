@@ -1,0 +1,42 @@
+@page
+@model TiShinShop.Pages.SellerPanel.ProfileModel
+@{
+    Layout = "~/Pages/Shared/_SellerPanelLayout.cshtml";
+    ViewData["Title"] = "پروفایل فروشنده";
+}
+
+<div class="space-y-6">
+    <h2 class="text-xl font-bold">پروفایل فروشنده</h2>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
+        <form method="post" class="space-y-4">
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm mb-1">نام</label>
+                    <input asp-for="Input.FirstName" class="form-input" />
+                    <span asp-validation-for="Input.FirstName" class="text-red-500 text-xs"></span>
+                </div>
+                <div>
+                    <label class="block text-sm mb-1">نام خانوادگی</label>
+                    <input asp-for="Input.LastName" class="form-input" />
+                    <span asp-validation-for="Input.LastName" class="text-red-500 text-xs"></span>
+                </div>
+                <div>
+                    <label class="block text-sm mb-1">ایمیل</label>
+                    <input asp-for="Input.Email" class="form-input" />
+                    <span asp-validation-for="Input.Email" class="text-red-500 text-xs"></span>
+                </div>
+                <div>
+                    <label class="block text-sm mb-1">شماره موبایل</label>
+                    <input asp-for="Input.PhoneNumber" class="form-input" />
+                    <span asp-validation-for="Input.PhoneNumber" class="text-red-500 text-xs"></span>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button type="submit" class="btn btn-primary">ذخیره</button>
+                <a asp-page="/seller-panel/Index" class="btn btn-secondary">انصراف</a>
+            </div>
+        </form>
+    </div>
+</div>

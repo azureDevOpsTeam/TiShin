@@ -1,0 +1,34 @@
+@page
+@model TiShinShop.Pages.UserPanel.Addresses.IndexModel
+@{
+    Layout = "~/Pages/Shared/_UserPanelLayout.cshtml";
+    ViewData["Title"] = "آدرس‌ها";
+}
+
+<div class="space-y-6">
+    <h2 class="text-xl font-bold">آدرس‌های من</h2>
+
+    <div class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-4">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-900">
+                <tr>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">آدرس کامل</th>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">کد پستی</th>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">پیش‌فرض</th>
+                </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-card-dark divide-y divide-gray-200 dark:divide-gray-700">
+                @foreach (var addr in Model.Addresses)
+                {
+                    <tr>
+                        <td class="px-4 py-3 text-sm">@addr.FullAddress</td>
+                        <td class="px-4 py-3 text-sm">@addr.PostalCode</td>
+                        <td class="px-4 py-3 text-sm">@(addr.IsDefault ? "بله" : "خیر")</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

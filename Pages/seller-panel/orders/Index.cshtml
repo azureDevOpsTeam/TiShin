@@ -1,0 +1,59 @@
+@page
+@model TiShinShop.Pages.SellerPanel.Orders.IndexModel
+@{
+    Layout = "~/Pages/Shared/_SellerPanelLayout.cshtml";
+    ViewData["Title"] = "سفارش‌ها";
+}
+
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <h2 class="text-xl font-bold">سفارش‌ها</h2>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-900">
+                    <tr>
+                        <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">شماره سفارش</th>
+                        <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">مشتری</th>
+                        <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">مبلغ</th>
+                        <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">وضعیت</th>
+                        <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">کد رهگیری</th>
+                        <th class="px-4 py-3"></th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    @foreach (var order in Model.Orders)
+                    {
+                        <tr>
+                            <td class="px-4 py-3 text-sm">@order.Id</td>
+                            <td class="px-4 py-3 text-sm">@order.User?.FirstName @order.User?.LastName</td>
+                            <td class="px-4 py-3 text-sm">@order.TotalPrice.ToString("N0") تومان</td>
+                            <td class="px-4 py-3 text-sm">@order.Status</td>
+                            <td class="px-4 py-3 text-sm">@order.TrackingCode</td>
+                            <td class="px-4 py-3 text-sm text-end">
+                                <div class="flex items-center justify-end gap-3">
+                                    <a asp-page="./Detail" asp-route-id="@order.Id" class="text-primary hover:underline">جزئیات</a>
+                                    <a asp-page="./Edit" asp-route-id="@order.Id" class="text-blue-600 hover:underline">ویرایش</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function toggleMenu(id, arrow) {
+            const el = document.getElementById(id);
+            const ar = document.getElementById(arrow);
+            if (!el) return;
+            el.classList.toggle('hidden');
+            if (ar) ar.classList.toggle('rotate-180');
+        }
+    </script>
+}

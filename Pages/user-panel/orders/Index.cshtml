@@ -1,0 +1,38 @@
+@page
+@model TiShinShop.Pages.UserPanel.Orders.IndexModel
+@{
+    Layout = "~/Pages/Shared/_UserPanelLayout.cshtml";
+    ViewData["Title"] = "سفارش‌های من";
+}
+
+<div class="space-y-6">
+    <h2 class="text-xl font-bold">سفارش‌های من</h2>
+
+    <div class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-4">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-900">
+                <tr>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">شماره سفارش</th>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">مبلغ</th>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">وضعیت</th>
+                    <th class="px-4 py-3"></th>
+                </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-card-dark divide-y divide-gray-200 dark:divide-gray-700">
+                @foreach (var order in Model.Orders)
+                {
+                    <tr>
+                        <td class="px-4 py-3 text-sm">@order.Id</td>
+                        <td class="px-4 py-3 text-sm">@order.TotalPrice.ToString("N0") تومان</td>
+                        <td class="px-4 py-3 text-sm">@order.Status</td>
+                        <td class="px-4 py-3 text-sm text-end">
+                            <a asp-page="./Detail" asp-route-id="@order.Id" class="text-primary hover:underline">مشاهده</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

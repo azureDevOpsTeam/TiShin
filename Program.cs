@@ -59,7 +59,7 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-    string[] roles = new[] { "Seler", "User" };
+    string[] roles = new[] { "Seller", "User" };
     foreach (var role in roles)
     {
         if (!await roleManager.RoleExistsAsync(role))

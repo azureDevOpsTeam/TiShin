@@ -1,0 +1,50 @@
+@page
+@model TiShinShop.Pages.UserPanel.Wallet.IndexModel
+@{
+    Layout = "~/Pages/Shared/_UserPanelLayout.cshtml";
+    ViewData["Title"] = "کیف پول";
+}
+
+<div class="space-y-6">
+    <h2 class="text-xl font-bold">کیف پول</h2>
+
+    <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-4">
+            <div class="text-sm text-gray-500 dark:text-gray-400">مجموع پرداختی‌ها</div>
+            <div class="mt-2 text-2xl font-bold">@Model.TotalSpent.ToString("N0") <span class="text-base font-normal">تومان</span></div>
+        </div>
+        <div class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-4">
+            <div class="text-sm text-gray-500 dark:text-gray-400">تعداد سفارش‌ها</div>
+            <div class="mt-2 text-2xl font-bold">@Model.OrderCount</div>
+        </div>
+        <div class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-4">
+            <div class="text-sm text-gray-500 dark:text-gray-400">آخرین کد رهگیری</div>
+            <div class="mt-2 text-2xl font-bold">@Model.LastTrackingCode</div>
+        </div>
+    </div>
+
+    <div class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-4">
+        <h3 class="font-semibold mb-3">آخرین سفارش‌ها</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-900">
+                <tr>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">شماره</th>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">مبلغ</th>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">وضعیت</th>
+                </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-card-dark divide-y divide-gray-200 dark:divide-gray-700">
+                @foreach (var order in Model.RecentOrders)
+                {
+                    <tr>
+                        <td class="px-4 py-3 text-sm">@order.Id</td>
+                        <td class="px-4 py-3 text-sm">@order.TotalPrice.ToString("N0") تومان</td>
+                        <td class="px-4 py-3 text-sm">@order.Status</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

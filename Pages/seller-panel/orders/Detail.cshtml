@@ -1,0 +1,52 @@
+@page "{id}"
+@model TiShinShop.Pages.SellerPanel.Orders.DetailModel
+@{
+    Layout = "~/Pages/Shared/_SellerPanelLayout.cshtml";
+    ViewData["Title"] = "جزئیات سفارش";
+}
+
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <h2 class="text-xl font-bold">جزئیات سفارش @Model.Order?.Id</h2>
+        <a asp-page="./Index" class="text-sm text-primary">بازگشت به لیست</a>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
+            <h3 class="font-semibold mb-3">اطلاعات مشتری</h3>
+            <p class="text-sm">@Model.Order?.User?.FirstName @Model.Order?.User?.LastName</p>
+            <p class="text-sm">@Model.Order?.User?.PhoneNumber</p>
+            <p class="text-sm">@Model.Order?.User?.Email</p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
+            <h3 class="font-semibold mb-3">وضعیت و مبلغ</h3>
+            <p class="text-sm">وضعیت: @Model.Order?.Status</p>
+            <p class="text-sm">مبلغ: @Model.Order?.TotalPrice.ToString("N0") تومان</p>
+        </div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
+        <h3 class="font-semibold mb-3">اقلام سفارش</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-900">
+                <tr>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">محصول</th>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">تعداد</th>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">قیمت</th>
+                </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                @foreach (var item in Model.OrderItems)
+                {
+                    <tr>
+                        <td class="px-4 py-3 text-sm">@item.Product?.Title</td>
+                        <td class="px-4 py-3 text-sm">@item.Quantity</td>
+                        <td class="px-4 py-3 text-sm">@item.UnitPrice.ToString("N0")</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

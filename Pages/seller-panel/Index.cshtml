@@ -5,7 +5,154 @@
     ViewData["Title"] = "پیشخوان فروشنده";
 }
 
-<div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
-    <h2 class="font-bold dark:text-white">صفحه خالی مناسب توسعه سریع</h2>
-    <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">این صفحه به‌صورت خالی برای توسعه امکانات پنل فروشنده آماده شده است.</p>
+<div class="space-y-6">
+    <!-- header page -->
+    <div class="mb-2 flex flex-col md:flex-row md:items-center md:justify-between">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">سلام فروشنده عزیز <span class="text-2xl">👋</span></h2>
+            <p class="text-gray-600 dark:text-gray-400">وضعیت کلی فروشگاه شما امروز</p>
+        </div>
+    </div>
+
+    <!-- Summary of cards (template-based) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+        <!-- Today revenue -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">درآمد امروز</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">@Model.TodayRevenue.ToString("N0") <span class="text-sm">تومان</span></p>
+                </div>
+                <div class="p-3 rounded-xl bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                <span class="text-xs text-gray-500 dark:text-gray-400">آمار مالی امروز</span>
+                <span class="text-xs px-2 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
+                    <i class="fas fa-arrow-up me-1"></i> به‌روز
+                </span>
+            </div>
+        </div>
+
+        <!-- Total orders -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">کل سفارش‌ها</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">@Model.TotalOrders <span class="text-sm">سفارش</span></p>
+                </div>
+                <div class="p-3 rounded-xl bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                <span class="text-xs text-gray-500 dark:text-gray-400">مجموع سفارش‌های ثبت‌شده</span>
+                <a asp-page="/seller-panel/orders/Index" class="text-xs text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300">مشاهده</a>
+            </div>
+        </div>
+
+        <!-- Today orders -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">سفارش‌های امروز</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">@Model.TodayOrders <span class="text-sm">عدد</span></p>
+                </div>
+                <div class="p-3 rounded-xl bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                <span class="text-xs text-gray-500 dark:text-gray-400">ثبت‌شده در امروز</span>
+                <span class="text-xs text-yellow-600 dark:text-yellow-400">لحظه‌ای</span>
+            </div>
+        </div>
+
+        <!-- Shipped orders -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">ارسال شده</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">@Model.ShippedCount <span class="text-sm">سفارش</span></p>
+                </div>
+                <div class="p-3 rounded-xl bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-1.5">
+                    <div class="bg-primary-500 dark:bg-primary-400 h-1.5 rounded-full" style="width: 85%"></div>
+                </div>
+                <div class="flex justify-between items-center mt-1">
+                    <span class="text-xs text-gray-500 dark:text-gray-400">پیشرفت ارسال</span>
+                    <span class="text-xs text-primary-600 dark:text-primary-400">در حال پردازش</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">در انتظار پرداخت</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">@Model.PendingCount</p>
+                </div>
+                <div class="p-3 rounded-xl bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">پرداخت شده</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">@Model.PaidCount</p>
+                </div>
+                <div class="p-3 rounded-xl bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">تحویل شده</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">@Model.DeliveredCount</p>
+                </div>
+                <div class="p-3 rounded-xl bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">لغو/ناموفق</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">@(@Model.CanceledCount + @Model.FailedCount)</p>
+                </div>
+                <div class="p-3 rounded-xl bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
