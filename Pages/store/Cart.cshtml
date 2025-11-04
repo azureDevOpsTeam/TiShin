@@ -1,0 +1,53 @@
+@page
+@model TiShinShop.Pages.Store.CartModel
+@{
+    Layout = "_StorefrontLayout";
+    ViewData["Title"] = "سبد خرید";
+}
+
+<section class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">سبد خرید</h1>
+    @if (Model.Items.Any())
+    {
+        <table class="min-w-full text-sm border border-gray-200 dark:border-gray-700">
+            <thead class="bg-gray-50 dark:bg-gray-700">
+                <tr>
+                    <th class="px-3 py-2">محصول</th>
+                    <th class="px-3 py-2">سایز</th>
+                    <th class="px-3 py-2">رنگ</th>
+                    <th class="px-3 py-2">جنس</th>
+                    <th class="px-3 py-2">تعداد</th>
+                    <th class="px-3 py-2">قیمت واحد</th>
+                    <th class="px-3 py-2">حذف</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-gray-800">
+                @foreach (var it in Model.Items)
+                {
+                    <tr class="border-t border-gray-200 dark:border-gray-700">
+                        <td class="px-3 py-2">@it.Product.Title</td>
+                        <td class="px-3 py-2">@it.ProductSize.Size.Value</td>
+                        <td class="px-3 py-2">@it.ProductColor.Color.Value</td>
+                        <td class="px-3 py-2">@it.ProductMaterial.Material.Name</td>
+                        <td class="px-3 py-2">@it.Quantity</td>
+                        <td class="px-3 py-2">@it.Product.BasePrice.ToString("N0")</td>
+                        <td class="px-3 py-2">
+                            <form method="post" asp-page-handler="Remove">
+                                <input type="hidden" name="id" value="@it.Id" />
+                                <button type="submit" class="px-3 py-1 rounded bg-red-600 text-white">حذف</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="mt-6 flex justify-end">
+            <a class="px-4 py-2 text-sm font-medium rounded-lg bg-primary-600 text-white hover:bg-primary-700 shadow-sm" asp-page="/store/Checkout">ادامه به پرداخت</a>
+        </div>
+    }
+    else
+    {
+        <div>سبد خرید شما خالی است.</div>
+    }
+</section>

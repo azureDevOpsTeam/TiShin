@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"] - پنل فروشنده</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="~/images/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/images/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/images/favicon_io/favicon-16x16.png">
+    <link rel="stylesheet" href="~/js/plugin/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="~/css/app.css">
+    <link rel="preload" href="~/fonts/payda/PeydaWebFaNum-Medium.woff2" as="font" type="font/woff2" crossorigin>
+</head>
+<body class="bg-light dark:bg-background-dark text-text-primary-light dark:text-text-primary-dark transition-colors duration-200">
+
+<div class="flex h-screen overflow-hidden max-w-[1920px] mx-auto">
+    <!-- sidebar -->
+    <div class="hidden lg:flex lg:flex-shrink-0">
+        <div class="flex flex-col w-72 bg-white dark:bg-gray-800 border-e border-gray-200 dark:border-gray-700 shadow-sm">
+            <!-- logo -->
+            <div class="flex items-center justify-center h-20 p-4 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-md bg-primary-grad flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                        </svg>
+                    </div>
+                    <h1 class="ms-3 text-xl font-bold text-dark dark:text-light">پنل <span class="text-primary">فروشندگان</span></h1>
+                </div>
+            </div>
+
+            <!-- menu -->
+            <div class="flex flex-col flex-grow p-4 overflow-y-auto">
+                <nav class="space-y-1">
+                    <!-- Dashboard -->
+                    <a asp-page="/seller-panel/Index" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline me-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                        پیشخوان
+                        <span class="ms-auto w-2 h-2 rounded-full bg-primary-600 dark:bg-primary-400"></span>
+                    </a>
+                    <!-- Profile (placeholder link) -->
+                    <a href="#" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">پروفایل فروشگاه</a>
+
+                    <!-- Products Management -->
+                    <div class="space-y-1 mt-2">
+                        <button type="button" class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700" onclick="toggleMenu('seller-products-menu', 'seller-products-arrow')">
+                            <span class="flex items-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline me-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                              </svg>
+                              مدیریت محصولات
+                            </span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform duration-300" id="seller-products-arrow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div id="seller-products-menu" class="hidden me-6 space-y-1">
+                            <a asp-page="/seller-panel/products/Create" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">ایجاد محصول</a>
+                        </div>
+                    </div>
+
+                    <!-- Settings -->
+                    <div class="space-y-1 mt-2">
+                        <button type="button" class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700" onclick="toggleMenu('seller-settings-menu', 'seller-settings-arrow')">
+                            <span class="flex items-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline me-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281a1.125 1.125 0 0 0 .865.997l1.437.553a1.125 1.125 0 0 1 .51 1.685l-1.004.827a1.125 1.125 0 0 0 0 1.742l1.004.827a1.125 1.125 0 0 1-.51 1.685l-1.437.553a1.125 1.125 0 0 0-.865.997l-.213 1.281a1.125 1.125 0 0 1-1.11.94h-2.593a1.125 1.125 0 0 1-1.11-.94l-.213-1.281Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                              </svg>
+                              تنظیمات
+                            </span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform duration-300" id="seller-settings-arrow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div id="seller-settings-menu" class="hidden me-6 space-y-1">
+                            <a asp-page="/seller-panel/settings/categories/Index" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">گروه‌بندی‌ها</a>
+                            <a asp-page="/seller-panel/settings/colors/Index" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">رنگ‌ها</a>
+                            <a asp-page="/seller-panel/settings/materials/Index" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">جنس‌ها</a>
+                            <a asp-page="/seller-panel/settings/sizes/Index" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">سایزها</a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- content area -->
+    <div class="flex flex-col w-0 flex-1">
+        <!-- header -->
+        <header class="border-b bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                    <button class="lg:hidden p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700" aria-label="toggle sidebar" onclick="openMobileSidebar()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <span class="font-bold">پیشخوان فروشنده</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- page content -->
+        <main class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-gray-900">
+            @RenderBody()
+        </main>
+    </div>
+</div>
+
+<!-- Mobile sidebar (responsive) -->
+<div id="mobile-sidebar" class="offcanvas invisible fixed top-0 end-0 w-[80%] sm:w-100 h-full bg-white dark:bg-gray-800 shadow-lg transform -translate-x-full transition-transform opacity-0 z-50" role="dialog" aria-modal="true" aria-labelledby="mobile-sidebar-title">
+    <header class="border-b p-4 flex items-center justify-between border-gray-200 dark:border-gray-700">
+        <h2 id="mobile-sidebar-title" class="font-bold">منوی فروشنده</h2>
+        <button class="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700" onclick="closeMobileSidebar()" aria-label="بستن">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </header>
+    <nav class="p-4 space-y-1">
+        <a asp-page="/seller-panel/Index" class="block px-4 py-3 text-sm font-medium rounded-lg bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">پیشخوان</a>
+        <a href="#" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">پروفایل فروشگاه</a>
+        <div class="mt-2">
+            <div class="text-xs font-bold text-gray-500 dark:text-gray-400 mb-2">محصولات</div>
+            <a asp-page="/seller-panel/products/Create" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">ایجاد محصول</a>
+        </div>
+        <div class="mt-2">
+            <div class="text-xs font-bold text-gray-500 dark:text-gray-400 mb-2">تنظیمات</div>
+            <a asp-page="/seller-panel/settings/categories/Index" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">گروه‌بندی‌ها</a>
+            <a asp-page="/seller-panel/settings/colors/Index" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">رنگ‌ها</a>
+            <a asp-page="/seller-panel/settings/materials/Index" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">جنس‌ها</a>
+            <a asp-page="/seller-panel/settings/sizes/Index" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">سایزها</a>
+        </div>
+    </nav>
+    <!-- you can extend mobile menu items here based on template -->
+    
+</div>
+<div id="mobile-sidebar-overlay" class="overlay transition fixed inset-0 z-40 bg-black/70 hidden" onclick="closeMobileSidebar()" role="presentation" aria-hidden="true"></div>
+
+<script src="~/js/dependencies/app.js"></script>
+<script>
+    function openMobileSidebar() {
+        const el = document.getElementById('mobile-sidebar');
+        const overlay = document.getElementById('mobile-sidebar-overlay');
+        if (!el || !overlay) return;
+        el.classList.remove('-translate-x-full', 'opacity-0', 'invisible');
+        el.classList.add('translate-x-0');
+        overlay.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    }
+    function closeMobileSidebar() {
+        const el = document.getElementById('mobile-sidebar');
+        const overlay = document.getElementById('mobile-sidebar-overlay');
+        if (!el || !overlay) return;
+        el.classList.add('-translate-x-full', 'opacity-0', 'invisible');
+        el.classList.remove('translate-x-0');
+        overlay.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
+</script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,152 @@
+﻿@using TiShinShop.ViewComponents
+@model TiShinShop.Entities.Cart
+
+<div id="offcanvas-left"
+     class="offcanvas invisible dark:bg-background-dark dark:text-white fixed top-0 left-0 sm:w-100 w-[80%] h-full bg-white shadow-lg transform -translate-x-full transition-transform opacity-0 z-50"
+     role="dialog"
+     aria-labelledby="cart-title"
+     aria-modal="true">
+    <!-- Header -->
+    <header class="border-b p-3 flex items-center justify-between border-gray-400">
+        <h2 id="cart-title" class="font-bold text-base">سبد خرید شما</h2>
+        <button onclick="closeOffcanvas()"
+                class="cursor-pointer"
+                aria-label="بستن سبد خرید">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor" class="size-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </header>
+    <!-- Cart Items -->
+    <main class="relative space-y-4 divide-y divide-gray-200 p-3 overflow-y-scroll h-full">
+        @if (Model?.Items?.Any() == true)
+        {
+            <!-- Product 1 -->
+            if (Model?.Items != null && Model.Items.Any())
+            {
+                foreach (var item in Model.Items)
+                {
+                    <div class="py-3 last:mb-35" itemscope itemtype="http://schema.org/Product">
+                        <div class="flex flex-wrap items-center">
+                            <div class="text-right w-1/5">
+                                <img class="max-w-full"
+                                     src="/uploads/products/@item.Product?.FirstImage"
+                                     alt="@item.Product?.Title"
+                                     itemprop="image"
+                                     loading="lazy">
+                            </div>
+                            <div class="w-2/3 space-y-4">
+                                <h3 class="font-bold leading-7" itemprop="name">
+                                    @item.Product?.Title
+                                </h3>
+                                <div class="flex items-center justify-between">
+                                    @if (item.Product?.Discount != null && item.Product.Discount.IsActive)
+                                    {
+                                        var discountAmount = (item.Product.BasePrice * item.Product.Discount.Percentage) / 100;
+                                        var finalPrice = item.Product.BasePrice - discountAmount;
+
+                                        <del class="text-rose-600 dark:text-white line-through">
+                                            <span>@String.Format("{0:N0}", item.Product.BasePrice)</span>
+                                        </del>
+                                        <ins class="no-underline text-xl text-green-500 font-bold">
+                                            @String.Format("{0:N0}", finalPrice) <span class="text-sm font-normal text-gray-700 dark:text-white">تومان</span>
+                                        </ins>
+                                    }
+                                    else
+                                    {
+                                        <ins class="no-underline text-xl text-green-500 font-bold">
+                                            @String.Format("{0:N0}", item.Product?.BasePrice) <span class="text-sm font-normal text-gray-700 dark:text-white">تومان</span>
+                                        </ins>
+                                    }
+                                </div>
+                                <div class="flex items-end justify-between">
+                                    <span>تعداد: @item.Quantity</span>
+
+                                    @if (item.ProductSize?.Size != null)
+                                    {
+                                        <span>سایز: @item.ProductSize.Size.Value</span>
+                                    }
+
+                                    @if (item.ProductColor?.Color != null)
+                                    {
+                                        <span>رنگ: @item.ProductColor.Color.Value</span>
+                                    }
+                                    <a href="javascript:void(0);"
+                                       class="remove-item bg-red-100 dark:border dark:bg-transparent dark:text-white text-red-950 p-2 rounded-lg"
+                                       data-id="@item.Id"
+                                       role="button"
+                                       aria-label="حذف محصول از سبد خرید">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                             stroke="currentColor" class="size-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-center text-gray-500">سبد خرید شما خالی است.</p>
+            }
+        }
+    </main>
+    <!-- Footer -->
+    <footer class="p-2 absolute bottom-0 right-0 left-0 bg-white dark:border-0  dark:bg-background-dark border border-gray-400">
+        <div class="flex items-center justify-between">
+            <div class="space-y-2">
+                <span class="inline-block text-lg">جمع کل</span>
+                <h3 class="font-bold text-xl" itemprop="totalPrice" content="11000000">
+                    @String.Format("{0:N0}", ViewData["CartTotal"]) تومان
+                </h3>
+            </div>
+            <div class="text-end">
+                <a href="/checkout"
+                   class="bg-primary-grad hover:bg-primary-600 text-white py-2 px-4 rounded-lg"
+                   role="button"
+                   aria-label="تکمیل فرایند خرید">
+                    تکمیل خرید
+                </a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+
+@section Scripts {
+
+    <script>
+        $(document).on("click", ".remove-item", function () {
+            const itemId = $(this).data("id");
+            const $itemElement = $(this).closest(".py-3"); // کل آیتم برای حذف بصری
+
+            $.ajax({
+                url: `/api/RemoveCartItem?id=${itemId}`,
+                type: "GET",
+                success: function (response) {
+                    // حذف آیتم از DOM
+                    $itemElement.remove();
+
+                    toastr.success("محصول از سبد خرید حذف شد");
+
+                    // در صورت نیاز: بروزرسانی تعداد یا جمع کل
+                    const cartCounter = document.getElementById("cartCounter");
+                    let currentCount = parseInt(cartCounter.textContent.trim()) || 0;
+                    cartCounter.textContent = currentCount > 0 ? currentCount - 1 : 0;
+
+                    // اگر سبد خالی شد
+                    if ($("#offcanvas-left main").find(".py-3").length === 0) {
+                        $("#offcanvas-left main").html('<p class="text-center text-gray-500">سبد خرید شما خالی است.</p>');
+                        $("footer").hide(); // اگر خواستی، فوتر را مخفی کن
+                    }
+                },
+                error: function () {
+                    toastr.error("خطا در حذف محصول از سبد خرید");
+                }
+            });
+        });
+    </script>
+}

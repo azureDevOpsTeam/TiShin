@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <!-- Icon sprite for TiShin storefront -->
+  <!-- Outline style to match template icons; inherits currentColor -->
+
+  <symbol id="menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
+  </symbol>
+
+  <symbol id="search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35" />
+    <circle cx="11" cy="11" r="7" />
+  </symbol>
+
+  <symbol id="user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 7.5a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0z" />
+    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 20.25a8.25 8.25 0 0 1 15 0" />
+  </symbol>
+
+  <symbol id="basket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <!-- Shopping bag icon (matches heroicons outline style) -->
+    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007Z" />
+    <path d="M8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+  </symbol>
+
+  <symbol id="theme" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <!-- Sun icon -->
+    <circle cx="12" cy="12" r="4" />
+    <path stroke-linecap="round" d="M12 3v2M12 19v2M3 12h2M19 12h2M5.636 5.636l1.414 1.414M16.95 16.95l1.414 1.414M5.636 18.364l1.414-1.414M16.95 7.05l1.414-1.414" />
+  </symbol>
+
+  <symbol id="home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l9-7 9 7v7a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-3H9v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7z" />
+  </symbol>
+
+  <symbol id="shop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <!-- Storefront icon -->
+    <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18l-2 4a3 3 0 0 1-3 2H8a3 3 0 0 1-3-2L3 7z" />
+    <path stroke-linecap="round" stroke-linejoin="round" d="M5 21V13m14 8V13M10 21h4" />
+  </symbol>
+</svg>

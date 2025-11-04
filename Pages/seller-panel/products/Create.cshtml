@@ -1,0 +1,212 @@
+@page
+@using TiShinShop.Entities
+@using TiShinShop.Extenssions.Enums
+@model TiShinShop.Pages.SellerPanel.Products.CreateModel
+@{
+    Layout = "_SellerPanelLayout";
+    ViewData["Title"] = "ایجاد محصول جدید";
+}
+
+<!-- header page -->
+<div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+    <div>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">ثبت مرسوله / ایجاد محصول</h2>
+        <p class="text-gray-600 dark:text-gray-400">مخصوص ثبت محصولات لباس زیر زنانه همراه با رنگ، جنس و سایز</p>
+    </div>
+    <div class="mt-4 md:mt-0">
+        <button type="submit" form="create-form" class="flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-primary-600 text-white hover:bg-primary-500 shadow-sm dark:bg-primary-500 dark:hover:bg-primary-600">
+            ثبت محصول
+        </button>
+    </div>
+</div>
+
+<form id="create-form" method="post" enctype="multipart/form-data">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 space-y-6">
+            <!-- General card -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+                <h3 class="font-bold text-lg mb-6 relative pb-4 before:absolute before:start-0 before:bottom-0 before:size-2 before:rounded-full before:bg-primary-600 after:absolute after:w-40 after:h-2 after:bottom-0 after:start-4 after:bg-primary-600 after:rounded-lg">اطلاعات محصول</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">عنوان</label>
+                        <input asp-for="Input.Title" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                        <span asp-validation-for="Input.Title" class="text-red-600 text-sm"></span>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">کد محصول</label>
+                        <input asp-for="Input.Code" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                        <span asp-validation-for="Input.Code" class="text-red-600 text-sm"></span>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">برند</label>
+                        <input asp-for="Input.Brand" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">قیمت پایه (تومان)</label>
+                        <input asp-for="Input.BasePrice" type="number" step="100" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                        <span asp-validation-for="Input.BasePrice" class="text-red-600 text-sm"></span>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">موجودی</label>
+                        <input asp-for="Input.Quantity" type="number" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                        <span asp-validation-for="Input.Quantity" class="text-red-600 text-sm"></span>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">توضیحات</label>
+                        <textarea asp-for="Input.Description" rows="4" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Images card -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+                <h3 class="font-bold text-lg mb-6 relative pb-4 before:absolute before:start-0 before:bottom-0 before:size-2 before:rounded-full before:bg-primary-600 after:absolute after:w-40 after:h-2 after:bottom-0 after:start-4 after:bg-primary-600 after:rounded-lg">تصاویر محصول</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">انتخاب تصاویر (چندتایی)</label>
+                        <input asp-for="Input.Images" type="file" multiple accept="image/*" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white" onchange="previewImages(this.files)" />
+                        <span asp-validation-for="Input.Images" class="text-red-600 text-sm"></span>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">فرمت‌های مجاز: JPG, PNG, WEBP — حداکثر ۵ مگابایت برای هر تصویر.</p>
+                    </div>
+                    <div id="preview-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+                </div>
+            </div>
+
+            <!-- Categories select -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+                <h3 class="font-bold text-lg mb-6 relative pb-4 before:absolute before:start-0 before:bottom-0 before:size-2 before:rounded-full before:bg-primary-600 after:absolute after:w-40 after:h-2 after:bottom-0 after:start-4 after:bg-primary-600 after:rounded-lg">گروه‌بندی محصول</h3>
+                <div class="grid grid-cols-1 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">انتخاب گروه‌بندی (دستهٔ قابل لینک)</label>
+                        <select asp-for="Input.SelectedCategoryId" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <option value="">— انتخاب کنید —</option>
+                            @foreach (var cat in Model.LinkableCategories)
+                            {
+                                <option value="@cat.Id">@cat.Name</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Input.SelectedCategoryId" class="text-red-600 text-sm"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Materials card -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+                <h3 class="font-bold text-lg mb-6 relative pb-4 before:absolute before:start-0 before:bottom-0 before:size-2 before:rounded-full before:bg-primary-600 after:absolute after:w-40 after:h-2 after:bottom-0 after:start-4 after:bg-primary-600 after:rounded-lg">جنس پارچه</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    @foreach (var m in Model.Materials)
+                    {
+                        <label class="flex items-center space-x-2 rtl:space-x-reverse p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <input type="checkbox" name="Input.SelectedMaterialIds" value="@m.Id" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700" />
+                            <span class="text-sm text-gray-800 dark:text-gray-200">@m.Name</span>
+                        </label>
+                    }
+                </div>
+            </div>
+
+            <!-- Colors card -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+                <h3 class="font-bold text-lg mb-6 relative pb-4 before:absolute before:start-0 before:bottom-0 before:size-2 before:rounded-full before:bg-primary-600 after:absolute after:w-40 after:h-2 after:bottom-0 after:start-4 after:bg-primary-600 after:rounded-lg">رنگ‌ها</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    @foreach (var c in Model.Colors)
+                    {
+                        <label class="flex items-center space-x-2 rtl:space-x-reverse p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <input type="checkbox" name="Input.SelectedColorIds" value="@c.Id" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700" />
+                            <span class="inline-block w-5 h-5 rounded border border-gray-300" style="background-color:@c.HexCode"></span>
+                            <span class="text-sm text-gray-800 dark:text-gray-200">@c.Value (@c.HexCode)</span>
+                        </label>
+                    }
+                </div>
+            </div>
+
+            <!-- Sizes card -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+                <h3 class="font-bold text-lg mb-6 relative pb-4 before:absolute before:start-0 before:bottom-0 before:size-2 before:rounded-full before:bg-primary-600 after:absolute after:w-40 after:h-2 after:bottom-0 after:start-4 after:bg-primary-600 after:rounded-lg">سایزها</h3>
+                <div class="mb-4">
+                    <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                        <label class="flex items-center space-x-2 rtl:space-x-reverse">
+                            <input type="radio" name="Input.SelectedSizeType" value="@((int)SizeType.LetterSize)" checked class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700" onclick="toggleSizeType('letter')" />
+                            <span class="text-sm text-gray-800 dark:text-gray-200">حرفی (XL, XXL و...)</span>
+                        </label>
+                        <label class="flex items-center space-x-2 rtl:space-x-reverse">
+                            <input type="radio" name="Input.SelectedSizeType" value="@((int)SizeType.NumericSize)" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700" onclick="toggleSizeType('numeric')" />
+                            <span class="text-sm text-gray-800 dark:text-gray-200">عددی (32، 36 و...)</span>
+                        </label>
+                    </div>
+                </div>
+                <div id="sizes-letter" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    @foreach (var s in Model.SizesLetter)
+                    {
+                        <label class="flex items-center space-x-2 rtl:space-x-reverse p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <input type="checkbox" name="Input.SelectedSizeIds" value="@s.Id" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700" />
+                            <span class="text-sm text-gray-800 dark:text-gray-200">@s.Value</span>
+                        </label>
+                    }
+                </div>
+                <div id="sizes-numeric" class="grid grid-cols-2 md:grid-cols-4 gap-4 hidden">
+                    @foreach (var s in Model.SizesNumeric)
+                    {
+                        <label class="flex items-center space-x-2 rtl:space-x-reverse p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <input type="checkbox" name="Input.SelectedSizeIds" value="@s.Id" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700" />
+                            <span class="text-sm text-gray-800 dark:text-gray-200">@s.Value</span>
+                        </label>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Shipping card (optional UI only) -->
+        <div class="space-y-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+                <h3 class="font-bold text-lg mb-6 relative pb-4 before:absolute before:start-0 before:bottom-0 before:size-2 before:rounded-full before:bg-primary-600 after:absolute after:w-40 after:h-2 after:bottom-0 after:start-4 after:bg-primary-600 after:rounded-lg">حمل و نقل</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">هزینه ارسال (اختیاری)</label>
+                        <input asp-for="Input.ShippingCost" type="number" step="100" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="هزینه ارسال" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function toggleSizeType(type) {
+            const letter = document.getElementById('sizes-letter');
+            const numeric = document.getElementById('sizes-numeric');
+            if (!letter || !numeric) return;
+            if (type === 'numeric') {
+                letter.classList.add('hidden');
+                numeric.classList.remove('hidden');
+            } else {
+                numeric.classList.add('hidden');
+                letter.classList.remove('hidden');
+            }
+        }
+
+        function previewImages(files) {
+            const grid = document.getElementById('preview-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            Array.from(files || []).forEach(function (file) {
+                if (!file || !file.type || !file.type.startsWith('image/')) return;
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const wrap = document.createElement('div');
+                    wrap.className = 'relative rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-800';
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = 'پیش‌نمایش تصویر محصول';
+                    img.className = 'w-full h-32 object-cover';
+
+                    wrap.appendChild(img);
+                    grid.appendChild(wrap);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    </script>
+}

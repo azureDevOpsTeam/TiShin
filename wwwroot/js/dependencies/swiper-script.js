@@ -1,40 +1,47 @@
 
-const swiper = new Swiper(".default-carousel", {
-    loop: true,
-    pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-    },
-    navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-    },
-});
+;(function(){
+    // Prevent redeclaration across multiple loads
+    window.defaultCarouselSwiper = window.defaultCarouselSwiper || new Swiper(".default-carousel", {
+        loop: true,
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+    });
 
-const customSwiperNext = document.querySelector('.custom-swiper-next');
-const customSwiperPrev = document.querySelector('.custom-swiper-prev');
+    var swiper = window.defaultCarouselSwiper;
 
-if (customSwiperNext  || customSwiperPrev) {
-    customSwiperNext.addEventListener('click',()=>{
-        swiper.slideNext()
-    })
+    var customSwiperNext = document.querySelector('.custom-swiper-next');
+    var customSwiperPrev = document.querySelector('.custom-swiper-prev');
 
-    customSwiperPrev.addEventListener('click',()=>{
-        swiper.slidePrev()
-    })
-}
+    if (customSwiperNext) {
+        customSwiperNext.addEventListener('click', function(){
+            swiper.slideNext();
+        });
+    }
+
+    if (customSwiperPrev) {
+        customSwiperPrev.addEventListener('click', function(){
+            swiper.slidePrev();
+        });
+    }
+})();
 
 
 
 //####################################################################
 
-new Swiper(".amazing-carousel", {
+;(function(){ new Swiper(".amazing-carousel", {
     slidesPerView: "auto",
     spaceBetween: 10,
     freeMode: true,
-});
+}); })();
 
-new Swiper(".landing-amazing-carousel", {
+;(function(){ new Swiper(".landing-amazing-carousel", {
     slidesPerView: 2,
     spaceBetween: 10,
     navigation: {
@@ -47,9 +54,9 @@ new Swiper(".landing-amazing-carousel", {
         768: { slidesPerView: 3 },
         1024: { slidesPerView: 4 },
     },
-});
+}); })();
 
-new Swiper(".category-carousel", {
+;(function(){ new Swiper(".category-carousel", {
     slidesPerView: 5,
     spaceBetween: 30,
     pagination: {
@@ -60,9 +67,9 @@ new Swiper(".category-carousel", {
         nextEl: ".swiper-button-next",
         prevEl: ".swiper-button-prev",
     },
-});
+}); })();
 
-new Swiper(".product-carousel", {
+;(function(){ new Swiper(".product-carousel", {
     slidesPerView: 5,
     spaceBetween: 10,
     navigation: {
@@ -76,9 +83,9 @@ new Swiper(".product-carousel", {
         1024: { slidesPerView: 4 },
         1400: { slidesPerView: 5 }
     },
-});
+}); })();
 
-new Swiper(".product-list-carousel", {
+;(function(){ new Swiper(".product-list-carousel", {
     slidesPerView: 5,
     spaceBetween: 10,
     navigation: {
@@ -90,10 +97,10 @@ new Swiper(".product-list-carousel", {
         576: { slidesPerView: 2 },
         1200: { slidesPerView: 4 },
     },
-});
+}); })();
 
 
-new Swiper(".blog-carousel", {
+;(function(){ new Swiper(".blog-carousel", {
     slidesPerView: 5,
     spaceBetween: 10,
     navigation: {
@@ -106,10 +113,10 @@ new Swiper(".blog-carousel", {
         992: { slidesPerView: 3 },
         1200: { slidesPerView: 4 },
     },
-});
+}); })();
 
 
-var swiperProductGalleryOne= new Swiper("#productGalleryOne", {
+;(function(){ var swiperProductGalleryOne= new Swiper("#productGalleryOne", {
     spaceBetween: 10,
     slidesPerView: 3,
     freeMode: true,
@@ -124,10 +131,10 @@ var swiperProductGalleryTwo=new Swiper("#productGalleryTwo", {
     thumbs: {
         swiper: swiperProductGalleryOne,
     },
-});
+}); })();
 
 
-new Swiper(".free-mode", {
+;(function(){ new Swiper(".free-mode", {
     slidesPerView: "auto",
     spaceBetween: 10,
     freeMode: true,
@@ -135,4 +142,4 @@ new Swiper(".free-mode", {
         nextEl: ".swiper-button-next",
         prevEl: ".swiper-button-prev",
     },
-});
+}); })();

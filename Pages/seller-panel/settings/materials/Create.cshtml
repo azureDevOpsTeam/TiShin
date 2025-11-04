@@ -1,0 +1,29 @@
+@page
+@model TiShinShop.Pages.SellerPanel.Settings.Materials.CreateModel
+@{
+    Layout = "_SellerPanelLayout";
+    ViewData["Title"] = "افزودن جنس";
+}
+
+<div class="bg-white py-6 dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 overflow-hidden border border-gray-200 dark:border-gray-700">
+    <div class="px-6 border-b border-gray-200 dark:border-gray-700 mb-6">
+        <h3 class="font-bold text-lg relative pb-4 before:absolute before:start-0 before:bottom-0 before:size-2 before:rounded-full before:bg-primary after:absolute after:w-40 after:h-2 after:bottom-0 after:start-4 after:bg-primary after:rounded-lg">افزودن جنس جدید</h3>
+    </div>
+    <form method="post" class="px-6 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">نام جنس</label>
+                <input asp-for="Input.Name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                <span asp-validation-for="Input.Name" class="text-red-600 text-sm"></span>
+            </div>
+        </div>
+        <div class="flex justify-end space-x-3 rtl:space-x-reverse">
+            <a asp-page="Index" class="px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">انصراف</a>
+            <button type="submit" class="px-4 py-2 text-sm font-medium rounded-lg bg-primary-600 text-white hover:bg-primary-700 shadow-sm dark:bg-primary-500 dark:hover:bg-primary-600">ثبت جنس</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

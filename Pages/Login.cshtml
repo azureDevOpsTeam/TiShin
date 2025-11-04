@@ -1,0 +1,117 @@
+@page
+@model TiShinShop.Pages.LoginModel
+@{
+    ViewData["Title"] = "ورود";
+}
+
+<section class="py-10">
+    <div class="container">
+        <div class="min-h-[60vh] grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Image/branding side -->
+            <div class="auth-bg relative hidden lg:flex items-center justify-center p-12 rounded-2xl overflow-hidden">
+                <div class="absolute inset-0 bg-black/20 dark:bg-black/40"></div>
+                <div class="relative z-10 text-white text-center max-w-md">
+                    <div class="w-20 h-20 rounded-xl bg-primary-grad flex items-center justify-center mx-auto mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-3xl font-bold mb-4">به تی‌شین خوش آمدید</h2>
+                    <p class="text-lg">برای ادامه خرید و مشاهده سفارش‌ها وارد حساب کاربری شوید.</p>
+                </div>
+            </div>
+
+            <!-- Form side -->
+            <div class="flex items-center justify-center p-6">
+                <div class="w-full max-w-md">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-soft dark:shadow-soft-dark p-8 border border-gray-100 dark:border-gray-700">
+                        <div class="text-center mb-6">
+                            <h2 class="text-2xl font-bold text-dark dark:text-light mb-1">ورود به حساب کاربری</h2>
+                            <p class="text-gray-500 dark:text-gray-400">روش ورود را انتخاب کنید</p>
+                        </div>
+
+                        <div class="flex mb-6 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-600">
+                            <button type="button" class="tab-button flex-1 py-3 px-4 text-sm font-medium active" onclick="switchLoginTab('password')">ورود با رمز عبور</button>
+                            <button type="button" class="tab-button flex-1 py-3 px-4 text-sm font-medium" onclick="switchLoginTab('sms')">ورود با پیامک</button>
+                        </div>
+
+                        <!-- Password login form -->
+                        <form id="password-form" method="post" class="space-y-5">
+                            <input type="hidden" asp-for="Input.ReturnUrl" />
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">ایمیل / موبایل / نام کاربری</label>
+                                <div class="relative">
+                                    <input asp-for="Input.Identifier" class="w-full ps-4 pe-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="example@example.com یا 09xxxxxxxxx" />
+                                </div>
+                                <span asp-validation-for="Input.Identifier" class="text-red-600 text-xs"></span>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">رمز عبور</label>
+                                <div class="relative">
+                                    <input asp-for="Input.Password" type="password" class="w-full ps-4 pe-12 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="رمز عبور" />
+                                    <button type="button" class="absolute password-toggle top-1/2 right-3 transform -translate-y-1/2 text-gray-400" onclick="togglePasswordVisibility('Input_Password')">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <span asp-validation-for="Input.Password" class="text-red-600 text-xs"></span>
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <input asp-for="Input.RememberMe" type="checkbox" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                                    <label class="ms-2 block text-sm text-gray-700 dark:text-gray-300">مرا به خاطر بسپار</label>
+                                </div>
+                                <div class="text-sm">
+                                    <a href="/ForgotPassword" class="font-medium text-primary hover:underline">فراموشی رمز عبور؟</a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <button type="submit" class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">
+                                    ورود به حساب
+                                </button>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                            {
+                                <div class="text-red-600 text-sm mt-2">@Model.ErrorMessage</div>
+                            }
+                        </form>
+
+                        <!-- SMS login (placeholder) -->
+                        <div id="sms-form" class="space-y-5 hidden">
+                            <div class="text-sm text-gray-500 dark:text-gray-400">ورود با پیامک در نسخه فعلی غیرفعال است.</div>
+                        </div>
+
+                        <div class="mt-6 text-center">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                حساب ندارید؟
+                                <a href="/Register" class="font-medium text-primary hover:underline">ثبت نام کنید</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        function switchLoginTab(tab) {
+            const pw = document.getElementById('password-form');
+            const sms = document.getElementById('sms-form');
+            if (tab === 'password') { pw.classList.remove('hidden'); sms.classList.add('hidden'); }
+            else { pw.classList.add('hidden'); sms.classList.remove('hidden'); }
+        }
+        function togglePasswordVisibility(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.type = el.type === 'password' ? 'text' : 'password';
+        }
+    </script>
+}

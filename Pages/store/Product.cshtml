@@ -1,0 +1,296 @@
+@page "{id:int}"
+@using TiShinShop.Entities
+@model TiShinShop.Pages.Store.ProductModel
+@{
+    Layout = "_StorefrontLayout";
+    ViewData["Title"] = Model.Item?.Title ?? "جزئیات محصول";
+}
+
+<section class="container mx-auto p-4">
+    @if (Model.Item != null)
+    {
+        <div class="dark:bg-gray-800 dark:text-white bg-white rounded-lg drop-shadow-lg border-gray-300 border-1 px-4 pt-4">
+            <div class="grid grid-cols-6 gap-4 place-items-start">
+                <!-- gallery -->
+                <section class="lg:col-span-2 mt-7 col-span-6 pb-10 w-full lg:sticky top-0" itemprop="image" itemscope itemtype="https://schema.org/ImageGallery">
+                    <header class="flex items-center relative z-10 ms-3 mt-2 justify-between">
+                        <div class="flex flex-col bg-white absolute top-1 start-0 p-1 rounded space-y-3 dark:bg-transparent">
+                            <!-- actions placeholders consistent with template -->
+                            <button class="hover:text-gray-400 relative group cursor-pointer" aria-label="افزودن به علاقه‌مندی‌ها">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </header>
+                    <div class="swiper" id="productGalleryTwo">
+                        <div class="swiper-wrapper" style="padding-bottom: 20px !important;">
+                            @if (Model.Item.Images?.Any() == true)
+                            {
+                                foreach (var img in Model.Item.Images)
+                                {
+                                    <div class="swiper-slide !pe-1" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
+                                        <img src="@Url.Content(img.ImageUrl)" alt="@Model.Item.Title" class="rounded-lg border border-gray-300 p-2" itemprop="contentUrl" />
+                                        <meta itemprop="caption" content="@Model.Item.Title">
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                var fallbacks = new List<string>();
+                                if (!string.IsNullOrEmpty(Model.Item.FirstImage)) fallbacks.Add(Model.Item.FirstImage);
+                                if (!string.IsNullOrEmpty(Model.Item.SecondImage)) fallbacks.Add(Model.Item.SecondImage);
+                                if (!fallbacks.Any()) fallbacks.Add(Url.Content("~/images/product/default.jpg"));
+                                foreach (var src in fallbacks)
+                                {
+                                    <div class="swiper-slide !pe-1" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
+                                        <img src="@Url.Content(src)" alt="@Model.Item.Title" class="rounded-lg border border-gray-300 p-2" itemprop="contentUrl" />
+                                        <meta itemprop="caption" content="@Model.Item.Title">
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="swiper-button-prev bg-white rounded-full dark:bg-zinc-800 border border-gray-200 !size-12 after:!text-xl px-3 after:text-primary" aria-label="اسلاید بعدی"></div>
+                        <div class="swiper-button-next bg-white rounded-full dark:bg-zinc-800 border border-gray-200 !size-12 after:!text-xl px-3 after:text-primary" aria-label="اسلاید قبلی"></div>
+                    </div>
+                    <div id="productGalleryOne" class="swiper" style="padding-left: 10px!important;">
+                        <div class="swiper-wrapper" style="padding-bottom: 0px !important;">
+                            @if (Model.Item.Images?.Any() == true)
+                            {
+                                foreach (var img in Model.Item.Images)
+                                {
+                                    <div class="swiper-slide !pe-1" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
+                                        <img src="@Url.Content(img.ImageUrl)" alt="@Model.Item.Title" class="rounded-lg cursor-pointer border border-gray-300 p-2" itemprop="contentUrl" />
+                                        <meta itemprop="caption" content="@Model.Item.Title">
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                var fallbacks = new List<string>();
+                                if (!string.IsNullOrEmpty(Model.Item.FirstImage)) fallbacks.Add(Model.Item.FirstImage);
+                                if (!string.IsNullOrEmpty(Model.Item.SecondImage)) fallbacks.Add(Model.Item.SecondImage);
+                                if (!fallbacks.Any()) fallbacks.Add(Url.Content("~/images/product/default.jpg"));
+                                foreach (var src in fallbacks)
+                                {
+                                    <div class="swiper-slide !pe-1" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
+                                        <img src="@Url.Content(src)" alt="@Model.Item.Title" class="rounded-lg cursor-pointer border border-gray-300 p-2" itemprop="contentUrl" />
+                                        <meta itemprop="caption" content="@Model.Item.Title">
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </section>
+
+                <!-- meta -->
+                <section class="lg:col-span-4 col-span-6 w-full my-7">
+                    <!-- title -->
+                    <div class="space-y-5">
+                        <h1 class="font-bold text-xl border-b border-b-gray-300 pb-3" itemprop="name">@Model.Item.Title</h1>
+                        <div class="flex items-start space-y-3 flex-col w-full">
+                            @if (!string.IsNullOrEmpty(Model.Item.Brand))
+                            {
+                                <h2 class="text-zinc-500 text-base" itemprop="model">@Model.Item.Brand</h2>
+                            }
+                        </div>
+                    </div>
+                    <!-- rating -->
+                    <div class="flex mt-4 items-center" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
+                        <meta itemprop="ratingValue" content="@Model.AverageRating">
+                        <meta itemprop="reviewCount" content="@Model.ReviewCount">
+                        <span class="me-2">@Model.AverageRating.ToString("0.0")</span>
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 text-orange-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-4">
+                        <!-- feature -->
+                        <section class="lg:col-span-2 col-span-4 w-full">
+                            <!-- size selector -->
+                            <div class="my-4">
+                                <h4 class="font-bold text-lg">انتخاب اندازه</h4>
+                                <div class="flex my-4 flex-wrap items-center gap-2">
+                                    <select asp-for="SelectedSizeId" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        @foreach (var ps in Model.Sizes)
+                                        {
+                                            <option value="@ps.Id">@ps.Size.Value</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- attributes -->
+                            <div class="space-y-5">
+                                <h4 class="font-bold text-lg">ویژگی‌های محصول:</h4>
+                                <ul class="flex flex-col items-start items-baseline flex-wrap space-x-3 space-y-3" itemprop="description">
+                                    <li>
+                                        <div class="flex items-center space-x-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+                                            <span class="inline-block text-base">کد محصول: @Model.Item.Code</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+
+                        <!-- meta and price -->
+                        <section class="lg:col-span-2 col-span-4 w-full">
+                            <div class="p-4 bg-white dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-zinc-700 shadow-sm mx-auto">
+                                <!-- Prices -->
+                                <div class="flex items-center space-x-4 justify-between mt-2 mb-2">
+                                    <div class="flex items-center">
+                                        <div class="text-gray-700 dark:text-zinc-300 flex flex-col items-center">
+                                            <div class="flex justify-between items-center">
+                                                @if (Model.FinalPrice < Model.Item.BasePrice)
+                                                {
+                                                    <del class="text-zinc-400" itemprop="priceSpecification" itemscope itemtype="http://schema.org/UnitPriceSpecification">
+                                                        <meta itemprop="priceCurrency" content="IRR">
+                                                        <span itemprop="price">@Model.Item.BasePrice.ToString("N0")</span>
+                                                    </del>
+                                                    <span class="bg-danger px-2 text-sm rounded-xl text-white ms-3">تخفیف</span>
+                                                }
+                                            </div>
+                                            <span class="text-xl font-bold dark:text-white" itemprop="price" content="@Model.FinalPrice">@Model.FinalPrice.ToString("N0")</span>
+                                        </div>
+                                        <span class="text-xs font-bold -rotate-90 dark:text-zinc-300">تومان</span>
+                                    </div>
+                                </div>
+
+                                <!-- combinations and quantities -->
+                                <form method="post" class="mt-3">
+                                    <input type="hidden" asp-for="CartItems[0].ProductId" value="@Model.Item.Id" />
+                                    <div class="mb-2">
+                                        <h3 class="font-bold mb-2">انتخاب ترکیب رنگ و جنس با تعداد</h3>
+                                        <div class="overflow-x-auto">
+                                            <table class="min-w-full text-sm border border-gray-200 dark:border-gray-700">
+                                                <thead class="bg-gray-50 dark:bg-gray-700">
+                                                    <tr>
+                                                        <th class="px-3 py-2">رنگ</th>
+                                                        <th class="px-3 py-2">جنس</th>
+                                                        <th class="px-3 py-2">تعداد</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="bg-white dark:bg-gray-800">
+                                                    @for (int i = 0; i < Model.ColorMaterialPairs.Count; i++)
+                                                    {
+                                                        var pair = Model.ColorMaterialPairs[i];
+                                                        <tr class="border-t border-gray-200 dark:border-gray-700">
+                                                            <td class="px-3 py-2">
+                                                                <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                                                                    <span class="inline-block w-5 h-5 rounded border border-gray-300" style="background-color:@pair.Color.HexCode"></span>
+                                                                    <span>@pair.Color.Value</span>
+                                                                </div>
+                                                                <input asp-for="CartItems[i].ProductColorId" type="hidden" value="@pair.ProductColorId" />
+                                                            </td>
+                                                            <td class="px-3 py-2">
+                                                                <span>@pair.Material.Name</span>
+                                                                <input asp-for="CartItems[i].ProductMaterialId" type="hidden" value="@pair.ProductMaterialId" />
+                                                            </td>
+                                                            <td class="px-3 py-2">
+                                                                <input asp-for="CartItems[i].Count" type="number" min="0" class="w-24 px-3 py-2 border rounded" value="0" />
+                                                                <input asp-for="CartItems[i].ProductId" type="hidden" value="@Model.Item.Id" />
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-center">
+                                        <button type="submit" formaction="?handler=AddToCart" class="bg-green-600 w-full mt-3 hover:bg-green-700 text-white font-semibold rounded-md px-6 py-3 text-sm">افزودن به سبد خرید</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </section>
+                        
+                        <!-- tabs -->
+                        <section class="col-span-4 w-full">
+                            <section id="metaData" class="py-5">
+                                <nav class="px-5 rounded-xl dark:border dark:bg-gray-800 bg-gray-300">
+                                    <ul class="flex space-x-1 md:overflow-x-auto overflow-x-scroll text-nowrap py-4" role="tablist">
+                                        <li role="presentation"><button class="bg-white tab-button px-15 py-5 rounded-xl transition-colors dark:bg-zinc-700 active" role="tab" data-tab="Intro" aria-controls="description">توضیحات کالا</button></li>
+                                        <li role="presentation"><button class="bg-white tab-button px-15 py-5 rounded-xl transition-colors dark:bg-zinc-700" role="tab" data-tab="Specifications" aria-controls="specs">مشخصات کالا</button></li>
+                                        <li role="presentation"><button class="bg-white tab-button px-15 py-5 rounded-xl transition-colors dark:bg-zinc-700" role="tab" data-tab="Comments" aria-controls="reviews">نظرات <span class="bg-secondary-500 size-5 text-sm text-center inline-block rounded text-white ms-1">@Model.ReviewCount</span></button></li>
+                                    </ul>
+                                </nav>
+                                <div class="tab-contents mt-4">
+                                    <div id="Intro" class="p-5 bg-white dark:bg-gray-800 dark:text-white rounded-xl hidden tab-content border border-gray-300 drop-shadow">
+                                        <div class="space-y-5">
+                                            <h2 class="text-2xl pb-3 font-black text-zinc-800 relative before:absolute before:bottom-0 before:start-0 before:h-1 before:w-22 before:bg-primary-500 before:rounded dark:text-white">معرفی محصول</h2>
+                                            <p class="text-neutral-700 leading-9 text-justify text-lg dark:text-white">@Model.Item.Description</p>
+                                        </div>
+                                    </div>
+                                    <div id="Specifications" class="p-5 bg-white dark:bg-gray-800 dark:text-white rounded-xl hidden tab-content border border-gray-300 drop-shadow">
+                                        <div class="space-y-5">
+                                            <h2 class="text-2xl pb-3 font-black text-zinc-800 relative before:absolute before:bottom-0 before:start-0 before:h-1 before:w-22 before:bg-primary-500 before:rounded dark:text-white">مشخصات</h2>
+                                            <div class="grid grid-cols-2 gap-6 text-start">
+                                                <span class="px-5 rounded-xl bg-gray-200 border border-gray-300 text-gray-900 text-sm py-4 inline-flex">برند</span>
+                                                <span class="bg-gray-100 border border-gray-200 px-3 py-4 text-sm text-gray-900 inline-flex rounded">@Model.Item.Brand</span>
+                                                <span class="px-5 rounded-xl bg-gray-200 border border-gray-300 text-gray-900 text-sm py-4 inline-flex">کد</span>
+                                                <span class="bg-gray-100 border border-gray-200 px-3 py-4 text-sm text-gray-900 inline-flex rounded">@Model.Item.Code</span>
+                                                <span class="px-5 rounded-xl bg-gray-200 border border-gray-300 text-gray-900 text-sm py-4 inline-flex">سایزها</span>
+                                                <span class="bg-gray-100 border border-gray-200 px-3 py-4 text-sm text-gray-900 inline-flex rounded">@string.Join("، ", Model.Sizes.Select(s => s.Size.Value))</span>
+                                                <span class="px-5 rounded-xl bg-gray-200 border border-gray-300 text-gray-900 text-sm py-4 inline-flex">رنگ‌ها</span>
+                                                <span class="bg-gray-100 border border-gray-200 px-3 py-4 text-sm text-gray-900 inline-flex rounded">@string.Join("، ", Model.ColorMaterialPairs.Select(p => p.Color.Value).Distinct())</span>
+                                                <span class="px-5 rounded-xl bg-gray-200 border border-gray-300 text-gray-900 text-sm py-4 inline-flex">جنس‌ها</span>
+                                                <span class="bg-gray-100 border border-gray-200 px-3 py-4 text-sm text-gray-900 inline-flex rounded">@string.Join("، ", Model.ColorMaterialPairs.Select(p => p.Material.Name).Distinct())</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="Comments" class="p-5 bg-white dark:bg-gray-800 dark:text-white rounded-xl hidden tab-content border border-gray-300 drop-shadow">
+                                        <div class="space-y-5">
+                                            <h2 class="text-2xl pb-3 font-black text-zinc-800 relative before:absolute before:bottom-0 before:start-0 before:h-1 before:w-22 before:bg-primary-500 before:rounded dark:text-white">نظرات کاربران</h2>
+                                            @if (Model.Reviews.Any())
+                                            {
+                                                foreach (var r in Model.Reviews)
+                                                {
+                                                    <article class="border border-gray-200 dark:border-zinc-700 rounded p-4 mb-3">
+                                                        <div class="flex items-center justify-between">
+                                                            <span class="text-sm text-gray-600 dark:text-gray-300">امتیاز: @r.Rating/5</span>
+                                                            <span class="text-xs text-gray-500">@r.CreatedAt.ToString("yyyy/MM/dd")</span>
+                                                        </div>
+                                                        <p class="mt-2 text-gray-800 dark:text-white">@r.Comment</p>
+                                                    </article>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <p class="text-gray-500">هنوز نظری ثبت نشده است.</p>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="p-4">محصول یافت نشد.</div>
+    }
+</section>
+
+<script>
+    // Simple tab toggling to match template behavior
+    (function() {
+        const buttons = document.querySelectorAll('.tab-button');
+        const contents = document.querySelectorAll('.tab-content');
+        function activate(tabId) {
+            contents.forEach(c => c.classList.add('hidden'));
+            buttons.forEach(b => b.classList.remove('active'));
+            const target = document.getElementById(tabId);
+            if (target) target.classList.remove('hidden');
+            const btn = Array.from(buttons).find(b => b.getAttribute('data-tab') === tabId);
+            if (btn) btn.classList.add('active');
+        }
+        buttons.forEach(b => b.addEventListener('click', () => activate(b.getAttribute('data-tab'))));
+        // default
+        activate('Intro');
+    })();
+</script>

@@ -1,0 +1,21 @@
+@page "{id:int}"
+@model TiShinShop.Pages.Store.PaymentModel
+@{
+    Layout = "_StorefrontLayout";
+    ViewData["Title"] = "پرداخت";
+}
+
+<section class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">پرداخت سفارش @Model.Order?.TrackingCode</h1>
+    @if (Model.Order != null)
+    {
+        <div class="mb-4">مبلغ قابل پرداخت: <strong>@Model.Order.FinalPrice.ToString("N0")</strong> تومان</div>
+        <form method="post">
+            <button type="submit" class="px-4 py-2 text-sm font-medium rounded-lg bg-primary-600 text-white hover:bg-primary-700 shadow-sm">پرداخت</button>
+        </form>
+    }
+    else
+    {
+        <div>سفارش یافت نشد.</div>
+    }
+</section>

@@ -1,0 +1,17 @@
+@page "{id:int}"
+@model TiShinShop.Pages.SellerPanel.Settings.Materials.DeleteModel
+@{
+    Layout = "_SellerPanelLayout";
+    ViewData["Title"] = "حذف جنس";
+}
+
+<div class="bg-white p-6 dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 overflow-hidden border border-gray-200 dark:border-gray-700">
+    <h3 class="font-bold text-lg mb-4">آیا از حذف این جنس مطمئن هستید؟</h3>
+    <div>
+        <div class="text-sm font-medium text-gray-900 dark:text-white">@Model.Item?.Name</div>
+    </div>
+    <form method="post" class="mt-6 flex justify-end space-x-3 rtl:space-x-reverse">
+        <a asp-page="Index" class="px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">انصراف</a>
+        <button type="submit" class="px-4 py-2 text-sm font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 shadow-sm">حذف</button>
+    </form>
+</div>

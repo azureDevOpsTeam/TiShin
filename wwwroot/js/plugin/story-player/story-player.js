@@ -1,3 +1,7 @@
+;(function(){
+// Prevent redeclare when script is loaded multiple times
+if (typeof window !== 'undefined' && window.StoryPlayer) { return; }
+
 /**
  * StoryPlayer - A customizable story viewer component
  * @version 1.0.1
@@ -323,3 +327,9 @@ class StoryPlayer {
         return (1 - currentWidth / 100) * totalDuration;
     }
 }
+
+// Expose globally once
+if (typeof window !== 'undefined') {
+    window.StoryPlayer = StoryPlayer;
+}
+})();

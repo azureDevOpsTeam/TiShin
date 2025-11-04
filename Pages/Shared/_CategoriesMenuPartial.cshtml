@@ -1,0 +1,37 @@
+@using TiShinShop.Entities
+@using Microsoft.EntityFrameworkCore
+@inject TiShinShop.Data.ApplicationDbContext Db
+@{
+    var cats = Db.Categories.AsNoTracking().OrderBy(c => c.ParentId).ThenBy(c => c.Name).ToList();
+    var byParent = cats.GroupBy(c => c.ParentId).ToDictionary(g => g.Key, g => g.ToList());
+    List<Category> roots = byParent.ContainsKey(0) ? byParent[0] : new List<Category>();
+    string LinkFor(int id) => $"/?categoryId={id}"; // placeholder link
+}
+<ul class="navbar-nav">
+@foreach (var root in roots)
+{
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">@root.Name</a>
+        <ul class="dropdown-menu">
+            @if (byParent.ContainsKey(root.Id))
+            {
+                foreach (var baseCat in byParent[root.Id].Where(c => c.IsBaseMenu))
+                {
+                    <li class="dropdown-submenu">
+                        <a class="dropdown-item dropdown-toggle" href="#">@baseCat.Name</a>
+                        <ul class="dropdown-menu">
+                            @if (byParent.ContainsKey(baseCat.Id))
+                            {
+                                foreach (var leaf in byParent[baseCat.Id].Where(c => !c.IsBaseMenu))
+                                {
+                                    <li><a class="dropdown-item" href="@LinkFor(leaf.Id)">@leaf.Name</a></li>
+                                }
+                            }
+                        </ul>
+                    </li>
+                }
+            }
+        </ul>
+    </li>
+}
+</ul>

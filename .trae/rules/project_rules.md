@@ -55,6 +55,10 @@ The database entities are predefined and must be used when generating data-drive
 
 These entities represent the complete domain model of the store and must be used as the foundation of all page logic and data rendering.
 
+Roles : 
+ - Seler
+ - User
+
 ──────────────────────────────
 🛍️ Project Structure
 
