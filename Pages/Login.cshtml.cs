@@ -1,93 +1,113 @@
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using TiShinShop.Data;
 using TiShinShop.Entities;
 
-namespace TiShinShop.Pages;
-
-public class LoginModel : PageModel
+namespace TiShin.Pages
 {
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly UserManager<ApplicationUser> _userManager;
-
-    public LoginModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+    public class LoginModel(ApplicationDbContext context, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager) : PageModel
     {
-        _signInManager = signInManager;
-        _userManager = userManager;
-    }
+        private readonly ApplicationDbContext _context = context;
+        private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
 
-    [BindProperty]
-    public InputModel Input { get; set; } = new();
+        [BindProperty]
+        public LoginInput Input { get; set; }
 
-    public string? ErrorMessage { get; set; }
+        public string ErrorMessage { get; set; }
 
-    public class InputModel
-    {
-        [Required(ErrorMessage = "ورود شناسه لازم است")]
-        public string Identifier { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "رمز عبور لازم است")]
-        [DataType(DataType.Password)]
-        public string Password { get; set; } = string.Empty;
-
-        public bool RememberMe { get; set; }
-
-        public string? ReturnUrl { get; set; }
-    }
-
-    public void OnGet(string? returnUrl = null)
-    {
-        Input.ReturnUrl = returnUrl;
-    }
-
-    public async Task<IActionResult> OnPostAsync()
-    {
-        if (!ModelState.IsValid)
+        public class LoginInput
         {
-            return Page();
+            public string PhoneNumber { get; set; }
+
+            public string Password { get; set; }
         }
 
-        var identifier = Input.Identifier?.Trim();
-        ApplicationUser? user = null;
-
-        if (string.IsNullOrWhiteSpace(identifier))
+        public class SendCodeInputModel
         {
-            ModelState.AddModelError(string.Empty, "شناسه ورود معتبر نیست");
-            return Page();
+            public string PhoneNumber { get; set; }
         }
 
-        if (identifier.Contains('@'))
+        public class LoginCodeInput
         {
-            user = await _userManager.FindByEmailAsync(identifier);
-        }
-        else if (System.Text.RegularExpressions.Regex.IsMatch(identifier, "^09\\d{9}$"))
-        {
-            user = await _userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == identifier);
-        }
-        else
-        {
-            user = await _userManager.FindByNameAsync(identifier);
+            public string PhoneNumber { get; set; }
+
+            public string Code { get; set; }
         }
 
-        if (user == null)
+        public void OnGet()
         {
-            ErrorMessage = "کاربری با این مشخصات یافت نشد";
-            return Page();
         }
 
-        var result = await _signInManager.PasswordSignInAsync(user, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-        if (result.Succeeded)
+        public async Task<IActionResult> OnPostAsync()
         {
-            if (!string.IsNullOrEmpty(Input.ReturnUrl) && Url.IsLocalUrl(Input.ReturnUrl))
+            var result = await _signInManager.PasswordSignInAsync(Input.PhoneNumber, Input.Password, false, false);
+            if (result.Succeeded)
             {
-                return LocalRedirect(Input.ReturnUrl);
+                return RedirectToPage("/Index");
             }
-            return RedirectToPage("/Index");
+
+            ErrorMessage = "ورود ناموفق بود.";
+            return Page();
         }
 
-        ErrorMessage = "ورود ناموفق بود. رمز عبور را بررسی کنید";
-        return Page();
+        public async Task<IActionResult> OnPostSendCodeAsync([FromBody] SendCodeInputModel input)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == input.PhoneNumber);
+            if (user == null)
+            {
+                return new JsonResult(new { success = false, message = "کاربری با این شماره پیدا نشد." });
+            }
+
+            var token = await _userManager.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider);
+            user.VerificationCode = token;
+            user.ExpireCode = DateTime.Now.AddMinutes(2);
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            TempData["PhoneNumber"] = input.PhoneNumber;
+
+            try
+            {
+                var api = new Kavenegar.KavenegarApi("784F3738592B59487748785776764B48385A744C2B4E2F702F39654B6247593233754835346274477956673D");
+                var result = await api.VerifyLookup(user.PhoneNumber, token, "LoginVerify");
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { success = false, message = $"خطا در ارسال پیامک: {ex.Message}" });
+            }
+
+            return new JsonResult(new { success = true, message = "کد تایید با موفقیت ارسال شد." });
+        }
+
+        public async Task<IActionResult> OnPostVerifyCodeAsync([FromBody] LoginCodeInput input)
+        {
+            if (string.IsNullOrEmpty(input.PhoneNumber))
+            {
+                return BadRequest(new { success = false, message = "شماره موبایل پیدا نشد." });
+            }
+
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == input.PhoneNumber);
+            if (user == null)
+            {
+                return BadRequest(new { success = false, message = "کاربری با این شماره پیدا نشد." });
+            }
+
+            if (user.ExpireCode < DateTime.Now)
+            {
+                return BadRequest(new { success = false, message = "کد وارد شده معتبر نیست." });
+            }
+
+            var isValid = await _userManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider, input.Code);
+            if (!isValid)
+            {
+                return BadRequest(new { success = false, message = "کد اشتباه است." });
+            }
+
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            return new JsonResult(new { success = true });
+        }
     }
 }
