@@ -5,50 +5,207 @@
     ViewData["Title"] = "جزئیات سفارش";
 }
 
-<div class="space-y-6">
-    <div class="flex items-center justify-between">
-        <h2 class="text-xl font-bold">جزئیات سفارش @Model.Order?.Id</h2>
-        <a asp-page="./Index" class="text-sm text-primary">بازگشت</a>
+<main class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-background-dark">
+    <!-- page header -->
+    <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+        <div>
+            <h2 class="text-2xl font-bold text-dark dark:text-light">جزئیات سفارش #@Model.Order?.Id</h2>
+            <div class="flex items-center mt-2">
+                <span class="px-3 py-1 inline-flex text-xs leading-5 rounded-full bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200">
+                    @Model.Order?.Status
+                </span>
+                <span class="ms-3 text-sm text-gray-600 dark:text-gray-400">در تاریخ @Model.Order?.CreatedAt.ToString("yyyy/MM/dd") ثبت شده است</span>
+            </div>
+        </div>
+        <div class="mt-4 md:mt-0 flex space-x-3 space-x-reverse">
+            <a class="flex items-center px-4 py-2 text-sm font-medium rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 me-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+                دریافت فاکتور
+            </a>
+            <a asp-page="./Index" class="flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-primary text-white hover:bg-primary/90 shadow-sm dark:bg-primary-dark dark:hover:bg-primary/80">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 me-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1.5.86l-3.5-2.5-3.5 2.5A1 1 0 014 16V4zm6 10.5l3.5 2.5V4a1 1 0 00-1-1H7a1 1 0 00-1 1v12.5l3.5-2.5z" clip-rule="evenodd" />
+                </svg>
+                بازگشت به سفارش‌ها
+            </a>
+        </div>
     </div>
 
-    <div class="grid md:grid-cols-2 gap-6">
-        <div class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-4">
-            <h3 class="font-semibold mb-3">آدرس ارسال</h3>
-            <p class="text-sm">@Model.Order?.ShippingAddress?.FullName</p>
-            <p class="text-sm">@Model.Order?.ShippingAddress?.Phone</p>
-            <p class="text-sm">@Model.Order?.ShippingAddress?.City - @Model.Order?.ShippingAddress?.Street</p>
-            <p class="text-sm">@Model.Order?.ShippingAddress?.FullAddress</p>
-        </div>
-        <div class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-4">
-            <h3 class="font-semibold mb-3">اطلاعات سفارش</h3>
-            <p class="text-sm">وضعیت: @Model.Order?.Status</p>
-            <p class="text-sm">مبلغ: @Model.Order?.TotalPrice.ToString("N0") تومان</p>
-            <p class="text-sm">کد رهگیری: @Model.Order?.TrackingCode</p>
-        </div>
-    </div>
-
-    <div class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-4">
-        <h3 class="font-semibold mb-3">اقلام</h3>
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead class="bg-gray-50 dark:bg-gray-900">
-                <tr>
-                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">محصول</th>
-                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">تعداد</th>
-                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">قیمت واحد</th>
-                </tr>
-                </thead>
-                <tbody class="bg-white dark:bg-card-dark divide-y divide-gray-200 dark:divide-gray-700">
-                @foreach (var item in Model.Items)
+    <!-- Ordering procedures -->
+    <div class="bg-white dark:bg-card-dark rounded-xl shadow-soft dark:shadow-soft-dark p-6 mb-6 border border-gray-100 dark:border-gray-700">
+        <h3 class="font-bold text-lg mb-4 relative pb-4 before:absolute before:start-0 before:bottom-0 before:size-2 before:rounded-full before:bg-primary after:absolute after:w-40 after:h-2 after:bottom-0 after:start-4 after:bg-primary after:rounded-lg">پیگیری وضعیت سفارش</h3>
+        <div class="relative">
+            <div class="absolute top-1/2 start-0 end-0 h-1 bg-gray-200 dark:bg-gray-700 transform -translate-y-1/2"></div>
+            <div class="absolute top-1/2 start-0 h-1 bg-green-500 dark:bg-green-400 transform -translate-y-1/2" style="width: @(Model.History?.Count > 0 ? "100%" : "0%")"></div>
+            <div class="relative flex justify-between max-sm:overflow-x-scroll">
+                @if (Model.History != null && Model.History.Any())
                 {
-                    <tr>
-                        <td class="px-4 py-3 text-sm">@item.Product?.Title</td>
-                        <td class="px-4 py-3 text-sm">@item.Quantity</td>
-                        <td class="px-4 py-3 text-sm">@item.UnitPrice.ToString("N0")</td>
-                    </tr>
+                    foreach (var h in Model.History)
+                    {
+                        <div class="flex mt-10 max-sm:min-w-50 flex-col items-center">
+                            <div class="w-8 h-8 rounded-full bg-green-500 dark:bg-green-400 flex items-center justify-center text-white mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <span class="text-sm font-medium text-dark dark:text-light">@h.Status</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">@h.ChangedAt.ToString("yyyy/MM/dd")</span>
+                        </div>
+                    }
                 }
-                </tbody>
-            </table>
+                else
+                {
+                    <div class="flex mt-10 max-sm:min-w-50 flex-col items-center">
+                        <div class="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-white mb-2"></div>
+                        <span class="text-sm font-medium text-dark dark:text-light">بدون وضعیت</span>
+                    </div>
+                }
+            </div>
         </div>
     </div>
-</div>
+
+    <!-- Order information -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <!-- Basic order information -->
+        <div class="lg:col-span-2 bg-white dark:bg-card-dark rounded-xl shadow-soft dark:shadow-soft-dark p-6 border border-gray-100 dark:border-gray-700">
+            <h3 class="font-bold text-lg mb-4 relative pb-4 before:absolute before:start-0 before:bottom-0 before:size-2 before:rounded-full before:bg-primary after:absolute after:w-40 after:h-2 after:bottom-0 after:start-4 after:bg-primary after:rounded-lg">اطلاعات سفارش</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-medium text-dark dark:text-light mb-2">اطلاعات پرداخت</h4>
+                    <div class="space-y-2">
+                        <p class="text-sm text-gray-600 dark:text-gray-400"><span class="font-medium text-gray-700 dark:text-gray-300">روش پرداخت:</span> پرداخت آنلاین</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400"><span class="font-medium text-gray-700 dark:text-gray-300">تاریخ پرداخت:</span> @Model.Order?.CreatedAt.ToString("yyyy/MM/dd - HH:mm")</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400"><span class="font-medium text-gray-700 dark:text-gray-300">کد رهگیری:</span> @Model.Order?.TrackingCode</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-medium text-dark dark:text-light mb-2">اطلاعات ارسال</h4>
+                    <div class="space-y-2">
+                        <p class="text-sm text-gray-600 dark:text-gray-400"><span class="font-medium text-gray-700 dark:text-gray-300">روش ارسال:</span> پست پیشتاز</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400"><span class="font-medium text-gray-700 dark:text-gray-300">شماره مرسوله:</span> @Model.Order?.TrackingCode</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400"><span class="font-medium text-gray-700 dark:text-gray-300">آدرس:</span> @Model.Order?.ShippingAddress?.City، @Model.Order?.ShippingAddress?.Street، @Model.Order?.ShippingAddress?.FullAddress</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order products -->
+            <div class="mt-6 max-sm:overflow-x-scroll">
+                <h4 class="font-medium text-dark dark:text-light mb-4">محصولات سفارش</h4>
+                <div class="border max-sm:min-w-150 rounded-lg overflow-hidden">
+                    <div class="grid grid-cols-12 bg-gray-50 dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <div class="col-span-6 text-sm font-medium text-gray-500 dark:text-gray-400">محصول</div>
+                        <div class="col-span-2 text-sm font-medium text-gray-500 dark:text-gray-400 text-center">تعداد</div>
+                        <div class="col-span-2 text-sm font-medium text-gray-500 dark:text-gray-400 text-center">قیمت واحد</div>
+                        <div class="col-span-2 text-sm font-medium text-gray-500 dark:text-gray-400 text-center">جمع</div>
+                    </div>
+
+                    @if (Model.Items != null && Model.Items.Any())
+                    {
+                        foreach (var item in Model.Items)
+                        {
+                            var image = string.IsNullOrWhiteSpace(item.Product?.FirstImage) ? "/images/product/default.png" : Url.Content($"~/images/product/{item.Product.FirstImage}");
+                            var sum = item.UnitPrice * item.Quantity;
+                            <div class="grid grid-cols-12 p-4 border-b border-gray-200 dark:border-gray-700">
+                                <div class="col-span-6 flex items-center">
+                                    <img src="@image" alt="@item.Product?.Title" class="w-16 h-16 object-cover rounded-lg me-3">
+                                    <div>
+                                        <p class="text-sm font-medium text-dark dark:text-light">@item.Product?.Title</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                                            اندازه: @item.ProductSize?.Size?.Value
+                                            — رنگ: @item.ProductColor?.Color?.Value
+                                            — جنس: @item.ProductMaterial?.Material?.Name
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-span-2 flex items-center justify-center text-sm text-gray-600 dark:text-gray-400">@item.Quantity</div>
+                                <div class="col-span-2 flex items-center justify-center text-sm text-gray-600 dark:text-gray-400">@item.UnitPrice.ToString("N0") تومان</div>
+                                <div class="col-span-2 flex items-center justify-center text-sm font-medium text-dark dark:text-light">@sum.ToString("N0") تومان</div>
+                            </div>
+                        }
+                        <div class="grid grid-cols-12 bg-gray-50 dark:bg-gray-800 p-4">
+                            <div class="col-span-8 text-sm font-medium text-gray-500 dark:text-gray-400">جمع کل سفارش</div>
+                            <div class="col-span-4 flex items-center justify-end text-lg font-bold text-dark dark:text-light">@Model.Items.Sum(i => i.UnitPrice * i.Quantity).ToString("N0") تومان</div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-4 text-center text-sm text-gray-500 dark:text-gray-400">هیچ آیتمی برای این سفارش ثبت نشده است.</div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- order detail summary -->
+        <div class="bg-white dark:bg-card-dark rounded-xl shadow-soft dark:shadow-soft-dark p-6 border border-gray-100 dark:border-gray-700">
+            <h3 class="font-bold text-lg mb-4 relative pb-4 before:absolute before:start-0 before:bottom-0 before:size-2 before:rounded-full before:bg-primary after:absolute after:w-40 after:h-2 after:bottom-0 after:start-4 after:bg-primary after:rounded-lg">خلاصه سفارش</h3>
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-600 dark:text-gray-400">مبلغ کالاها</span>
+                    <span class="text-sm font-medium text-dark dark:text-light">@Model.Items.Sum(i => i.UnitPrice * i.Quantity).ToString("N0") تومان</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-600 dark:text-gray-400">تخفیف</span>
+                    <span class="text-sm font-medium text-danger dark:text-danger-dark">@Model.Order?.DiscountAmount.ToString() تومان</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-600 dark:text-gray-400">کد تخفیف</span>
+                    <span class="text-sm font-medium text-dark dark:text-light">@(Model.Order?.Coupon != null ? Model.Order.Coupon.Code : "—")</span>
+                </div>
+                <div class="border-t border-gray-200 dark:border-gray-700 pt-3 mt-3 flex items-center justify-between">
+                    <span class="text-base font-bold text-dark dark:text-light">مبلغ نهایی</span>
+                    <span class="text-base font-bold text-primary dark:text-primary-dark">@Model.Order?.FinalPrice.ToString("N0") تومان</span>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <h4 class="font-medium text-dark dark:text-light mb-2">اطلاعات گیرنده</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">@Model.Order?.ShippingAddress?.FullName</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">@Model.Order?.ShippingAddress?.Phone</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">@Model.Order?.ShippingAddress?.City - @Model.Order?.ShippingAddress?.Street</p>
+            </div>
+
+            <div class="mt-6 space-y-3">
+                <a asp-page="./Index" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary/90 dark:bg-primary-dark dark:hover:bg-primary/80 transition-colors text-center inline-block">بازگشت به سفارش‌ها</a>
+                <button class="w-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">درخواست مرجوعی</button>
+                <button class="w-full border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">تماس با پشتیبانی</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- More information -->
+    <div class="bg-white dark:bg-card-dark rounded-xl shadow-soft dark:shadow-soft-dark p-6 border border-gray-100 dark:border-gray-700">
+        <h3 class="font-bold text-lg mb-4 relative pb-4 before:absolute before:start-0 before:bottom-0 before:size-2 before:rounded-full before:bg-primary after:absolute after:w-40 after:h-2 after:bottom-0 after:start-4 after:bg-primary after:rounded-lg">اطلاعات بیشتر</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <h4 class="font-medium text-dark dark:text-light mb-2">توضیحات سفارش</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-400">این سفارش با موفقیت ثبت شده است. در صورت وجود هرگونه مشکل با پشتیبانی تماس بگیرید.</p>
+            </div>
+            <div>
+                <h4 class="font-medium text-dark dark:text-light mb-2">پیگیری پستی</h4>
+                <div class="flex">
+                    <input id="inputField" type="text" class="flex-1 border rounded-s-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="@Model.Order?.TrackingCode" readonly>
+                    <button id="copyButton" class="bg-primary text-white px-4 py-2 rounded-e-lg hover:bg-primary/90 dark:bg-primary-dark dark:hover:bg-primary/80 transition-colors">کپی</button>
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">می‌توانید این کد را در سایت اداره پست وارد کنید تا وضعیت مرسوله را پیگیری کنید.</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    (function(){
+        const btn = document.getElementById('copyButton');
+        const input = document.getElementById('inputField');
+        if(btn && input){
+            btn.addEventListener('click', function(){
+                input.select();
+                input.setSelectionRange(0, input.value.length);
+                navigator.clipboard.writeText(input.value);
+            });
+        }
+    })();
+</script>

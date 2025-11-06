@@ -108,8 +108,12 @@ public class ProductModel : PageModel
         var product = await _db.Products.FirstOrDefaultAsync(p => p.Id == id);
         if (product == null) return NotFound();
 
-        // Get or create cart for current user (guest=0)
-        var userId = 0;
+        // Get or create cart for current user (fallback guest=0)
+        var username = User?.Identity?.Name;
+        var user = !string.IsNullOrWhiteSpace(username)
+            ? await _db.Users.FirstOrDefaultAsync(u => u.UserName == username)
+            : null;
+        var userId = user?.Id ?? 0;
         var cart = await _db.Carts.Include(c => c.Items).FirstOrDefaultAsync(c => c.UserId == userId);
         if (cart == null)
         {

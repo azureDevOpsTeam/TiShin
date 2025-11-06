@@ -1,71 +1,141 @@
-﻿@using TiShinShop.ViewComponents
-@model IEnumerable<MenuItemViewModel>
-@{
-}
-
-@if (Model.Any())
-{
-    <div class="grid grid-cols-12">
-        <!-- لیست منوی اصلی -->
-        <div class="col-span-2 h-[400px] overflow-y-scroll border-l border-gray-400">
-            <ul class="my-2 space-y-1">
-                @foreach (var item in Model.FirstOrDefault().BaseMenu)
-                {
-                    <li data-mega-id="@item.Id"
-                        class="px-4 w-full hover:bg-opacity-70 border-opacity-0 hover:border-opacity-100 rounded-lg dark:hover:text-zinc-950 mega-menu-li">
-                        <a href="#" class="flex items-center justify-between py-3">
-                            <div class="flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
-                                     viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                          d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm11 1H6v8l4-2 4 2V6z"
-                                          clip-rule="evenodd" />
-                                </svg>
-                                <div class="mr-1">
-                                    <p class="text-xs">@item.Name</p>
-                                </div>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                 class="h-5 w-5 text-gray-500" fill="none"
-                                 viewBox="0 0 24 24"
-                                 stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      stroke-width="2"
-                                      d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </a>
-                    </li>
-                }
-            </ul>
-        </div>
-
-        <!-- محتویات هر منوی اصلی -->
-        <div class="col-span-10 bg-white dark:bg-background-dark">
-
-            <div class="grid h-[400px] overflow-y-scroll grid-cols-8 gap-10 m-3">
-                @foreach (var item in Model)
-                {
-                    <div class="col-span-2">
-                        <div class="mb-4">
-                            <p class="text-sm font-bold">
-                                @{
-                                    @item.Parent.Name
-                                }
-                            </p>
-                            <div class="mt-3 space-y-4">
-                                @foreach (var child in item.Children.Where(c => !c.IsBaseMenu))
-                                {
-                                    <a href="#"
-                                       class="text-xs text-gray-600 block hover:text-primary dark:text-gray-300">
-                                        @child.Name
-                                    </a>
-                                }
-                            </div>
+<div class="grid grid-cols-12">
+    <!-- بخش راست: منوهای اصلی -->
+    <div class="col-span-2 h-[400px] overflow-y-scroll border-e border-gray-400">
+        <ul class="my-2 space-y-1">
+            <li data-mega-id="1"
+                class="px-4 w-full hover:bg-opacity-70 border-opacity-0 hover:border-opacity-100 rounded-lg dark:hover:text-zinc-950 mega-menu-li bg-gray-100">
+                <a href="#" class="flex items-center justify-between py-3">
+                    <div class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm11 1H6v8l4-2 4 2V6z"
+                                  clip-rule="evenodd" />
+                        </svg>
+                        <div class="ms-1">
+                            <p class="text-xs">کالای دیجیتال</p>
                         </div>
                     </div>
-                }
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </a>
+            </li>
+            <li data-mega-id="2"
+                class="px-4 w-full hover:bg-opacity-70 border-opacity-0 hover:border-opacity-100 rounded-lg dark:hover:text-zinc-950 mega-menu-li">
+                <a href="#" class="flex items-center justify-between py-3">
+                    <div class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm11 1H6v8l4-2 4 2V6z"
+                                  clip-rule="evenodd" />
+                        </svg>
+                        <div class="ms-1">
+                            <p class="text-xs">مد و پوشاک</p>
+                        </div>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </a>
+            </li>
+            <li data-mega-id="3"
+                class="px-4 w-full hover:bg-opacity-70 border-opacity-0 hover:border-opacity-100 rounded-lg dark:hover:text-zinc-950 mega-menu-li">
+                <a href="#" class="flex items-center justify-between py-3">
+                    <div class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                  d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm11 1H6v8l4-2 4 2V6z"
+                                  clip-rule="evenodd" />
+                        </svg>
+                        <div class="ms-1">
+                            <p class="text-xs">خانه و آشپزخانه</p>
+                        </div>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </div>
 
+    <!-- بخش چپ: محتوای مگا‌منو -->
+    <div class="col-span-10 bg-white dark:bg-zinc-900">
+        <div data-mega-target="1"
+             class="grid h-[400px] overflow-y-scroll grid-cols-8 gap-10 m-3">
+            <div class="col-span-2">
+                <div class="mb-4">
+                    <p class="text-sm font-bold">موبایل</p>
+                    <div class="mt-3 space-y-4">
+                        <a href="#" class="text-xs text-gray-600 block hover:text-primary dark:text-gray-300">گوشی سامسونگ</a>
+                        <a href="#" class="text-xs text-gray-600 block hover:text-primary dark:text-gray-300">گوشی اپل</a>
+                        <a href="#" class="text-xs text-gray-600 block hover:text-primary dark:text-gray-300">گوشی شیائومی</a>
+                        <a href="#" class="text-xs text-gray-600 block hover:text-primary dark:text-gray-300">گوشی نوکیا</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-2">
+                <div class="mb-4">
+                    <p class="text-sm font-bold">لپ‌تاپ و تبلت</p>
+                    <div class="mt-3 space-y-4">
+                        <a href="#" class="text-xs text-gray-600 block hover:text-primary dark:text-gray-300">لپ‌تاپ لنوو</a>
+                        <a href="#" class="text-xs text-gray-600 block hover:text-primary dark:text-gray-300">لپ‌تاپ ایسوس</a>
+                        <a href="#" class="text-xs text-gray-600 block hover:text-primary dark:text-gray-300">تبلت سامسونگ</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-2">
+                <a href="#">
+                    <img src="/assets/images/banner/banner-1.webp" loading="lazy" alt="کالای دیجیتال" class="w-full rounded-lg" />
+                </a>
+            </div>
+        </div>
+
+        <div data-mega-target="2" class="hidden grid h-[400px] overflow-y-scroll grid-cols-8 gap-10 m-3">
+            <div class="col-span-2">
+                <div class="mb-4">
+                    <p class="text-sm font-bold">پوشاک مردانه</p>
+                    <div class="mt-3 space-y-4">
+                        <a href="#" class="text-xs text-gray-600 block hover:text-primary dark:text-gray-300">پیراهن مردانه</a>
+                        <a href="#" class="text-xs text-gray-600 block hover:text-primary dark:text-gray-300">شلوار جین</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-2">
+                <div class="mb-4">
+                    <p class="text-sm font-bold">پوشاک زنانه</p>
+                    <div class="mt-3 space-y-4">
+                        <a href="#" class="text-xs text-gray-600 block hover:text-primary dark:text-gray-300">مانتو</a>
+                        <a href="#" class="text-xs text-gray-600 block hover:text-primary dark:text-gray-300">شال و روسری</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-2">
+                <a href="#">
+                    <img src="/assets/images/banner/banner-2.webp" loading="lazy" alt="مد و پوشاک" class="w-full rounded-lg" />
+                </a>
+            </div>
+        </div>
+
+        <div data-mega-target="3" class="hidden grid h-[400px] overflow-y-scroll grid-cols-8 gap-10 m-3">
+            <div class="col-span-2">
+                <div class="mb-4">
+                    <p class="text-sm font-bold">وسایل آشپزخانه</p>
+                    <div class="mt-3 space-y-4">
+                        <a href="#" class="text-xs text-gray-600 block hover:text-primary dark:text-gray-300">ظروف پخت و پز</a>
+                        <a href="#" class="text-xs text-gray-600 block hover:text-primary dark:text-gray-300">قاشق و چنگال</a>
+                        <a href="#" class="text-xs text-gray-600 block hover:text-primary dark:text-gray-300">سرویس قابلمه</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-2">
+                <a href="#">
+                    <img src="/assets/images/banner/banner-3.webp" loading="lazy" alt="خانه و آشپزخانه" class="w-full rounded-lg" />
+                </a>
             </div>
         </div>
     </div>
-}
+</div>

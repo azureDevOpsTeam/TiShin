@@ -15,7 +15,11 @@ public class CartModel : PageModel
 
     public async Task OnGet()
     {
-        var userId = 0;
+        var username = User?.Identity?.Name;
+        var user = !string.IsNullOrWhiteSpace(username)
+            ? await _db.Users.FirstOrDefaultAsync(u => u.UserName == username)
+            : null;
+        var userId = user?.Id ?? 0;
         var cart = await _db.Carts.FirstOrDefaultAsync(c => c.UserId == userId);
         if (cart != null)
         {
@@ -31,7 +35,15 @@ public class CartModel : PageModel
 
     public async Task<IActionResult> OnPostRemove(int id)
     {
-        var item = await _db.CartItems.FindAsync(id);
+        var username = User?.Identity?.Name;
+        var user = !string.IsNullOrWhiteSpace(username)
+            ? await _db.Users.FirstOrDefaultAsync(u => u.UserName == username)
+            : null;
+        var userId = user?.Id ?? 0;
+
+        var item = await _db.CartItems
+            .Include(ci => ci.Cart)
+            .FirstOrDefaultAsync(ci => ci.Id == id && ci.Cart.UserId == userId);
         if (item != null)
         {
             _db.CartItems.Remove(item);

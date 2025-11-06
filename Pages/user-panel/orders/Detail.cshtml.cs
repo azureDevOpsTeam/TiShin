@@ -18,8 +18,9 @@ namespace TiShinShop.Pages.UserPanel.Orders
         private readonly UserManager<ApplicationUser> _userManager;
 
         [BindProperty(SupportsGet = true)] public int Id { get; set; }
-        public Order? Order { get; set; }
+        public Order Order { get; set; }
         public List<OrderItem> Items { get; set; } = new();
+        public List<OrderStatusHistory> History { get; set; } = new();
 
         public DetailModel(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
         {
@@ -33,9 +34,20 @@ namespace TiShinShop.Pages.UserPanel.Orders
             if (user == null) return Challenge();
             Order = await _db.Orders
                 .Include(o => o.ShippingAddress)
+                .Include(o => o.Coupon)
                 .FirstOrDefaultAsync(o => o.Id == Id && o.UserId == user.Id);
             if (Order == null) return NotFound();
-            Items = await _db.OrderItems.Include(i => i.Product).Where(i => i.OrderId == Id).ToListAsync();
+            Items = await _db.OrderItems
+                .Include(i => i.Product)
+                .Include(i => i.ProductSize).ThenInclude(ps => ps.Size)
+                .Include(i => i.ProductColor).ThenInclude(pc => pc.Color)
+                .Include(i => i.ProductMaterial).ThenInclude(pm => pm.Material)
+                .Where(i => i.OrderId == Id)
+                .ToListAsync();
+            History = await _db.OrderStatusHistories
+                .Where(h => h.OrderId == Id)
+                .OrderBy(h => h.ChangedAt)
+                .ToListAsync();
             return Page();
         }
     }

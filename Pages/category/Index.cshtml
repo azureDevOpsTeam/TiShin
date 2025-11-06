@@ -1,0 +1,399 @@
+@page "/category/{id?}"
+@model TiShin.Pages.Category.IndexModel
+@{
+    Layout = "_Layout";
+}
+
+<!-- ================= start content section (same as shop) ================= -->
+<section class="py-5">
+    <div class="container">
+        <!-- breadcrumb -->
+        <nav class="flex mt-2 mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse" itemscope
+                itemtype="https://schema.org/BreadcrumbList">
+                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <a href="/"
+                       class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+                       itemprop="item">
+                        <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                             fill="currentColor" viewBox="0 0 20 20">
+                            <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+                        </svg>
+                        <span itemprop="name">خانه</span>
+                    </a>
+                    <meta itemprop="position" content="1">
+                </li>
+                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <div class="flex items-center">
+                        <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true"
+                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="m1 9 4-4-4-4"/>
+                        </svg>
+                        <a href="/category"
+                           class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white"
+                           itemprop="item">
+                            <span itemprop="name">دسته‌بندی</span>
+                        </a>
+                    </div>
+                    <meta itemprop="position" content="2">
+                </li>
+            </ol>
+        </nav>
+
+        <!-- title -->
+        <div class="ps-15 my-10 section-heading sm:col-span-4 w-full col-span-6 relative space-y-3">
+            <h2 class="font-black text-3xl">
+                <span itemprop="name" class="dark:text-white">صفحه</span>
+                <span class="text-primary font-bold">دسته‌بندی</span>
+            </h2>
+        </div>
+
+        <!-- quick select category (copied exactly from shop template if needed) -->
+        <div class="mb-6">
+            <div class="swiper free-mode">
+                <div class="swiper-wrapper" style="padding-bottom: 0 !important;">
+                    <!-- همان اسلایدهای نمونه فروشگاه -->
+                    <div class="swiper-slide p-1 !w-auto">
+                        <div class="size-40 overflow-hidden rounded-lg border border-gray-200 flex flex-col justify-center items-center space-y-3 bg-white dark:bg-zinc-900 p-3 drop-shadow-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" viewBox="0 0 40 32" fill="none"><path d="M37.2847 14.5C37.0504 14.5 36.8985 14.4683 36.7574 14.4048C34.2153 6.22656 27.5139 0.75 20 0.75C12.4792 0.75 5.77083 6.22891 3.24306 14.4062C3.10972 14.4688 2.96042 14.5 2.71736 14.5C1.21944 14.5 0 15.8984 0 17.625C0 19.3516 1.21944 20.75 2.71736 20.75C5.05903 20.75 6.41528 19.5781 7.23542 18.8703C7.80556 18.3672 7.94445 18.25 8.49306 18.25C9.02695 18.25 9.16361 18.3696 9.74306 18.875C10.5549 19.5757 11.909 20.75 14.2569 20.75C16.5986 20.75 17.9549 19.5781 18.7771 18.8688C19.3542 18.3594 19.4931 18.25 20.0208 18.25C20.5395 18.25 20.6675 18.3477 21.2882 18.897C22.1458 19.6328 23.4514 20.75 25.7708 20.75C28.1188 20.75 29.4729 19.5758 30.291 18.8688C30.8611 18.3672 30.9931 18.25 31.5347 18.25C32.0599 18.25 32.1814 18.3562 32.7715 18.8702C33.5764 19.5703 34.9236 20.75 37.2847 20.75C38.7778 20.75 40 19.3516 40 17.625C40 15.8984 38.7778 14.5 37.2847 14.5ZM37.2847 19.5C35.3076 19.5 34.1944 18.5273 33.4479 17.875C32.8194 17.3281 32.4444 17 31.5347 17C30.6056 17 30.2306 17.3333 29.6056 17.8836C28.8194 18.5625 27.7431 19.5 25.7708 19.5C23.8201 19.5 22.7438 18.5773 21.9361 17.8852C21.3125 17.3359 20.9375 17 20.0208 17C19.1319 17 18.7431 17.3047 18.0833 17.8906C17.2986 18.5703 16.2153 19.5 14.2569 19.5C12.2847 19.5 11.2014 18.5625 10.3542 17.8828C9.78472 17.3359 9.40278 17 8.49306 17C7.5625 17 7.18056 17.3359 6.54931 17.8906C5.76181 18.5703 4.68125 19.5 2.71736 19.5C1.83194 19.5 1.11111 18.6562 1.11111 17.625C1.11111 16.5938 1.83194 15.75 2.71736 15.75C3.22736 15.75 3.59167 15.6463 3.97847 15.3899L4.15639 15.2715L4.22366 15.0493C6.54306 7.24219 12.8819 2 20 2C27.1111 2 33.4514 7.24453 35.7778 15.0469L35.8472 15.2764L36.0339 15.3936C36.4306 15.6484 36.7917 15.75 37.2847 15.75C38.1667 15.75 38.8889 16.5938 38.8889 17.625C38.8889 18.6562 38.1667 19.5 37.2847 19.5ZM35.7292 22.0312C35.4406 21.9263 35.1237 22.1008 35.0264 22.4267L32.9319 29.5142C32.7222 30.25 32.1111 30.75 31.4167 30.75H8.59028C7.89799 30.75 7.28611 30.2507 7.06458 29.5094L4.97014 22.4266C4.8725 22.0994 4.56215 21.9248 4.26736 22.0311C3.97653 22.1398 3.81813 22.4937 3.91583 22.8217L6.01028 29.9053C6.38472 31.1562 7.42361 32 8.59028 32H31.4167C32.5931 32 33.6257 31.1562 33.9882 29.9055L36.0826 22.8227C36.1806 22.4922 36.0208 22.1406 35.7292 22.0312ZM20 7C19.6944 7 19.4444 7.28125 19.4444 7.625V11.375C19.4444 11.7188 19.6944 12 20 12C20.3056 12 20.5556 11.7205 20.5556 11.375V7.625C20.5556 7.28125 20.3056 7 20 7ZM12.8333 7.34375L11.1667 11.0938C11.0347 11.4062 11.1458 11.7812 11.4167 11.9375C11.5 11.9766 11.5833 12 11.6667 12C11.8707 12 12.066 11.873 12.1636 11.6545L13.8303 7.90453C13.967 7.5957 13.8563 7.22094 13.5807 7.06625C13.3194 6.91406 12.9722 7.03906 12.8333 7.34375ZM27.1667 7.34375C27.0299 7.03492 26.6892 6.91164 26.4222 7.06422C26.1466 7.21922 26.036 7.59398 26.1726 7.9025L27.8393 11.6525C27.9375 11.875 28.1319 12 28.3333 12C28.418 12 28.5026 11.9792 28.5807 11.9341C28.8563 11.7791 28.9669 11.4043 28.8303 11.0958L27.1667 7.34375Z" fill="#A1A1A1"></path></svg>
+                            <p class="text-neutral-600 dark:text-white">ابزار شیرینی پزی</p>
+                            <a href="" class="bg-secondary-500 hover:bg-secondary-400 transition flex items-center space-x-1 rounded-3xl py-1 text-sm px-3">
+                                <span class="inline-block text-white">مشاهده</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- filters + products layout copied from shop.html -->
+        <div class="grid gap-4 grid-cols-4">
+            <!-- sidebar filters -->
+            <aside class="lg:col-span-1 relative space-y-4 col-span-4 w-full">
+                <section class="space-y-5 sticky top-0">
+                    <!-- search -->
+                    <section>
+                        <div class="dark:bg-zinc-900 dark:text-white bg-white rounded-lg drop-shadow-lg border-gray-300 border-1 p-4">
+                            <h2 class="font-bold text-lg mb-4 relative pb-4 before:absolute before:start-0 before:bottom-0 before:size-2 before:rounded-full before:bg-primary after:absolute after:w-40 after:h-2 after:bottom-0 after:start-4 after:bg-primary after:rounded-lg">جستجوی محصولات</h2>
+                            <div class="relative flex items-center w-full">
+                                <input type="search" class="w-full appearance-none dark:text-white rounded-3xl  border border-gray-300 py-3 ps-12 px-3" placeholder="اسم محصول را وارد کنید ....">
+                                <button class="bg-primary-grad  p-2 text-white rounded-3xl absolute start-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- color -->
+                    <section>
+                        <div class="dark:bg-zinc-900 dark:text-white bg-white rounded-lg drop-shadow-lg border-gray-300 border-1 p-4">
+                            <h2 class="font-bold text-lg mb-4 relative pb-4 before:absolute before:start-0 before:bottom-0 before:size-2 before:rounded-full before:bg-primary after:absolute after:w-40 after:h-2 after:bottom-0 after:start-4 after:bg-primary after:rounded-lg">رنگ ها</h2>
+                            <div class="relative space-x-2 flex-wrap flex items-center w-full">
+                                <div class="flex items-center">
+                                    <input type="radio" name="color" id="greenColor" class="hidden peer">
+                                    <label for="greenColor" class="select-none dark:!text-white cursor-pointer flex items-center justify-center rounded-full border-2 border-gray-200 py-1 px-3 text-gray-700 transition-colors duration-200 ease-in-out peer-checked:text-gray-900 peer-checked:border-primary-500">
+                                        <span class="size-4 bg-green-600 rounded-full"></span>
+                                        <span class="dir-ltr ms-2">سبز</span>
+                                    </label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" name="color" id="blueColor" class="hidden peer">
+                                    <label for="blueColor" class="select-none dark:!text-white cursor-pointer flex items-center justify-center rounded-full border-2 border-gray-200 py-1 px-3 text-gray-700 transition-colors duration-200 ease-in-out peer-checked:text-gray-900 peer-checked:border-primary-500">
+                                        <span class="size-4 bg-blue-600 rounded-full"></span>
+                                        <span class="dir-ltr ms-2">ابی</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- price range -->
+                    <section>
+                        <div class="dark:bg-zinc-900 dark:text-white bg-white rounded-lg drop-shadow-lg border-gray-300 border-1 p-4">
+                            <h2 class="font-bold text-lg mb-4 relative pb-4 before:absolute before:start-0 before:bottom-0 before:size-2 before:rounded-full before:bg-primary after:absolute after:w-40 after:h-2 after:bottom-0 after:start-4 after:bg-primary after:rounded-lg">
+                                فیلتر قیمت
+                            </h2>
+                            <div class="relative space-x-2 flex-wrap flex items-center w-full">
+                                <div class="price-filter">
+                                    <div class="p-4 rounded-lg space-y-4 mx-auto">
+                                        <div class="flex items-baseline gap-4">
+                                            <div class="flex-1">
+                                                <input type="text" class="min-input w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 dark:bg-zinc-900 text-center" disabled>
+                                                <strong class="block text-center mt-3">تومان</strong>
+                                            </div>
+                                            <span class="text-gray-500 block">تا</span>
+                                            <div class="flex-1">
+                                                <input type="text" class="max-input w-full px-3 py-2 border border-gray-300 rounded-md dark:bg-zinc-900 text-center bg-gray-100" disabled>
+                                                <strong class="block text-center mt-3">تومان</strong>
+                                            </div>
+                                        </div>
+                                        <div class="slider-container">
+                                            <div class="slider-track"></div>
+                                            <div class="slider-range"></div>
+                                            <div class="slider-thumb min-thumb"></div>
+                                            <div class="slider-thumb max-thumb"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- brand -->
+                    <section>
+                        <div class="dark:bg-zinc-900 dark:text-white bg-white rounded-lg drop-shadow-lg border-gray-300 border-1 p-4">
+                            <h2 class="font-bold text-lg mb-4 relative pb-4 before:absolute before:start-0 before:bottom-0 before:size-2 before:rounded-full before:bg-primary after:absolute after:w-40 after:h-2 after:bottom-0 after:start-4 after:bg-primary بعد:rounded-lg">
+                                برند ها
+                            </h2>
+                            <div class="space-y-3">
+                                <div class="relative space-x-2 flex-wrap flex items-center w-full">
+                                    <label class="inline-flex items-center space-x-3 cursor-pointer">
+                                        <input type="checkbox" class="hidden peer" checked>
+                                        <div class="w-5 h-5 border rounded bg-white border-gray-400 peer-checked:bg-blue-600 peer-checked:border-blue-600 flex items-center justify-center transition-all shadow-sm">
+                                            <svg class="w-4 h-4 text-white peer-checked:block" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-4 4.5a.75.75 0 0 1-1.08.02l-2-2a.75.75 0 0 1 1.08-1.04l1.47 1.47 3.46-3.98z"></path>
+                                            </svg>
+                                        </div>
+                                        <span class="me-2 text-gray-700 dark:text:white">سامسونگ</span>
+                                    </label>
+                                </div>
+                                <div class="relative space-x-2 flex-wrap flex items-center w-full">
+                                    <label class="inline-flex items:center space-x-3 cursor-pointer">
+                                        <input type="checkbox" class="hidden peer">
+                                        <div class="w-5 h-5 border rounded bg:white border-gray-400 peer-checked:bg-blue-600 peer-checked:border-blue-600 flex items-center justify-center transition-all shadow-sm">
+                                            <svg class="w-4 h-4 text-white peer-checked:block" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-4 4.5a.75.75 0 0 1-1.08.02l-2-2a.75.75 0 0 1 1.08-1.04l1.47 1.47 3.46-3.98z"></path>
+                                            </svg>
+                                        </div>
+                                        <span class="me-2 text-gray-700 dark:text-white">اپل</span>
+                                    </label>
+                                </div>
+                                <div class="relative space-x-2 flex-wrap flex items-center w-full">
+                                    <label class="inline-flex items-center space-x-3 cursor-pointer">
+                                        <input type="checkbox" class="hidden peer">
+                                        <div class="w-5 h-5 border rounded bg-white border-gray-400 peer-checked:bg-blue-600 peer-checked:border-blue-600 flex items-center justify-center transition-all shadow-sm">
+                                            <svg class="w-4 h-4 text-white peer-checked:block" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-4 4.5a.75.75 0 0 1-1.08.02l-2-2a.75.75 0 0 1 1.08-1.04l1.47 1.47 3.46-3.98z"></path>
+                                            </svg>
+                                        </div>
+                                        <span class="me-2 text-gray-700 dark:text-white">شیائومی</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+            </aside>
+
+            <!-- products column -->
+            <div class="lg:col-span-3 col-span-4">
+                <div class="grid grid-cols-12 gap-4">
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12 w-full">
+                        <article class="bg-white product-box-item drop-shadow-md rounded-xl p-4 dark:bg-gray-800 dark:border-white dark:border-1" itemscope itemtype="http://schema.org/Product">
+                            <header class="flex items-center relative justify-between">
+                                <div class="flex flex-col bg-white absolute top-1 start-0 p-1 rounded space-y-3  dark:bg-transparent">
+                                    <!-- actions -->
+                                    <button class="hover:text-gray-400 relative group cursor-pointer" aria-label="افزودن به علاقه‌مندی‌ها">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/></svg></button>
+                                </div>
+                                <div class="flex flex-col bg-white absolute top-1 end-0 p-1 rounded dark:bg-transparent" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                                    <span class="size-4 rounded-full bg-gray-300" title="خاکستری"></span>
+                                    <span class="size-4 rounded-full bg-amber-300" title="زرد"></span>
+                                    <span class="size-4 rounded-full bg-green-300" title="سبز"></span>
+                                </div>
+                            </header>
+                            <figure class="flex image justify-center my-4">
+                                <a href="#" itemprop="url">
+                                    <img class="one-image" src="~/images/product/mobile-1.png" loading="lazy" alt="" itemprop="image">
+                                    <img class="two-image" src="~/images/product/mobile-1.png" loading="lazy" alt="" itemprop="image">
+                                </a>
+                            </figure>
+                            <h3 class="text-base leading-8  line-clamp-2 mb-2">
+                                <a href="#" class="text-gray-800 dark:text-white" itemprop="name">نام محصول نمونه</a>
+                            </h3>
+                            <footer itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                                <link itemprop="availability" href="http://schema.org/InStock">
+                                <meta itemprop="priceCurrency" content="IRR">
+                                <div class="flex items-center justify-between">
+                                    <button class="bg-primary-grad text:white p-3 rounded-lg transition" aria-label="افزودن به سبد خرید"></button>
+                                    <div class="text-gray-700 flex flex-col items:center">
+                                        <div class="flex justify-between items-center">
+                                            <del class="text-zinc-400" itemprop="priceSpecification" itemscope itemtype="http://schema.org/UnitPriceSpecification"><meta itemprop="priceCurrency" content="IRR"><span itemprop="price">10000000</span></del>
+                                            <span class="bg-secondary px-3 rounded-bl-none text-sm rounded-xl text-white ms-3" itemprop="discount">10%</span>
+                                        </div>
+                                        <span class="text-xl font-bold dark:text-white" itemprop="price" content="9000000">9,000,000 <span class="text-xs">تومان</span></span>
+                                    </div>
+                                </div>
+                            </footer>
+                        </article>
+                    </div>
+                    <!-- ... replicate more items as needed from template ... -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ================= end content section ================= -->
+
+<!-- ================= start cart offcanvas ================= -->
+<div id="offcanvas-left"
+     class="offcanvas invisible dark:bg-zinc-900 dark:text-white fixed top-0 end-0 sm:w-100 w-[80%] h-full bg-white shadow-lg transform -translate-x-full transition-transform opacity-0 z-50"
+     role="dialog"
+     aria-labelledby="cart-title"
+     aria-modal="true">
+    <header class="border-b p-3 flex items-center justify-between border-gray-400">
+        <h2 id="cart-title" class="font-bold text-base">سبد خرید شما</h2>
+        <button onclick="closeOffcanvas()" class="cursor-pointer" aria-label="بستن سبد خرید">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="size-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+            </svg>
+        </button>
+    </header>
+    <main class="relative space-y-4 divide-y divide-gray-200 p-3 overflow-y-scroll h-full">
+        <div class="py-3 last:mb-35" itemscope itemtype="http://schema.org/Product">
+            <div class="flex flex-wrap items-center">
+                <div class="text-start w-1/3">
+                    <img class="max-w-full" src="~/images/product/wach-1.png" alt="ساعت مچی" itemprop="image" loading="lazy">
+                </div>
+                <div class="w-2/3 space-y-4">
+                    <h3 class="font-bold leading-7" itemprop="name">ساعت مچی عقربه‌ای مردانه اینویکتا مدل Automatico Ghost Reserve</h3>
+                    <div class="flex items-center justify-between">
+                        <del class="text-rose-600 dark:text-white line-through" itemprop="priceCurrency" content="IRR">
+                            <span itemprop="highPrice">5,000,000</span>
+                        </del>
+                        <ins class="no-underline text-xl text-green-600 font-bold" itemprop="price" content="2500000">
+                            2,500,000 <span class="text-sm font-normal text-gray-700 dark:text-white">تومان</span>
+                        </ins>
+                    </div>
+                    <div class="flex items-end justify-between">
+                        <span itemprop="quantity">تعداد: 3</span>
+                        <a href="#" class="bg-red-100 dark:border dark:bg-transparent dark:text-white text-red-950 p-2 rounded-lg" role="button" aria-label="حذف محصول از سبد خرید">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="size-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="p-2 absolute bottom-0 start-0 end-0 bg-white dark:border-0  dark:bg-zinc-900 border border-gray-400">
+        <div class="flex items-center justify-between">
+            <div class="space-y-2">
+                <span class="inline-block text-lg">جمع کل</span>
+                <h3 class="font-bold text-xl" itemprop="totalPrice" content="11000000">11,000,000 تومان</h3>
+            </div>
+            <div class="text-end">
+                <a href="/checkout" class="bg-primary-grad hover:bg-primary-600 text-white py-2 px-4 rounded-lg" role="button" aria-label="تکمیل فرایند خرید">تکمیل خرید</a>
+            </div>
+        </div>
+    </footer>
+ </div>
+<div class="overlay transition fixed inset-0 z-40 bg-black/70 hidden" onclick="closeOffcanvas()" role="presentation" aria-hidden="true"></div>
+<!-- ================= end cart offcanvas ================= -->
+
+<!-- ================= start filter modal ================= -->
+<div id="filterModal" role="dialog" aria-modal="true" aria-labelledby="filterModalTitle" data-modal-id="filterModal" class="modal hidden fixed inset-0 z-50 overflow-auto backdrop-blur bg-opacity-50">
+    <div class="relative p-4 w-full max-w-md m-auto flex items-center min-h-screen">
+        <div class="relative dark:bg-gray-800 border-gray-300 border bg-white rounded-lg shadow-lg w-full" itemscope itemtype="http://schema.org/Place">
+            <div class="flex justify-between items-center p-4 dark:border-b-white border-b">
+                <h3 id="filterModalTitle" class="text-xl  dark:text-white" itemprop="name">فیلتر بر اساس شهر</h3>
+                <button data-modal-close class="text-gray-500 hover:text-gray-700 cursor-pointer text-3xl" aria-label="بستن پنجره فیلتر">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="size-6 dark:text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div class="p-4">
+                <meta itemprop="address" content="تهران,مشهد,اصفهان,تبریز,شیراز,اهواز,قم,کرج,کرمانشاه,ارومیه,زاهدان,رشت,همدان,یزد,اردبیل,بندرعباس,کیش,ساری,گرگان,بجنورد">
+                <div id="citySelector" data-cities="تهران,مشهد,اصفهان,تبریز,شیراز,اهواز,قم,کرج,کرمانشاه,ارومیه,زاهدان,رشت,همدان,یزد,اردبیل,بندرعباس,کیش,ساری,گرگان,بجنورد"></div>
+                <form id="searchForm" class="mb-2" role="search">
+                    <label for="search" class="mb-2 block text-sm font-medium dark:text-white text-gray-900">جستجوی شهر</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/></svg>
+                        </div>
+                        <input type="search" id="search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary focus:border-primary dark:bg-zinc-900 dark:text-white" placeholder="نام شهر را وارد کنید" aria-describedby="searchDescription" required>
+                    </div>
+                    <p id="searchDescription" class="sr-only">برای جستجو در بین شهرهای موجود تایپ کنید</p>
+                </form>
+                <div id="selectedCities" class="flex my-3 flex-wrap gap-2" role="status" aria-live="polite"></div>
+                <ul id="cityList" class="w-full h-80 overflow-y-auto text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white" role="listbox" aria-labelledby="filterModalTitle">
+                    <template id="cityTemplate">
+                        <li role="option" class="p-3 border-b cursor-pointer hover:bg-gray-100" tabindex="0" itemprop="containsPlace" itemscope itemtype="http://schema.org/City">
+                            <span itemprop="name"></span>
+                        </li>
+                    </template>
+                </ul>
+                <div class="mt-4">
+                    <button id="filterButton" class="w-full px-4 py-3 cursor-pointer bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors" aria-label="اعمال فیلتر بر اساس شهرهای انتخاب شده">فیلتر کن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+<!-- ================= end filter modal ================= -->
+
+<!-- ================= start modal login ================= -->
+<div id="LoginModal" role="dialog" aria-modal="true" aria-labelledby="LoginModalTitle" data-modal-id="LoginModal" class="modal hidden fixed inset-0 z-50 overflow-auto backdrop-blur bg-opacity-50">
+    <div class="relative p-4 w-full max-w-md m-auto flex items-center min-h-screen">
+        <div class="relative dark:bg-gray-800 border-gray-300 p-1 border bg-white rounded-lg shadow-lg w-full">
+            <div class="flex justify-between items-center p-4 dark:border-b-white border-b">
+                <h3 id="LoginModalTitle" class="text-xl dark:text-white">ورود / ثبت نام</h3>
+                <button data-modal-close class="text-gray-500 hover:text-gray-700 cursor-pointer text-3xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="size-6 dark:text-white"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="bg-white dark:bg-gray-800 shadow-soft dark:shadow-soft-dark p-8 dark:border-gray-700 fade-in">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-dark dark:text-light mb-2">ورود به حساب کاربری</h2>
+                    <p class="text-gray-500 dark:text-gray-400">روش ورود را انتخاب کنید</p>
+                </div>
+                <div class="flex mb-6 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-600">
+                    <button id="password-tab" class="tab-button flex-1 py-3 px-4 text-sm font-medium active" onclick="switchTab('password')">ورود با رمز عبور</button>
+                    <button id="sms-tab" class="tab-button flex-1 py-3 px-4 text-sm font-medium" onclick="switchTab('sms')">ورود با پیامک</button>
+                </div>
+                <form class="space-y-5" id="password-form">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">نام کاربری یا شماره موبایل</label>
+                        <div class="relative">
+                            <input type="text" id="username" class="w-full ps-12 ps-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="نام کاربری یا شماره موبایل" required>
+                            <div class="absolute input-icon top-1/2 transform -translate-y-1/2 text-gray-400"></div>
+                        </div>
+                        <p class="error-message hidden" id="username-error">لطفا نام کاربری یا شماره موبایل معتبر وارد کنید</p>
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">رمز عبور</label>
+                        <div class="relative">
+                            <input type="password" id="password" class="w-full ps-12 ps-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="رمز عبور خود را وارد کنید" required>
+                            <button type="button" class="absolute password-toggle top-1/2 transform -translate-y-1/2 text-gray-400" onclick="togglePassword('password')"></button>
+                        </div>
+                        <p class="error-message hidden" id="password-error">رمز عبور باید حداقل ۶ کاراکتر باشد</p>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-primary dark:text-primary-dark focus:ring-primary dark:focus:ring-primary-dark border-gray-300 dark:border-gray-600 rounded">
+                            <label for="remember-me" class="ms-2 block text-sm text-gray-700 dark:text-gray-300">مرا به خاطر بسپار</label>
+                        </div>
+                        <div class="text-sm">
+                            <a href="#" class="font-medium text-primary dark:text-primary-dark hover:underline">رمز عبور را فراموش کرده‌اید؟</a>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="submit" class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-primary dark:bg-primary-dark hover:bg-primary/90 dark:hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">ورود به حساب</button>
+                    </div>
+                </form>
+                <form class="space-y-5 hidden" id="sms-form">
+                    <div>
+                        <label for="mobile" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">شماره موبایل</label>
+                        <div class="relative">
+                            <input type="tel" id="mobile" class="w-full ps-12 ps-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="09xxxxxxxxx" required>
+                        </div>
+                        <p class="error-message hidden" id="mobile-error">لطفا شماره موبایل معتبر وارد کنید</p>
+                    </div>
+                    <div id="otp-section" class="hidden"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ================= end modal login ================= -->

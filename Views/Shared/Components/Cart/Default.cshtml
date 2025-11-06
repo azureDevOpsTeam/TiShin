@@ -1,4 +1,4 @@
-﻿@using TiShinShop.ViewComponents
+@using TiShinShop.ViewComponents
 @model TiShinShop.Entities.Cart
 
 <div id="offcanvas-left"
@@ -62,6 +62,10 @@
                                 </div>
                                 <div class="flex items-end justify-between">
                                     <span>تعداد: @item.Quantity</span>
+                                    <div class="flex items-center gap-2">
+                                        <button type="button" class="qty-dec bg-gray-100 px-2 py-1 rounded" data-id="@item.Id" aria-label="کاهش تعداد">−</button>
+                                        <button type="button" class="qty-inc bg-gray-100 px-2 py-1 rounded" data-id="@item.Id" aria-label="افزایش تعداد">+</button>
+                                    </div>
 
                                     @if (item.ProductSize?.Size != null)
                                     {
@@ -99,12 +103,12 @@
         <div class="flex items-center justify-between">
             <div class="space-y-2">
                 <span class="inline-block text-lg">جمع کل</span>
-                <h3 class="font-bold text-xl" itemprop="totalPrice" content="11000000">
+                <h3 id="cartTotalDisplay" class="font-bold text-xl" itemprop="totalPrice" content="11000000">
                     @String.Format("{0:N0}", ViewData["CartTotal"]) تومان
                 </h3>
             </div>
             <div class="text-end">
-                <a href="/checkout"
+                <a href="/store/Checkout"
                    class="bg-primary-grad hover:bg-primary-600 text-white py-2 px-4 rounded-lg"
                    role="button"
                    aria-label="تکمیل فرایند خرید">
@@ -134,8 +138,13 @@
 
                     // در صورت نیاز: بروزرسانی تعداد یا جمع کل
                     const cartCounter = document.getElementById("cartCounter");
-                    let currentCount = parseInt(cartCounter.textContent.trim()) || 0;
-                    cartCounter.textContent = currentCount > 0 ? currentCount - 1 : 0;
+                    if (response && typeof response.count !== 'undefined') {
+                        cartCounter.textContent = response.count;
+                    }
+                    if (response && typeof response.total !== 'undefined') {
+                        const totalEl = document.getElementById("cartTotalDisplay");
+                        totalEl.textContent = new Intl.NumberFormat('fa-IR').format(response.total) + ' تومان';
+                    }
 
                     // اگر سبد خالی شد
                     if ($("#offcanvas-left main").find(".py-3").length === 0) {
@@ -145,6 +154,38 @@
                 },
                 error: function () {
                     toastr.error("خطا در حذف محصول از سبد خرید");
+                }
+            });
+        });
+
+        // افزایش/کاهش تعداد آیتم‌ها در مینی‌سبد
+        $(document).on("click", ".qty-inc, .qty-dec", function () {
+            const itemId = $(this).data("id");
+            const isInc = $(this).hasClass("qty-inc");
+            const url = isInc ? "/api/IncrementCartItem" : "/api/DecrementCartItem";
+            const $container = $(this).closest(".py-3");
+            const $qtyLabel = $container.find("span:contains('تعداد:')");
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: { id: itemId },
+                success: function (response) {
+                    if (response && typeof response.quantity !== 'undefined') {
+                        // بروزرسانی نمایش تعداد
+                        $qtyLabel.text(`تعداد: ${response.quantity}`);
+                    }
+                    if (response && typeof response.total !== 'undefined') {
+                        const totalEl = document.getElementById("cartTotalDisplay");
+                        totalEl.textContent = new Intl.NumberFormat('fa-IR').format(response.total) + ' تومان';
+                    }
+                    if (response && typeof response.count !== 'undefined') {
+                        const cartCounter = document.getElementById("cartCounter");
+                        cartCounter.textContent = response.count;
+                    }
+                },
+                error: function () {
+                    toastr.error("خطا در بروزرسانی تعداد محصول");
                 }
             });
         });

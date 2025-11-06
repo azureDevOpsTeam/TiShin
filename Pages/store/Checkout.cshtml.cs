@@ -30,8 +30,16 @@ public class CheckoutModel : PageModel
     public async Task<IActionResult> OnPost()
     {
         if (!ModelState.IsValid) return Page();
-        var userId = 0;
-        var cart = await _db.Carts.Include(c => c.Items).ThenInclude(i => i.Product).FirstOrDefaultAsync(c => c.UserId == userId);
+        var username = User?.Identity?.Name;
+        var user = !string.IsNullOrWhiteSpace(username)
+            ? await _db.Users.FirstOrDefaultAsync(u => u.UserName == username)
+            : null;
+        var userId = user?.Id ?? 0;
+        var cart = await _db.Carts
+            .Include(c => c.Items)
+                .ThenInclude(i => i.Product)
+                    .ThenInclude(p => p.Discount)
+            .FirstOrDefaultAsync(c => c.UserId == userId);
         if (cart == null || cart.Items == null || cart.Items.Count == 0)
         {
             return RedirectToPage("/store/Cart");
@@ -42,7 +50,15 @@ public class CheckoutModel : PageModel
             UserId = userId,
             CreatedAt = DateTime.UtcNow,
             TrackingCode = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper(),
-            TotalPrice = cart.Items.Sum(i => i.Quantity * i.Product.BasePrice),
+            TotalPrice = cart.Items.Sum(i =>
+            {
+                var price = i.Product.BasePrice;
+                if (i.Product.Discount != null && i.Product.Discount.IsActive)
+                {
+                    price -= (price * i.Product.Discount.Percentage) / 100m;
+                }
+                return i.Quantity * price;
+            }),
             ShippingAddress = new OrderAddress
             {
                 FullName = Input.FullName,
@@ -66,7 +82,9 @@ public class CheckoutModel : PageModel
                 ProductColorId = it.ProductColorId,
                 ProductMaterialId = it.ProductMaterialId,
                 Quantity = it.Quantity,
-                UnitPrice = it.Product.BasePrice
+                UnitPrice = (it.Product.Discount != null && it.Product.Discount.IsActive)
+                    ? it.Product.BasePrice - ((it.Product.BasePrice * it.Product.Discount.Percentage) / 100m)
+                    : it.Product.BasePrice
             });
         }
         await _db.SaveChangesAsync();

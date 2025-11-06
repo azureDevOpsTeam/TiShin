@@ -1,4 +1,4 @@
-﻿namespace TiShinShop.DTOs.Product
+namespace TiShinShop.DTOs.Product
 {
     public class ProductHomeViewModel
     {
@@ -7,6 +7,14 @@
         public List<ListViewModel> DiscountProducts { get; set; } = new();
 
         public List<ListViewModel> TopVisitProducts { get; set; } = new();
+
+        // Dynamic sections for homepage
+        public List<ListViewModel> LatestLaptops { get; set; } = new();
+
+        public List<ListViewModel> LatestClothes { get; set; } = new();
+
+        // Best selling (approximate) products for homepage
+        public List<ListViewModel> TopSellingProducts { get; set; } = new();
     }
 
     public class ListViewModel

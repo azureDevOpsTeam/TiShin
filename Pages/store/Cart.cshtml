@@ -18,7 +18,7 @@
                     <th class="px-3 py-2">جنس</th>
                     <th class="px-3 py-2">تعداد</th>
                     <th class="px-3 py-2">قیمت واحد</th>
-                    <th class="px-3 py-2">حذف</th>
+                    <th class="px-3 py-2">عملیات</th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-gray-800">
@@ -29,13 +29,21 @@
                         <td class="px-3 py-2">@it.ProductSize.Size.Value</td>
                         <td class="px-3 py-2">@it.ProductColor.Color.Value</td>
                         <td class="px-3 py-2">@it.ProductMaterial.Material.Name</td>
-                        <td class="px-3 py-2">@it.Quantity</td>
+                        <td class="px-3 py-2">
+                            <div class="flex items-center gap-2">
+                                <button type="button" class="cart-dec px-2 py-1 rounded bg-gray-100" data-id="@it.Id">−</button>
+                                <span id="qty-@it.Id">@it.Quantity</span>
+                                <button type="button" class="cart-inc px-2 py-1 rounded bg-gray-100" data-id="@it.Id">+</button>
+                            </div>
+                        </td>
                         <td class="px-3 py-2">@it.Product.BasePrice.ToString("N0")</td>
                         <td class="px-3 py-2">
-                            <form method="post" asp-page-handler="Remove">
-                                <input type="hidden" name="id" value="@it.Id" />
-                                <button type="submit" class="px-3 py-1 rounded bg-red-600 text-white">حذف</button>
-                            </form>
+                            <div class="flex gap-2">
+                                <form method="post" asp-page-handler="Remove">
+                                    <input type="hidden" name="id" value="@it.Id" />
+                                    <button type="submit" class="px-3 py-1 rounded bg-red-600 text-white">حذف</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 }
@@ -51,3 +59,26 @@
         <div>سبد خرید شما خالی است.</div>
     }
 </section>
+
+@section Scripts {
+    <script>
+        $(document).on('click', '.cart-inc, .cart-dec', function () {
+            const itemId = $(this).data('id');
+            const isInc = $(this).hasClass('cart-inc');
+            const url = isInc ? '/api/IncrementCartItem' : '/api/DecrementCartItem';
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: { id: itemId },
+                success: function (response) {
+                    if (response && typeof response.quantity !== 'undefined') {
+                        $('#qty-' + itemId).text(response.quantity);
+                    }
+                },
+                error: function () {
+                    toastr.error('خطا در بروزرسانی تعداد محصول');
+                }
+            });
+        });
+    </script>
+}

@@ -5,43 +5,75 @@
     ViewData["Title"] = "سفارش‌ها";
 }
 
+@using TiShinShop.Extenssions
+
 <div class="space-y-6">
     <div class="flex items-center justify-between">
         <h2 class="text-xl font-bold">سفارش‌ها</h2>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
+    <div class="bg-white dark:bg-card-dark rounded-xl shadow-soft dark:shadow-soft-dark overflow-hidden border border-gray-100 dark:border-gray-700">
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+            <h3 class="font-bold text-lg mb-4 relative pb-4 before:absolute before:start-0 before:bottom-0 before:size-2 before:rounded-full before:bg-primary after:absolute after:w-40 after:h-2 after:bottom-0 after:start-4 after:bg-primary after:rounded-lg">لیست سفارش‌ها</h3>
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <button class="px-3 py-1 text-xs font-medium rounded-lg bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-dark">همه</button>
+                <button class="px-3 py-1 text-xs font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">ارسال شده</button>
+                <button class="px-3 py-1 text-xs font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">تحویل شده</button>
+            </div>
+        </div>
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead class="bg-gray-50 dark:bg-gray-900">
+                <thead class="bg-gray-50 dark:bg-gray-800">
                     <tr>
-                        <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">شماره سفارش</th>
-                        <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">مشتری</th>
-                        <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">مبلغ</th>
-                        <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">وضعیت</th>
-                        <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">کد رهگیری</th>
-                        <th class="px-4 py-3"></th>
+                        <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">شماره سفارش</th>
+                        <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">مشتری</th>
+                        <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">مبلغ</th>
+                        <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">وضعیت</th>
+                        <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">کد رهگیری</th>
+                        <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">عملیات</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody class="bg-white dark:bg-card-dark divide-y divide-gray-200 dark:divide-gray-700">
                     @foreach (var order in Model.Orders)
                     {
-                        <tr>
-                            <td class="px-4 py-3 text-sm">@order.Id</td>
-                            <td class="px-4 py-3 text-sm">@order.User?.FirstName @order.User?.LastName</td>
-                            <td class="px-4 py-3 text-sm">@order.TotalPrice.ToString("N0") تومان</td>
-                            <td class="px-4 py-3 text-sm">@order.Status</td>
-                            <td class="px-4 py-3 text-sm">@order.TrackingCode</td>
-                            <td class="px-4 py-3 text-sm text-end">
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-dark dark:text-light">#@order.Id</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">@order.User?.FirstName @order.User?.LastName</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">@order.TotalPrice.ToString("N0") تومان</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 rounded-full @order.Status.GetBadgeClass()">
+                                    @order.Status.GetDisplayName()
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">@order.TrackingCode</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                 <div class="flex items-center justify-end gap-3">
-                                    <a asp-page="./Detail" asp-route-id="@order.Id" class="text-primary hover:underline">جزئیات</a>
-                                    <a asp-page="./Edit" asp-route-id="@order.Id" class="text-blue-600 hover:underline">ویرایش</a>
+                                    <a asp-page="./Detail" asp-route-id="@order.Id" class="text-primary hover:text-primary/80 dark:text-primary-dark dark:hover:text-primary/70 flex items-center">
+                                        جزئیات
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ms-1">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"></path>
+                                        </svg>
+                                    </a>
+                                    <a asp-page="./Edit" asp-route-id="@order.Id" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center">
+                                        ویرایش
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 ms-1">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l2.651 2.651m-2.651-2.651a2.25 2.25 0 013.182 3.182L7.5 22.5H4.5v-3l12.362-12.363z"></path>
+                                        </svg>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
+        </div>
+        <div class="p-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
+            <p class="text-sm text-gray-500 dark:text-gray-400">نمایش @Model.Orders.Count از @Model.Orders.Count سفارش</p>
+            <div class="flex space-x-2 space-x-reverse">
+                <button class="px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50" disabled>قبلی</button>
+                <button class="px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-primary text-white hover:bg-primary/90 dark:bg-primary-dark dark:hover:bg-primary/80">1</button>
+                <button class="px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">بعدی</button>
+            </div>
         </div>
     </div>
 </div>

@@ -19,7 +19,7 @@ public class ForgotPasswordModel : PageModel
     [BindProperty]
     public InputModel Input { get; set; } = new();
 
-    public string? Message { get; set; }
+    public string Message { get; set; }
 
     public class InputModel
     {
