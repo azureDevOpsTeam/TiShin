@@ -18,56 +18,60 @@ public class IndexModel(ApplicationDbContext context) : PageModel
         OutPut = new();
         var query = await Task.Run(() => _context.Products.AsQueryable());
 
-        OutPut.NewProducts = await query.Take(10)
+        OutPut.NewProducts = await query
             .OrderByDescending(current => current.CreateAt)
+            .Take(10)
             .Select(current => new ListViewModel
             {
                 ProductId = current.Id,
                 Title = current.Title,
                 Quantity = current.Quantity,
                 BasePrice = current.BasePrice,
-                FirstImage = current.FirstImage,
-                SecondImage = current.SecondImage,
+                FirstImage = current.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? current.FirstImage,
+                SecondImage = current.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? current.SecondImage,
                 Colors = current.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray()
             }).ToListAsync();
 
-        OutPut.TopVisitProducts = await query.Take(10)
+        OutPut.TopVisitProducts = await query
             .OrderByDescending(current => current.Visit)
+            .Take(10)
             .Select(current => new ListViewModel
             {
                 ProductId = current.Id,
                 Title = current.Title,
                 Quantity = current.Quantity,
                 BasePrice = current.BasePrice,
-                FirstImage = current.FirstImage,
-                SecondImage = current.SecondImage,
+                FirstImage = current.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? current.FirstImage,
+                SecondImage = current.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? current.SecondImage,
                 Colors = current.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray()
             }).ToListAsync();
 
         // Approximate best sellers using Visit count (simple proxy)
-        OutPut.TopSellingProducts = await query.Take(10)
+        OutPut.TopSellingProducts = await query
             .OrderByDescending(current => current.Visit)
+            .Take(10)
             .Select(current => new ListViewModel
             {
                 ProductId = current.Id,
                 Title = current.Title,
                 Quantity = current.Quantity,
                 BasePrice = current.BasePrice,
-                FirstImage = current.FirstImage,
-                SecondImage = current.SecondImage,
+                FirstImage = current.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? current.FirstImage,
+                SecondImage = current.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? current.SecondImage,
                 Colors = current.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray()
             }).ToListAsync();
 
-        OutPut.DiscountProducts = await query.Take(10)
+        OutPut.DiscountProducts = await query
         .OrderByDescending(current => current.DiscountId)
+        .Take(10)
         .Select(current => new ListViewModel
         {
             ProductId = current.Id,
             Title = current.Title,
             Quantity = current.Quantity,
             BasePrice = current.BasePrice,
-            FirstImage = current.FirstImage,
-            SecondImage = current.SecondImage,
+            FirstImage = current.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? current.FirstImage,
+            SecondImage = current.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? current.SecondImage,
             Colors = current.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray()
         }).ToListAsync();
 
@@ -93,8 +97,8 @@ public class IndexModel(ApplicationDbContext context) : PageModel
                 Title = p.Title,
                 Quantity = p.Quantity,
                 BasePrice = p.BasePrice,
-                FirstImage = p.FirstImage,
-                SecondImage = p.SecondImage,
+                FirstImage = p.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? p.FirstImage,
+                SecondImage = p.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? p.SecondImage,
                 Colors = p.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray()
             })
             .ToListAsync();
@@ -121,10 +125,16 @@ public class IndexModel(ApplicationDbContext context) : PageModel
                 Title = p.Title,
                 Quantity = p.Quantity,
                 BasePrice = p.BasePrice,
-                FirstImage = p.FirstImage,
-                SecondImage = p.SecondImage,
+                FirstImage = p.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? p.FirstImage,
+                SecondImage = p.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? p.SecondImage,
                 Colors = p.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray()
             })
             .ToListAsync();
+
+        // Fallback: اگر دسته «لباس» خالی بود، جدیدترین محصولات را نشان بده
+        if (OutPut.LatestClothes == null || OutPut.LatestClothes.Count == 0)
+        {
+            OutPut.LatestClothes = OutPut.NewProducts;
+        }
     }
 }
