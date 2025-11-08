@@ -8,6 +8,10 @@
 <div class="space-y-6">
     <h2 class="text-xl font-bold">آدرس‌های من</h2>
 
+    <div class="flex justify-end mb-3">
+        <a asp-page="./Create" class="px-4 py-2 text-sm font-medium rounded-lg bg-primary-600 text-white hover:bg-primary-700 shadow-sm">ایجاد آدرس جدید</a>
+    </div>
+
     <div class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-4">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -16,6 +20,7 @@
                     <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">آدرس کامل</th>
                     <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">کد پستی</th>
                     <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">پیش‌فرض</th>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">اقدامات</th>
                 </tr>
                 </thead>
                 <tbody class="bg-white dark:bg-card-dark divide-y divide-gray-200 dark:divide-gray-700">
@@ -25,6 +30,9 @@
                         <td class="px-4 py-3 text-sm">@addr.FullAddress</td>
                         <td class="px-4 py-3 text-sm">@addr.PostalCode</td>
                         <td class="px-4 py-3 text-sm">@(addr.IsDefault ? "بله" : "خیر")</td>
+                        <td class="px-4 py-3 text-sm">
+                            <a asp-page="./Edit" asp-route-id="@addr.Id" class="text-primary-600 hover:text-primary-700">ویرایش</a>
+                        </td>
                     </tr>
                 }
                 </tbody>

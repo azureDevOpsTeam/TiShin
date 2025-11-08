@@ -5,80 +5,227 @@
     ViewData["Title"] = "سبد خرید";
 }
 
-<section class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-4">سبد خرید</h1>
-    @if (Model.Items.Any())
-    {
-        <table class="min-w-full text-sm border border-gray-200 dark:border-gray-700">
-            <thead class="bg-gray-50 dark:bg-gray-700">
-                <tr>
-                    <th class="px-3 py-2">محصول</th>
-                    <th class="px-3 py-2">سایز</th>
-                    <th class="px-3 py-2">رنگ</th>
-                    <th class="px-3 py-2">جنس</th>
-                    <th class="px-3 py-2">تعداد</th>
-                    <th class="px-3 py-2">قیمت واحد</th>
-                    <th class="px-3 py-2">عملیات</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white dark:bg-gray-800">
-                @foreach (var it in Model.Items)
-                {
-                    <tr class="border-t border-gray-200 dark:border-gray-700">
-                        <td class="px-3 py-2">@it.Product.Title</td>
-                        <td class="px-3 py-2">@it.ProductSize.Size.Value</td>
-                        <td class="px-3 py-2">@it.ProductColor.Color.Value</td>
-                        <td class="px-3 py-2">@it.ProductMaterial.Material.Name</td>
-                        <td class="px-3 py-2">
-                            <div class="flex items-center gap-2">
-                                <button type="button" class="cart-dec px-2 py-1 rounded bg-gray-100" data-id="@it.Id">−</button>
-                                <span id="qty-@it.Id">@it.Quantity</span>
-                                <button type="button" class="cart-inc px-2 py-1 rounded bg-gray-100" data-id="@it.Id">+</button>
-                            </div>
-                        </td>
-                        <td class="px-3 py-2">@it.Product.BasePrice.ToString("N0")</td>
-                        <td class="px-3 py-2">
-                            <div class="flex gap-2">
-                                <form method="post" asp-page-handler="Remove">
-                                    <input type="hidden" name="id" value="@it.Id" />
-                                    <button type="submit" class="px-3 py-1 rounded bg-red-600 text-white">حذف</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<section class="py-5">
+    <div class="container">
+        @if (Model.IsAuthenticated ? Model.Items.Any() : Model.GuestItems.Any())
+        {
+            <ol class="flex items-center w-full bg-white rounded-lg drop-shadow-lg border border-gray-300 mb-4 p-3 space-x-2 text-sm font-medium text-center text-gray-500 dark:text-gray-400 sm:text-base dark:bg-gray-800 sm:p-4 sm:space-x-4 rtl:space-x-reverse">
+                <li class="flex font-bold text-primary items-center">
+                    <span class="flex items-center justify-center w-5 h-5 me-2 text-xs border rounded-full shrink-0">1</span>
+                    جزئیات <span class="hidden sm:inline-flex sm:ms-2">سبد خرید</span>
+                    <svg class="w-3 h-3 ms-2 sm:ms-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 12 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 9 4-4-4-4M1 9l4-4-4-4" /></svg>
+                </li>
+                <li class="flex items-center">
+                    <span class="flex items-center justify-center w-5 h-5 me-2 text-xs border border-gray-500 rounded-full shrink-0 dark:border-gray-400">2</span>
+                    جزئیات <span class="hidden sm:inline-flex sm:ms-2">سفارش</span>
+                    <svg class="w-3 h-3 ms-2 sm:ms-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 12 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 9 4-4-4-4M1 9l4-4-4-4" /></svg>
+                </li>
+                <li class="flex items-center">
+                    <span class="flex me-2 items-center justify-center w-5 h-5 ms-2 text-xs border border-gray-500 rounded-full shrink-0 dark:border-gray-400">3</span>
+                    جزئیات <span class="hidden sm:inline-flex sm:ms-2">پرداخت</span>
+                </li>
+            </ol>
 
-        <div class="mt-6 flex justify-end">
-            <a class="px-4 py-2 text-sm font-medium rounded-lg bg-primary-600 text-white hover:bg-primary-700 shadow-sm" asp-page="/store/Checkout">ادامه به پرداخت</a>
-        </div>
-    }
-    else
-    {
-        <div>سبد خرید شما خالی است.</div>
-    }
+            <div class="grid gap-4 relative grid-cols-4">
+                <div class="xl:col-span-3 col-span-4 w-full">
+                    <ul class="space-y-4" id="cartList">
+                        @if (Model.IsAuthenticated)
+                        {
+                            foreach (var it in Model.Items)
+                            {
+                                var imgSrc = it.Product.Images?.Any() == true
+                                    ? Url.Content(it.Product.Images.First().ImageUrl)
+                                    : (!string.IsNullOrEmpty(it.Product.FirstImage) ? Url.Content("~/images/product/" + it.Product.FirstImage) : (!string.IsNullOrEmpty(it.Product.SecondImage) ? Url.Content("~/images/product/" + it.Product.SecondImage) : Url.Content("~/images/product/default.jpg")));
+                                var unitDiscount = TiShinShop.Pages.Store.CartModel.CalculateUnitDiscount(it.Product);
+                                var unitFinal = Math.Max(0, it.Product.BasePrice - unitDiscount);
+                                <li>
+                                    <div class="grid grid-cols-4 gap-4 dark:bg-gray-800 dark:text-white bg-white rounded-lg drop-shadow-lg border-gray-300 border-1 p-4 cart-item" data-auth="true" data-id="@it.Id" data-unit-base="@it.Product.BasePrice" data-unit-final="@unitFinal">
+                                        <div class="lg:col-span-3 col-span-4 w-full">
+                                            <div class="flex flex-wrap">
+                                                <figure>
+                                                    <img class="size-40" src="@imgSrc" alt="@it.Product.Title">
+                                                </figure>
+                                                <div class="space-y-5">
+                                                    <div class="flex sm:space-y-0 space-y-2 item-center flex-wrap">
+                                                        <h3 class="sm:w-auto w-full font-bold">@it.Product.Title</h3>
+                                                        @if (unitDiscount > 0)
+                                                        {
+                                                            <span class="bg-secondary px-3 rounded-bl-none text-sm rounded-xl text-white sm:ms-3">تخفیف</span>
+                                                        }
+                                                    </div>
+                                                    <div class="flex item-center space-x-2 rtl:space-x-reverse"><h6 class="font-bold">سایز:</h6><span class="block">@it.ProductSize.Size.Value</span></div>
+                                                    <div class="flex item-center space-x-2 rtl:space-x-reverse"><h6 class="font-bold">رنگ:</h6><span class="block">@it.ProductColor.Color.Value</span></div>
+                                                    <div class="flex item-center space-x-2 rtl:space-x-reverse"><h6 class="font-bold">جنس:</h6><span class="block">@it.ProductMaterial.Material.Name</span></div>
+                                                    <div class="flex items-center">
+                                                        <div class="inline-flex items-center space-x-2 rtl:space-x-reverse border rounded-full px-4 py-2 dark:bg-zinc-800 bg-white shadow">
+                                                            <button type="button" class="bg-gray-200 text-gray-600 w-8 h-8 rounded-full flex items-center justify-center text-lg cart-dec" data-id="@it.Id">-</button>
+                                                            <span class="text-lg px-5 inline-block qty" id="qty-@it.Id">@it.Quantity</span>
+                                                            <button type="button" class="bg-gray-500 text-white w-8 h-8 rounded-full flex items-center justify-center text-lg cart-inc" data-id="@it.Id">+</button>
+                                                        </div>
+                                                        <form method="post" asp-page-handler="Remove" class="block p-2 bg-primary-grad rounded-full text-white ms-2 mt-1">
+                                                            <input type="hidden" name="id" value="@it.Id" />
+                                                            <input type="hidden" name="productSizeId" value="@it.ProductSizeId" />
+                                                            <input type="hidden" name="productColorId" value="@it.ProductColorId" />
+                                                            <input type="hidden" name="productMaterialId" value="@it.ProductMaterialId" />
+                                                            <button type="submit" aria-label="حذف از سبد">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="lg:col-span-1 col-span-4 w-full">
+                                            <div class="space-y-5 flex flex-col xl:items-end xl:justify-end">
+                                                @if (unitDiscount > 0)
+                                                {
+                                                    <del class="text-zinc-400" itemprop="priceSpecification" itemscope itemtype="http://schema.org/UnitPriceSpecification"><meta itemprop="priceCurrency" content="IRR"><span itemprop="price">@it.Product.BasePrice.ToString("N0")</span></del>
+                                                }
+                                                <span class="text-xl block font-bold dark:text-white" itemprop="price" content="@unitFinal">@unitFinal.ToString("N0") <span class="text-xs">تومان</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            foreach (var it in Model.GuestItems)
+                            {
+                                var key = $"{it.ProductId}-{it.ProductSizeId}-{it.ProductColorId}-{it.ProductMaterialId}";
+                                var imgSrc = it.Product.Images?.Any() == true
+                                    ? Url.Content(it.Product.Images.First().ImageUrl)
+                                    : (!string.IsNullOrEmpty(it.Product.FirstImage) ? Url.Content("~/images/product/" + it.Product.FirstImage) : (!string.IsNullOrEmpty(it.Product.SecondImage) ? Url.Content("~/images/product/" + it.Product.SecondImage) : Url.Content("~/images/product/default.jpg")));
+                                var unitDiscount = TiShinShop.Pages.Store.CartModel.CalculateUnitDiscount(it.Product);
+                                var unitFinal = Math.Max(0, it.Product.BasePrice - unitDiscount);
+                                <li>
+                                    <div class="grid grid-cols-4 gap-4 dark:bg-gray-800 dark:text-white bg-white rounded-lg drop-shadow-lg border-gray-300 border-1 p-4 cart-item" data-auth="false" data-productid="@it.ProductId" data-sizeid="@it.ProductSizeId" data-colorid="@it.ProductColorId" data-materialid="@it.ProductMaterialId" data-unit-base="@it.Product.BasePrice" data-unit-final="@unitFinal">
+                                        <div class="lg:col-span-3 col-span-4 w-full">
+                                            <div class="flex flex-wrap">
+                                                <figure><img class="size-40" src="@imgSrc" alt="@it.Product.Title"></figure>
+                                                <div class="space-y-5">
+                                                    <div class="flex sm:space-y-0 space-y-2 item-center flex-wrap">
+                                                        <h3 class="sm:w-auto w-full font-bold">@it.Product.Title</h3>
+                                                        @if (unitDiscount > 0) { <span class="bg-secondary px-3 rounded-bl-none text-sm rounded-xl text-white sm:ms-3">تخفیف</span> }
+                                                    </div>
+                                                    <div class="flex item-center space-x-2 rtl:space-x-reverse"><h6 class="font-bold">سایز:</h6><span class="block">@it.ProductSize.Size.Value</span></div>
+                                                    <div class="flex item-center space-x-2 rtl:space-x-reverse"><h6 class="font-bold">رنگ:</h6><span class="block">@it.ProductColor.Color.Value</span></div>
+                                                    <div class="flex item-center space-x-2 rtl:space-x-reverse"><h6 class="font-bold">جنس:</h6><span class="block">@it.ProductMaterial.Material.Name</span></div>
+                                                    <div class="flex items-center">
+                                                        <div class="inline-flex items-center space-x-2 rtl:space-x-reverse border rounded-full px-4 py-2 dark:bg-zinc-800 bg-white shadow">
+                                                            <button type="button" class="bg-gray-200 text-gray-600 w-8 h-8 rounded-full flex items-center justify-center text-lg cart-dec">-</button>
+                                                            <span class="text-lg px-5 inline-block qty" id="qty-@key">@it.Quantity</span>
+                                                            <button type="button" class="bg-gray-500 text-white w-8 h-8 rounded-full flex items-center justify-center text-lg cart-inc">+</button>
+                                                        </div>
+                                                        <form method="post" asp-page-handler="Remove" class="block p-2 bg-primary-grad rounded-full text-white ms-2 mt-1">
+                                                            <input type="hidden" name="productId" value="@it.ProductId" />
+                                                            <input type="hidden" name="productSizeId" value="@it.ProductSizeId" />
+                                                            <input type="hidden" name="productColorId" value="@it.ProductColorId" />
+                                                            <input type="hidden" name="productMaterialId" value="@it.ProductMaterialId" />
+                                                            <button type="submit" aria-label="حذف از سبد">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="lg:col-span-1 col-span-4 w-full">
+                                            <div class="space-y-5 flex flex-col xl:items-end xl:justify-end">
+                                                @if (unitDiscount > 0) { <del class="text-zinc-400" itemprop="priceSpecification" itemscope itemtype="http://schema.org/UnitPriceSpecification"><meta itemprop="priceCurrency" content="IRR"><span itemprop="price">@it.Product.BasePrice.ToString("N0")</span></del> }
+                                                <span class="text-xl block font-bold dark:text-white" itemprop="price" content="@unitFinal">@unitFinal.ToString("N0") <span class="text-xs">تومان</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+                <div class="xl:col-span-1 col-span-4 w-full">
+                    <div class="dark:bg-gray-800 sticky top-0 dark:text-white bg-white rounded-lg drop-shadow-lg border-gray-300 border-1 p-4">
+                        <ul class="space-y-5">
+                            <li class="flex justify-between item-center"><h6 class="font-bold">قیمت کالاها</h6><p id="itemsPrice">@Model.TotalBasePrice.ToString("N0") تومان</p></li>
+                            <li class="flex justify-between item-center"><h6 class="font-bold">تخفیف کالاها</h6><p id="itemsDiscount" class="text-primary font-bold">@Model.TotalDiscount.ToString("N0") تومان</p></li>
+                            <li class="flex justify-between item-center"><h6 class="font-bold">مجموع</h6><p id="itemsTotal">@Model.TotalFinalPrice.ToString("N0") تومان</p></li>
+                            <li><a asp-page="/store/Checkout" class="p-2 bg-primary-grad w-full block text-center rounded-lg text-white">تسویه حساب</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="dark:bg-gray-800 dark:text-white bg-white rounded-lg drop-shadow-lg border-gray-300 border-1 p-4 text-center">سبد خرید شما خالی است.</div>
+        }
+    </div>
 </section>
 
 @section Scripts {
     <script>
-        $(document).on('click', '.cart-inc, .cart-dec', function () {
-            const itemId = $(this).data('id');
-            const isInc = $(this).hasClass('cart-inc');
-            const url = isInc ? '/api/IncrementCartItem' : '/api/DecrementCartItem';
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: { id: itemId },
-                success: function (response) {
-                    if (response && typeof response.quantity !== 'undefined') {
-                        $('#qty-' + itemId).text(response.quantity);
+        (function(){
+            const isAuth = @Model.IsAuthenticated.ToString().ToLower();
+            function formatNumber(num){ return (num || 0).toLocaleString('fa-IR'); }
+            function recalcTotals(){
+                const items = document.querySelectorAll('.cart-item');
+                let baseSum = 0, finalSum = 0;
+                items.forEach(it => {
+                    const unitBase = parseFloat(it.dataset.unitBase || '0');
+                    const unitFinal = parseFloat(it.dataset.unitFinal || '0');
+                    const qtyEl = it.querySelector('.qty');
+                    const qty = parseInt(qtyEl?.textContent || '0');
+                    baseSum += unitBase * qty;
+                    finalSum += unitFinal * qty;
+                });
+                const discount = baseSum - finalSum;
+                const priceEl = document.getElementById('itemsPrice');
+                const discEl = document.getElementById('itemsDiscount');
+                const totalEl = document.getElementById('itemsTotal');
+                if (priceEl) priceEl.textContent = `${formatNumber(baseSum)} تومان`;
+                if (discEl) discEl.textContent = `${formatNumber(discount)} تومان`;
+                if (totalEl) totalEl.textContent = `${formatNumber(finalSum)} تومان`;
+            }
+            document.addEventListener('click', async (e) => {
+                const btn = e.target.closest('.cart-inc, .cart-dec');
+                if (!btn) return;
+                const isInc = btn.classList.contains('cart-inc');
+                try {
+                    if (isAuth) {
+                        const id = btn.dataset.id;
+                        const url = isInc ? '/api/IncrementCartItem' : '/api/DecrementCartItem';
+                        const formData = new FormData();
+                        formData.append('id', id);
+                        const res = await fetch(url, { method: 'POST', body: formData });
+                        const data = await res.json();
+                        if (data && typeof data.quantity !== 'undefined') {
+                            const qtyEl = document.getElementById('qty-' + id);
+                            if (qtyEl) qtyEl.textContent = data.quantity;
+                            recalcTotals();
+                        }
+                    } else {
+                        const item = btn.closest('.cart-item');
+                        const pid = item.dataset.productid;
+                        const sid = item.dataset.sizeid;
+                        const cid = item.dataset.colorid;
+                        const mid = item.dataset.materialid;
+                        const url = isInc ? '/api/GuestIncrementCartItem' : '/api/GuestDecrementCartItem';
+                        const formData = new FormData();
+                        formData.append('productId', pid);
+                        formData.append('productSizeId', sid);
+                        formData.append('productColorId', cid);
+                        formData.append('productMaterialId', mid);
+                        const res = await fetch(url, { method: 'POST', body: formData });
+                        const data = await res.json();
+                        if (data && typeof data.quantity !== 'undefined') {
+                            const key = `${pid}-${sid}-${cid}-${mid}`;
+                            const qtyEl = document.getElementById('qty-' + key);
+                            if (qtyEl) qtyEl.textContent = data.quantity;
+                            recalcTotals();
+                        }
                     }
-                },
-                error: function () {
-                    toastr.error('خطا در بروزرسانی تعداد محصول');
-                }
+                } catch(err) { console.error(err); }
             });
-        });
+            recalcTotals();
+        })();
     </script>
 }

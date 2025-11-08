@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TiShinShop.Data;
 using TiShinShop.Entities;
+using TiShinShop.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddControllers();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddScoped<IGuestCartService, GuestCartService>();
 
 
 var app = builder.Build();
@@ -50,6 +53,33 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Migrate guest cart to user cart after successful authentication
+app.Use(async (context, next) =>
+{
+    if (context.User?.Identity?.IsAuthenticated == true)
+    {
+        try
+        {
+            var db = context.RequestServices.GetRequiredService<ApplicationDbContext>();
+            var username = context.User.Identity?.Name;
+            if (!string.IsNullOrWhiteSpace(username))
+            {
+                var user = await db.Users.FirstOrDefaultAsync(u => u.UserName == username);
+                if (user != null)
+                {
+                    var guestSvc = context.RequestServices.GetRequiredService<IGuestCartService>();
+                    await guestSvc.MigrateToUserCartAsync(context, user.Id);
+                }
+            }
+        }
+        catch
+        {
+            // ignore migration errors to not block the request pipeline
+        }
+    }
+    await next();
+});
 
 app.MapStaticAssets();
 app.MapRazorPages().WithStaticAssets();

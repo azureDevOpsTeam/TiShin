@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TiShinShop.Data;
+using TiShinShop.Services;
 
 namespace TiShinShop.Controllers
 {
@@ -9,9 +10,11 @@ namespace TiShinShop.Controllers
     public class CartApiController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
-        public CartApiController(ApplicationDbContext db)
+        private readonly IGuestCartService _guestCartService;
+        public CartApiController(ApplicationDbContext db, IGuestCartService guestCartService)
         {
             _db = db;
+            _guestCartService = guestCartService;
         }
 
         private async Task<int> GetCurrentUserIdAsync()
@@ -74,6 +77,10 @@ namespace TiShinShop.Controllers
         public async Task<IActionResult> IncrementCartItem([FromForm] int id)
         {
             var userId = await GetCurrentUserIdAsync();
+            if (userId == 0)
+            {
+                return BadRequest(new { success = false, message = "Guest cart requires composite identifiers" });
+            }
             var item = await _db.CartItems
                 .Include(ci => ci.Cart)
                 .Include(ci => ci.Product).ThenInclude(p => p.Discount)
@@ -100,6 +107,10 @@ namespace TiShinShop.Controllers
         public async Task<IActionResult> DecrementCartItem([FromForm] int id)
         {
             var userId = await GetCurrentUserIdAsync();
+            if (userId == 0)
+            {
+                return BadRequest(new { success = false, message = "Guest cart requires composite identifiers" });
+            }
             var item = await _db.CartItems
                 .Include(ci => ci.Cart)
                 .Include(ci => ci.Product).ThenInclude(p => p.Discount)
@@ -132,6 +143,10 @@ namespace TiShinShop.Controllers
             if (quantity > 100) quantity = 100;
 
             var userId = await GetCurrentUserIdAsync();
+            if (userId == 0)
+            {
+                return BadRequest(new { success = false, message = "Guest cart requires composite identifiers" });
+            }
             var item = await _db.CartItems
                 .Include(ci => ci.Cart)
                 .Include(ci => ci.Product).ThenInclude(p => p.Discount)
@@ -152,6 +167,34 @@ namespace TiShinShop.Controllers
 
             var (total, count) = await GetCartTotalsAsync(userId);
             return Ok(new { success = true, quantity = item.Quantity, itemTotal, total, count });
+        }
+
+        // Guest cart endpoints working on composite keys
+        [HttpPost("GuestIncrementCartItem")]
+        public async Task<IActionResult> GuestIncrementCartItem([FromForm] int productId, [FromForm] int productSizeId, [FromForm] int productColorId, [FromForm] int productMaterialId)
+        {
+            var cartId = _guestCartService.GetOrCreateGuestCartId(HttpContext);
+            var qty = await _guestCartService.IncrementAsync(cartId, productId, productSizeId, productColorId, productMaterialId);
+            var (total, count) = await _guestCartService.GetTotalsAsync(cartId);
+            return Ok(new { success = true, quantity = qty, total, count });
+        }
+
+        [HttpPost("GuestDecrementCartItem")]
+        public async Task<IActionResult> GuestDecrementCartItem([FromForm] int productId, [FromForm] int productSizeId, [FromForm] int productColorId, [FromForm] int productMaterialId)
+        {
+            var cartId = _guestCartService.GetOrCreateGuestCartId(HttpContext);
+            var qty = await _guestCartService.DecrementAsync(cartId, productId, productSizeId, productColorId, productMaterialId);
+            var (total, count) = await _guestCartService.GetTotalsAsync(cartId);
+            return Ok(new { success = true, quantity = qty, total, count });
+        }
+
+        [HttpPost("GuestRemoveCartItem")]
+        public async Task<IActionResult> GuestRemoveCartItem([FromForm] int productId, [FromForm] int productSizeId, [FromForm] int productColorId, [FromForm] int productMaterialId)
+        {
+            var cartId = _guestCartService.GetOrCreateGuestCartId(HttpContext);
+            var removed = await _guestCartService.RemoveAsync(cartId, productId, productSizeId, productColorId, productMaterialId);
+            var (total, count) = await _guestCartService.GetTotalsAsync(cartId);
+            return Ok(new { success = removed, total, count });
         }
     }
 }

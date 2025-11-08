@@ -1,17 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TiShinShop.Data;
 using TiShinShop.Entities;
+using TiShinShop.Services;
 
 namespace TiShinShop.ViewComponents
 {
     public class CartViewComponent : ViewComponent
     {
         private readonly ApplicationDbContext _context;
+        private readonly IGuestCartService _guestCartService;
 
-        public CartViewComponent(ApplicationDbContext context)
+        public CartViewComponent(ApplicationDbContext context, IGuestCartService guestCartService)
         {
             _context = context;
+            _guestCartService = guestCartService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
@@ -57,6 +60,10 @@ namespace TiShinShop.ViewComponents
                     return View(cart);
                 }
             }
+            // Guest cart total
+            var cartId = _guestCartService.GetOrCreateGuestCartId(HttpContext);
+            var (guestTotal, _) = await _guestCartService.GetTotalsAsync(cartId);
+            ViewData["CartTotal"] = guestTotal;
             return View(new Cart());
         }
     }

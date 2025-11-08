@@ -15,17 +15,38 @@ public class CheckoutModel : PageModel
     [BindProperty]
     public InputModel Input { get; set; } = new();
 
+    public List<UserAddress> Addresses { get; set; } = new();
+
+    [BindProperty]
+    public int? SelectedAddressId { get; set; }
+
+    [BindProperty]
+    public bool UseNewAddress { get; set; }
+
     public class InputModel
     {
         [Required] public string FullName { get; set; } = string.Empty;
         [Required] public string Phone { get; set; } = string.Empty;
         [Required] public string City { get; set; } = string.Empty;
         [Required] public string Street { get; set; } = string.Empty;
-        [Required] public string FullAddress { get; set; } = string.Empty;
-        [Required] public string PostalCode { get; set; } = string.Empty;
+        public string FullAddress { get; set; }
+        public string PostalCode { get; set; }
     }
 
-    public void OnGet() { }
+    public async Task OnGet()
+    {
+        var username = User?.Identity?.Name;
+        var user = !string.IsNullOrWhiteSpace(username)
+            ? await _db.Users.FirstOrDefaultAsync(u => u.UserName == username)
+            : null;
+        if (user != null)
+        {
+            Addresses = await _db.UserAddresses
+                .Where(a => a.UserId == user.Id)
+                .OrderByDescending(a => a.IsDefault)
+                .ToListAsync();
+        }
+    }
 
     public async Task<IActionResult> OnPost()
     {
@@ -43,6 +64,33 @@ public class CheckoutModel : PageModel
         if (cart == null || cart.Items == null || cart.Items.Count == 0)
         {
             return RedirectToPage("/store/Cart");
+        }
+
+        // Resolve shipping address source
+        string finalFullAddress = string.Empty;
+        string finalPostalCode = string.Empty;
+
+        if (SelectedAddressId.HasValue && user != null)
+        {
+            var selected = await _db.UserAddresses.FirstOrDefaultAsync(a => a.Id == SelectedAddressId.Value && a.UserId == user.Id);
+            if (selected == null)
+            {
+                ModelState.AddModelError(string.Empty, "آدرس انتخاب‌شده معتبر نیست.");
+                return Page();
+            }
+            finalFullAddress = selected.FullAddress;
+            finalPostalCode = selected.PostalCode;
+        }
+        else
+        {
+            // Using new address from form
+            if (string.IsNullOrWhiteSpace(Input.FullAddress) || string.IsNullOrWhiteSpace(Input.PostalCode))
+            {
+                ModelState.AddModelError(string.Empty, "آدرس کامل و کد پستی را وارد کنید.");
+                return Page();
+            }
+            finalFullAddress = Input.FullAddress!;
+            finalPostalCode = Input.PostalCode!;
         }
 
         var order = new Order
@@ -65,8 +113,8 @@ public class CheckoutModel : PageModel
                 Phone = Input.Phone,
                 City = Input.City,
                 Street = Input.Street,
-                FullAddress = Input.FullAddress,
-                PostalCode = Input.PostalCode
+                FullAddress = finalFullAddress,
+                PostalCode = finalPostalCode
             }
         };
         _db.Orders.Add(order);

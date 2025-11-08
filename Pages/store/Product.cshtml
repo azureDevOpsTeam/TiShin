@@ -2,7 +2,7 @@
 @using TiShinShop.Entities
 @model TiShinShop.Pages.Store.ProductModel
 @{
-    Layout = "_StorefrontLayout";
+    Layout = "_Layout";
     ViewData["Title"] = Model.Item?.Title ?? "جزئیات محصول";
 }
 
@@ -160,7 +160,9 @@
                                 </div>
 
                                 <!-- combinations and quantities -->
-                                <form method="post" class="mt-3">
+                                <form method="post" class="mt-3" id="addToCartForm">
+                                    <!-- Ensure selected size posts with the form -->
+                                    <input type="hidden" asp-for="SelectedSizeId" id="SelectedSizeIdHidden" />
                                     <input type="hidden" asp-for="CartItems[0].ProductId" value="@Model.Item.Id" />
                                     <div class="mb-2">
                                         <h3 class="font-bold mb-2">انتخاب ترکیب رنگ و جنس با تعداد</h3>
@@ -292,5 +294,19 @@
         buttons.forEach(b => b.addEventListener('click', () => activate(b.getAttribute('data-tab'))));
         // default
         activate('Intro');
+    })();
+
+    // Sync selected size into hidden input in form before submit
+    (function() {
+        const sizeSelect = document.getElementById('SelectedSizeId');
+        const hiddenInput = document.getElementById('SelectedSizeIdHidden');
+        const form = document.getElementById('addToCartForm');
+        if (sizeSelect && hiddenInput) {
+            const sync = () => { hiddenInput.value = sizeSelect.value; };
+            sizeSelect.addEventListener('change', sync);
+            if (form) form.addEventListener('submit', sync);
+            // initial sync
+            sync();
+        }
     })();
 </script>

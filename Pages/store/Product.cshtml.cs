@@ -10,7 +10,8 @@ namespace TiShinShop.Pages.Store;
 public class ProductModel : PageModel
 {
     private readonly ApplicationDbContext _db;
-    public ProductModel(ApplicationDbContext db) { _db = db; }
+    private readonly TiShinShop.Services.IGuestCartService _guestCartService;
+    public ProductModel(ApplicationDbContext db, TiShinShop.Services.IGuestCartService guestCartService) { _db = db; _guestCartService = guestCartService; }
 
     public Product? Item { get; set; }
     public List<ProductSize> Sizes { get; set; } = new();
@@ -108,37 +109,70 @@ public class ProductModel : PageModel
         var product = await _db.Products.FirstOrDefaultAsync(p => p.Id == id);
         if (product == null) return NotFound();
 
-        // Get or create cart for current user (fallback guest=0)
+        // Get current user
         var username = User?.Identity?.Name;
         var user = !string.IsNullOrWhiteSpace(username)
             ? await _db.Users.FirstOrDefaultAsync(u => u.UserName == username)
             : null;
-        var userId = user?.Id ?? 0;
-        var cart = await _db.Carts.Include(c => c.Items).FirstOrDefaultAsync(c => c.UserId == userId);
-        if (cart == null)
+        // If user is not authenticated, store items in guest cache
+        if (user == null)
         {
-            cart = new Cart { UserId = userId, CreatedAt = DateTime.UtcNow };
-            _db.Carts.Add(cart);
-            await _db.SaveChangesAsync();
-        }
-
-        // Add items for combinations with Count > 0
-        if (CartItems != null)
-        {
-            foreach (var item in CartItems.Where(ci => ci.Count > 0))
+            var cartId = _guestCartService.GetOrCreateGuestCartId(HttpContext);
+            var cachedItems = new List<TiShinShop.DTOs.Cart.CachedCartItem>();
+            if (CartItems != null)
             {
-                var cartItem = new CartItem
+                foreach (var item in CartItems.Where(ci => ci.Count > 0))
                 {
-                    CartId = cart.Id,
-                    ProductId = product.Id,
-                    ProductColorId = item.ProductColorId,
-                    ProductMaterialId = item.ProductMaterialId,
-                    ProductSizeId = SelectedSizeId,
-                    Quantity = item.Count
-                };
-                _db.CartItems.Add(cartItem);
+                    cachedItems.Add(new TiShinShop.DTOs.Cart.CachedCartItem
+                    {
+                        ProductId = product.Id,
+                        ProductColorId = item.ProductColorId,
+                        ProductMaterialId = item.ProductMaterialId,
+                        ProductSizeId = SelectedSizeId,
+                        Quantity = item.Count
+                    });
+                }
+                if (cachedItems.Count > 0)
+                {
+                    await _guestCartService.AddItemsAsync(cartId, cachedItems);
+                }
             }
-            await _db.SaveChangesAsync();
+        }
+        else
+        {
+            // Persist items to user's cart in DB
+            var cart = await _db.Carts.Include(c => c.Items).FirstOrDefaultAsync(c => c.UserId == user.Id);
+            if (cart == null)
+            {
+                cart = new Cart { UserId = user.Id, CreatedAt = DateTime.UtcNow };
+                _db.Carts.Add(cart);
+                await _db.SaveChangesAsync();
+            }
+
+            if (CartItems != null)
+            {
+                foreach (var item in CartItems.Where(ci => ci.Count > 0))
+                {
+                    var existing = await _db.CartItems.FirstOrDefaultAsync(ci => ci.CartId == cart.Id && ci.ProductId == product.Id && ci.ProductSizeId == SelectedSizeId && ci.ProductColorId == item.ProductColorId && ci.ProductMaterialId == item.ProductMaterialId);
+                    if (existing == null)
+                    {
+                        _db.CartItems.Add(new CartItem
+                        {
+                            CartId = cart.Id,
+                            ProductId = product.Id,
+                            ProductColorId = item.ProductColorId,
+                            ProductMaterialId = item.ProductMaterialId,
+                            ProductSizeId = SelectedSizeId,
+                            Quantity = item.Count
+                        });
+                    }
+                    else
+                    {
+                        existing.Quantity += item.Count;
+                    }
+                }
+                await _db.SaveChangesAsync();
+            }
         }
 
         return RedirectToPage("/store/Cart");

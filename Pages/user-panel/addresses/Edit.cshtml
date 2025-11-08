@@ -1,0 +1,37 @@
+@page "{id:int}"
+@model TiShinShop.Pages.UserPanel.Addresses.EditModel
+@{
+    Layout = "~/Pages/Shared/_UserPanelLayout.cshtml";
+    ViewData["Title"] = "ویرایش آدرس";
+}
+
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <h2 class="text-xl font-bold">ویرایش آدرس</h2>
+        <a asp-page="./Index" class="text-sm text-primary">بازگشت به لیست</a>
+    </div>
+
+    <div class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-4">
+        <form method="post" class="space-y-4">
+            <input type="hidden" asp-for="Input.Id" />
+            <div>
+                <label class="block text-sm mb-1">آدرس کامل</label>
+                <textarea asp-for="Input.FullAddress" class="form-input"></textarea>
+                <span asp-validation-for="Input.FullAddress" class="text-red-500 text-xs"></span>
+            </div>
+            <div>
+                <label class="block text-sm mb-1">کد پستی</label>
+                <input asp-for="Input.PostalCode" class="form-input" />
+                <span asp-validation-for="Input.PostalCode" class="text-red-500 text-xs"></span>
+            </div>
+            <div class="flex items-center gap-2">
+                <input asp-for="Input.IsDefault" type="checkbox" class="form-checkbox" />
+                <label class="text-sm">تنظیم به عنوان آدرس پیش‌فرض</label>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="submit" class="px-4 py-2 text-sm font-medium rounded-lg bg-primary-600 text-white hover:bg-primary-700 shadow-sm">ذخیره تغییرات</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+@page
+@model TiShinShop.Pages.SellerPanel.Coupons.IndexModel
+@{
+    Layout = "~/Pages/Shared/_SellerPanelLayout.cshtml";
+    ViewData["Title"] = "کوپن‌های تخفیف";
+}
+
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <h2 class="text-xl font-bold">کوپن‌های تخفیف</h2>
+        <a asp-page="./Create" class="px-3 py-2 rounded-lg bg-primary text-white">ایجاد کوپن جدید</a>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-900">
+                <tr>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">کد</th>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">نوع</th>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">مقدار</th>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">سقف</th>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">شروع</th>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">پایان</th>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">تک‌استفاده</th>
+                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">فعال</th>
+                </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                @if (Model.Items != null && Model.Items.Any())
+                {
+                    foreach (var c in Model.Items)
+                    {
+                        var type = c.FixedAmount.HasValue ? "مبلغ ثابت" : "درصد";
+                        var value = c.FixedAmount.HasValue ? c.FixedAmount.Value.ToString("N0") + " تومان" : (c.Percentage ?? 0).ToString("N0") + "%";
+                        <tr>
+                            <td class="px-4 py-3 text-sm">@c.Code</td>
+                            <td class="px-4 py-3 text-sm">@type</td>
+                            <td class="px-4 py-3 text-sm">@value</td>
+                            <td class="px-4 py-3 text-sm">@(c.MaxAmount.HasValue ? c.MaxAmount.Value.ToString("N0") + " تومان" : "—")</td>
+                            <td class="px-4 py-3 text-sm">@c.StartDate.ToString("yyyy/MM/dd")</td>
+                            <td class="px-4 py-3 text-sm">@c.EndDate.ToString("yyyy/MM/dd")</td>
+                            <td class="px-4 py-3 text-sm">@(c.IsSingleUse ? "بله" : "خیر")</td>
+                            <td class="px-4 py-3 text-sm">@(c.IsActive ? "فعال" : "غیرفعال")</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td class="px-4 py-3 text-sm" colspan="8">کوپنی ثبت نشده است.</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

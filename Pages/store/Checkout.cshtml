@@ -1,7 +1,7 @@
 @page
 @model TiShinShop.Pages.Store.CheckoutModel
 @{
-    Layout = "_StorefrontLayout";
+    Layout = "_Layout";
     ViewData["Title"] = "تکمیل سفارش";
 }
 
@@ -9,29 +9,57 @@
     <h1 class="text-2xl font-bold mb-4">آدرس و پرداخت</h1>
     <form method="post">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Contact info -->
             <div>
                 <label class="block text-sm font-medium mb-2">نام و نام‌خانوادگی</label>
                 <input asp-for="Input.FullName" class="w-full px-4 py-2 border rounded" />
+                <span asp-validation-for="Input.FullName" class="text-xs text-red-500"></span>
             </div>
             <div>
                 <label class="block text-sm font-medium mb-2">شماره تماس</label>
                 <input asp-for="Input.Phone" class="w-full px-4 py-2 border rounded" />
+                <span asp-validation-for="Input.Phone" class="text-xs text-red-500"></span>
             </div>
             <div>
                 <label class="block text-sm font-medium mb-2">شهر</label>
                 <input asp-for="Input.City" class="w-full px-4 py-2 border rounded" />
+                <span asp-validation-for="Input.City" class="text-xs text-red-500"></span>
             </div>
             <div>
                 <label class="block text-sm font-medium mb-2">خیابان</label>
                 <input asp-for="Input.Street" class="w-full px-4 py-2 border rounded" />
+                <span asp-validation-for="Input.Street" class="text-xs text-red-500"></span>
             </div>
+
+            <!-- Address selection -->
             <div class="md:col-span-2">
-                <label class="block text-sm font-medium mb-2">آدرس کامل</label>
-                <textarea asp-for="Input.FullAddress" class="w-full px-4 py-2 border rounded"></textarea>
-            </div>
-            <div>
-                <label class="block text-sm font-medium mb-2">کدپستی</label>
-                <input asp-for="Input.PostalCode" class="w-full px-4 py-2 border rounded" />
+                <div class="bg-white dark:bg-card-dark rounded-xl shadow-sm p-4 space-y-4">
+                    @if (Model.Addresses != null && Model.Addresses.Count > 0)
+                    {
+                        <div>
+                            <h3 class="font-semibold mb-2">انتخاب از آدرس‌های ذخیره‌شده</h3>
+                            <div class="space-y-2">
+                                @foreach (var a in Model.Addresses)
+                                {
+                                    <label class="flex items-center gap-2 p-3 border rounded-lg dark:border-gray-700">
+                                        <input type="radio" name="SelectedAddressId" value="@a.Id" class="form-radio" />
+                                        <span class="text-sm">@a.FullAddress - @a.PostalCode @(a.IsDefault ? "(پیش‌فرض)" : "")</span>
+                                    </label>
+                                }
+                            </div>
+                            <div class="mt-3 text-sm text-gray-500 dark:text-gray-400">یا آدرس جدید وارد کنید:</div>
+                        </div>
+                    }
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2">آدرس کامل</label>
+                        <textarea asp-for="Input.FullAddress" class="w-full px-4 py-2 border rounded"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">کدپستی</label>
+                        <input asp-for="Input.PostalCode" class="w-full px-4 py-2 border rounded" />
+                    </div>
+                </div>
             </div>
         </div>
         <div class="mt-6 flex justify-end">

@@ -1,16 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TiShinShop.Data;
+using TiShinShop.Services;
 
 namespace TiShinShop.ViewComponents;
 
 public class CartItemCountViewComponent : ViewComponent
 {
     private readonly ApplicationDbContext _context;
+    private readonly IGuestCartService _guestCartService;
 
-    public CartItemCountViewComponent(ApplicationDbContext context)
+    public CartItemCountViewComponent(ApplicationDbContext context, IGuestCartService guestCartService)
     {
         _context = context;
+        _guestCartService = guestCartService;
     }
 
     public async Task<IViewComponentResult> InvokeAsync()
@@ -29,6 +32,9 @@ public class CartItemCountViewComponent : ViewComponent
                 return View(itemCount);
             }
         }
-        return View(0);
+        // guest cart count
+        var cartId = _guestCartService.GetOrCreateGuestCartId(HttpContext);
+        var items = await _guestCartService.GetItemsAsync(cartId);
+        return View(items.Count);
     }
 }
