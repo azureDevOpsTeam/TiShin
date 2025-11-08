@@ -15,9 +15,9 @@ public class PaymentModel : PageModel
     public Order? Order { get; set; }
     public decimal TotalDiscount { get; set; }
     public decimal FinalPrice { get; set; }
-    public string? Message { get; set; }
+    public string Message { get; set; }
     public bool IsError { get; set; }
-    public string? AppliedCode { get; set; }
+    public string AppliedCode { get; set; }
 
     public async Task<IActionResult> OnGet(int id)
     {
