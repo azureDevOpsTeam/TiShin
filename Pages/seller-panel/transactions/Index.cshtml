@@ -1,0 +1,189 @@
+@page
+@model TiShinShop.Pages.SellerPanel.Transactions.IndexModel
+@using TiShinShop.Extenssions
+@{
+    Layout = "~/Pages/Shared/_SellerPanelLayout.cshtml";
+    ViewData["Title"] = "مدیریت تراکنش‌ها";
+}
+
+<main class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-gray-900">
+    <!--Page header-->
+    <div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">مدیریت تراکنش‌ها</h2>
+            <p class="text-gray-600 dark:text-gray-400">تاریخچه کامل تراکنش‌های مالی سیستم</p>
+        </div>
+        <div class="mt-4 md:mt-0 flex items-center space-x-3 rtl:space-x-reverse">
+            <form method="post" asp-page-handler="Export">
+                <button type="submit" class="flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-primary-600 text-white hover:bg-primary-700 shadow-sm dark:bg-primary-500 dark:hover:bg-primary-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 me-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+                    خروجی Excel
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!--General statistics-->
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-6">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">کل تراکنش‌ها</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">@Model.TotalCount</p>
+                </div>
+                <div class="p-3 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">مبلغ موفق</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">@Model.TotalSuccessAmount.ToString("N0") تومان</p>
+                </div>
+                <div class="p-3 rounded-xl bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">تراکنش‌های ناموفق</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">@Model.FailedCount</p>
+                </div>
+                <div class="p-3 rounded-xl bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">میانگین ارزش تراکنش</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">@Model.AverageAmount.ToString("N0") تومان</p>
+                </div>
+                <div class="p-3 rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Filters and search-->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md mb-6 p-6 border border-gray-200 dark:border-gray-700">
+        <form method="get" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">نوع تراکنش</label>
+                <select name="Type" class="w-full px-3 py-2 border rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600">
+                    <option value="all" selected>همه انواع</option>
+                    <option value="sale">فروش</option>
+                    <option value="refund">عودت</option>
+                    <option value="withdraw">برداشت</option>
+                    <option value="deposit">واریز</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">وضعیت</label>
+                <select name="Status" class="w-full px-3 py-2 border rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600">
+                    @if (Model.Status == "all") {<option value="all" selected>همه وضعیت‌ها</option>} else {<option value="all">همه وضعیت‌ها</option>}
+                    @if (Model.Status == "success") {<option value="success" selected>موفق</option>} else {<option value="success">موفق</option>}
+                    @if (Model.Status == "pending") {<option value="pending" selected>در انتظار</option>} else {<option value="pending">در انتظار</option>}
+                    @if (Model.Status == "failed") {<option value="failed" selected>ناموفق</option>} else {<option value="failed">ناموفق</option>}
+                    @if (Model.Status == "cancelled") {<option value="cancelled" selected>لغو شده</option>} else {<option value="cancelled">لغو شده</option>}
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">از تاریخ</label>
+                <input type="date" name="FromDate" value="@Model.FromDate" class="w-full px-3 py-2 border rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">جستجو</label>
+                <div class="relative">
+                    <input type="text" name="Q" value="@Model.Q" placeholder="شناسه تراکنش یا شماره تماس..." class="w-full px-3 py-2 border rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600">
+                    <button type="submit" class="absolute end-3 top-2 text-gray-400 dark:text-gray-500">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--Transactions table-->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-700">
+                <tr>
+                    <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">شناسه تراکنش</th>
+                    <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">تاریخ</th>
+                    <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">مشتری</th>
+                    <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">مبلغ</th>
+                    <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">درگاه پرداخت</th>
+                    <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">وضعیت</th>
+                    <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">اقدامات</th>
+                </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                @foreach (var tx in Model.Transactions)
+                {
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">@(!string.IsNullOrWhiteSpace(tx.TrackingCode) ? tx.TrackingCode : $"TX-{tx.Id}")</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">@tx.CreatedAt.ToString("yyyy/MM/dd - HH:mm")</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <img class="h-8 w-8 rounded-full" src="~/images/user/user.jpg" alt="پروفایل">
+                                <div class="ms-3">
+                                    <p class="text-sm text-gray-900 dark:text-white">@(tx.ShippingAddress?.FullName ?? tx.User?.UserName ?? "-")</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">@(tx.ShippingAddress?.Phone ?? tx.User?.PhoneNumber ?? "-")</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                            <div class="flex items-center">
+                                <span class="@(tx.Status == TiShinShop.Extenssions.Enums.OrderStatus.Paid ? "text-green-600 dark:text-green-400" : "text-gray-600 dark:text-gray-400")">@((tx.Status == TiShinShop.Extenssions.Enums.OrderStatus.Paid ? "+" : ""))</span>
+                                <span>@tx.FinalPrice.ToString("N0") تومان</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <img src="~/images/bank-logo/next-pay.png" class="h-6 w-6 rounded-full" alt="زرین پال">
+                                <span class="ms-2 text-sm">زرین پال</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 rounded-full @tx.Status.GetBadgeClass()">
+                                @tx.Status.GetDisplayName()
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                                <a asp-page="/seller-panel/orders/Detail" asp-route-id="@tx.Id" class="text-blue-600 hover:text-blue-900 dark:text-blue-400">مشاهده تراکنش</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
