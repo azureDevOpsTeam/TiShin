@@ -64,6 +64,25 @@
                     <!-- Orders -->
                     <a asp-page="/seller-panel/orders/Index" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">سفارش‌ها</a>
 
+                    <!-- Reports -->
+                    <div class="space-y-1 mt-2">
+                        <button type="button" class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700" onclick="toggleMenu('seller-reports-menu', 'seller-reports-arrow')">
+                            <span class="flex items-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline me-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6a2 2 0 012-2h8m-6 8h6m-6 0a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h4m4 0v4m0-4h4" />
+                              </svg>
+                              گزارش‌ها
+                            </span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform duration-300" id="seller-reports-arrow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div id="seller-reports-menu" class="hidden me-6 space-y-1">
+                            <a asp-page="/seller-panel/reports/Customers" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">گزارش مشتریان</a>
+                            <a asp-page="/seller-panel/transactions/Index" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">تراکنش‌ها</a>
+                        </div>
+                    </div>
+
                     <!-- Products Management -->
                     <div class="space-y-1 mt-2">
                         <button type="button" class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700" onclick="toggleMenu('seller-products-menu', 'seller-products-arrow')">
@@ -277,6 +296,12 @@
         <a asp-page="/seller-panel/Index" class="block px-4 py-3 text-sm font-medium rounded-lg bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">پیشخوان</a>
         <a asp-page="/seller-panel/Profile" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">پروفایل فروشگاه</a>
         <a asp-page="/seller-panel/orders/Index" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">سفارش‌ها</a>
+        <a asp-page="/seller-panel/users/Index" class="block px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">مدیریت کاربران</a>
+        <div class="mt-2">
+            <div class="text-xs font-bold text-gray-500 dark:text-gray-400 mb-2">گزارش‌ها</div>
+            <a asp-page="/seller-panel/reports/Customers" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">گزارش مشتریان</a>
+            <a asp-page="/seller-panel/transactions/Index" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">تراکنش‌ها</a>
+        </div>
         <div class="mt-2">
             <div class="text-xs font-bold text-gray-500 dark:text-gray-400 mb-2">محصولات</div>
             <a asp-page="/seller-panel/products/Index" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">مدیریت محصولات</a>

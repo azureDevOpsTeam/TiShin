@@ -1,0 +1,100 @@
+@page "{id}"
+@model TiShinShop.Pages.SellerPanel.Users.EditModel
+@{
+    Layout = "~/Pages/Shared/_SellerPanelLayout.cshtml";
+    ViewData["Title"] = "ویرایش کاربر";
+}
+
+<div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+    <div>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">ویرایش کاربر</h2>
+        <p class="text-gray-600 dark:text-gray-400">فعال/غیرفعال‌سازی حساب از طریق مودال</p>
+    </div>
+    <div class="mt-4 md:mt-0">
+        <a asp-page="Index" class="px-4 py-2 text-sm font-medium rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">بازگشت به لیست</a>
+    </div>
+    </div>
+
+@if (Model.UserItem == null)
+{
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+        <p class="text-red-600 dark:text-red-400">کاربر یافت نشد.</p>
+    </div>
+}
+else
+{
+    var isLocked = Model.IsLocked(Model.UserItem);
+    <div class="bg-white py-6 space-y-6 dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 overflow-hidden border border-gray-200 dark:border-gray-700">
+        <div class="px-6 border-b pb-4 border-gray-200 dark:border-gray-700">
+            <h3 class="font-bold text-lg">اطلاعات کاربر</h3>
+        </div>
+        <div class="px-6 grid md:grid-cols-2 gap-6">
+            <div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">نام و نام خانوادگی</div>
+                <div class="text-base font-medium text-gray-900 dark:text-white">@Model.UserItem.FirstName @Model.UserItem.LastName</div>
+            </div>
+            <div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">نام کاربری</div>
+                <div class="text-base font-medium text-gray-900 dark:text-white">@Model.UserItem.UserName</div>
+            </div>
+            <div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">ایمیل</div>
+                <div class="text-base font-medium text-gray-900 dark:text-white">@Model.UserItem.Email</div>
+            </div>
+            <div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">وضعیت</div>
+                @if (!isLocked)
+                {
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">فعال</span>
+                }
+                else
+                {
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">غیرفعال</span>
+                }
+            </div>
+        </div>
+
+        <div class="px-6">
+            <button type="button" class="px-4 py-2 text-sm font-medium rounded-lg bg-primary-600 text-white hover:bg-primary-700 shadow-sm" onclick="document.getElementById('lock-modal').classList.remove('hidden')">
+                @(!isLocked ? "غیرفعال‌سازی کاربر" : "فعال‌سازی کاربر")
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="lock-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50" onclick="document.getElementById('lock-modal').classList.add('hidden')"></div>
+        <div class="relative mx-auto mt-24 w-[90%] max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h4 class="text-lg font-bold text-gray-900 dark:text-white">تأیید عملیات</h4>
+                <button type="button" class="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700" onclick="document.getElementById('lock-modal').classList.add('hidden')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-500">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            @if (!isLocked)
+            {
+                <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">با تأیید، کاربر غیرفعال خواهد شد و امکان ورود نخواهد داشت.</p>
+                <form method="post" asp-page-handler="Lock">
+                    <input type="hidden" name="Id" value="@Model.UserItem.Id" />
+                    <div class="flex items-center justify-end space-x-3 rtl:space-x-reverse">
+                        <button type="button" class="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600" onclick="document.getElementById('lock-modal').classList.add('hidden')">انصراف</button>
+                        <button type="submit" class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700">تأیید غیرفعال‌سازی</button>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">با تأیید، کاربر فعال خواهد شد و امکان ورود خواهد داشت.</p>
+                <form method="post" asp-page-handler="Unlock">
+                    <input type="hidden" name="Id" value="@Model.UserItem.Id" />
+                    <div class="flex items-center justify-end space-x-3 rtl:space-x-reverse">
+                        <button type="button" class="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600" onclick="document.getElementById('lock-modal').classList.add('hidden')">انصراف</button>
+                        <button type="submit" class="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700">تأیید فعال‌سازی</button>
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,101 @@
+@page "/contact-us"
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "تماس با ما";
+}
+
+<section class="py-5">
+    <div class="container">
+        <!-- Contact Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-3xl font-bold dark:text-white">با ما در ارتباط باشید</h1>
+            <p class="max-w-2xl mx-auto text-gray-600 dark:text-gray-400 mt-4">
+                برای هرگونه سوال، پیشنهاد یا انتقاد می‌توانید از طریق اطلاعات زیر یا فرم تماس با ما پیام خود را ارسال کنید.
+            </p>
+        </div>
+
+        <!-- Contact Info Cards -->
+        <div class="grid md:grid-cols-3 gap-6 mb-12">
+            <div class="bg-white dark:bg-zinc-800 p-6 rounded-2xl shadow-sm">
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="w-10 h-10 rounded-full bg-primary-light/10 dark:bg-primary-dark/20 flex items-center justify-center">
+                        <img src="~/images/social/telephone-call.svg" alt="تماس" class="w-5 h-5">
+                    </span>
+                    <h3 class="font-bold dark:text-white">شماره تماس</h3>
+                </div>
+                <p class="text-gray-600 dark:text-gray-400">021-12345678</p>
+                <p class="text-gray-600 dark:text-gray-400">0935-123-4567</p>
+            </div>
+            <div class="bg-white dark:bg-zinc-800 p-6 rounded-2xl shadow-sm">
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="w-10 h-10 rounded-full bg-primary-light/10 dark:bg-primary-dark/20 flex items-center justify-center">
+                        <img src="~/images/social/envelope.svg" alt="ایمیل" class="w-5 h-5">
+                    </span>
+                    <h3 class="font-bold dark:text-white">ایمیل</h3>
+                </div>
+                <p class="text-gray-600 dark:text-gray-400">support@tishin.shop</p>
+                <p class="text-gray-600 dark:text-gray-400">info@tishin.shop</p>
+            </div>
+            <div class="bg-white dark:bg-zinc-800 p-6 rounded-2xl shadow-sm">
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="w-10 h-10 rounded-full bg-primary-light/10 dark:bg-primary-dark/20 flex items-center justify-center">
+                        <img src="~/images/social/location-pin.svg" alt="آدرس" class="w-5 h-5">
+                    </span>
+                    <h3 class="font-bold dark:text-white">آدرس</h3>
+                </div>
+                <p class="text-gray-600 dark:text-gray-400">تهران، خیابان ولیعصر، پلاک ۱۲۳، واحد ۴</p>
+            </div>
+        </div>
+
+        <!-- Contact Form and Map -->
+        <div class="grid md:grid-cols-2 gap-8 items-start">
+            <!-- Form -->
+            <div class="bg-white dark:bg-zinc-800 p-6 rounded-2xl shadow-sm">
+                <h3 class="text-xl font-bold mb-4 dark:text-white">فرم تماس با ما</h3>
+                <form>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm mb-2 dark:text-gray-300">نام و نام خانوادگی</label>
+                            <input type="text" class="form-input" placeholder="مثال: سارا محمدی">
+                        </div>
+                        <div>
+                            <label class="block text-sm mb-2 dark:text-gray-300">ایمیل</label>
+                            <input type="email" class="form-input" placeholder="example@email.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm mb-2 dark:text-gray-300">شماره تماس</label>
+                            <input type="tel" class="form-input" placeholder="0912xxxxxxx">
+                        </div>
+                        <div>
+                            <label class="block text-sm mb-2 dark:text-gray-300">موضوع</label>
+                            <input type="text" class="form-input" placeholder="مثال: پیگیری سفارش">
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm mb-2 dark:text-gray-300">پیام شما</label>
+                        <textarea rows="5" class="form-input" placeholder="متن پیام"></textarea>
+                    </div>
+                    <button type="button" class="btn btn-primary mt-4">ارسال پیام</button>
+                </form>
+            </div>
+
+            <!-- Map / Image -->
+            <div class="rounded-2xl overflow-hidden shadow-sm bg-gray-100 dark:bg-zinc-900">
+                <img src="~/images/about/map.jpg" alt="نقشه" class="w-full h-full object-cover">
+            </div>
+        </div>
+
+        <!-- Social Links -->
+        <div class="mt-12">
+            <div class="bg-white dark:bg-zinc-800 p-6 rounded-2xl shadow-sm">
+                <h3 class="text-xl font-bold mb-4 dark:text-white">ما را در شبکه‌های اجتماعی دنبال کنید</h3>
+                <div class="flex flex-wrap items-center gap-3">
+                    <a class="btn btn-sm btn-secondary" href="#"><img src="~/images/social/instagram.svg" class="w-4 h-4 ms-1" alt="instagram">اینستاگرام</a>
+                    <a class="btn btn-sm btn-secondary" href="#"><img src="~/images/social/telegram.svg" class="w-4 h-4 ms-1" alt="telegram">تلگرام</a>
+                    <a class="btn btn-sm btn-secondary" href="#"><img src="~/images/social/whatsapp.svg" class="w-4 h-4 ms-1" alt="whatsapp">واتس‌اپ</a>
+                    <a class="btn btn-sm btn-secondary" href="#"><img src="~/images/social/x.svg" class="w-4 h-4 ms-1" alt="x">ایکس</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
