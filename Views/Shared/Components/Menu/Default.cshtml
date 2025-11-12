@@ -46,7 +46,7 @@
                             <div class="mt-3 space-y-4">
                                 @foreach (var child in item.Children.Where(c => !c.IsBaseMenu))
                                 {
-                                    <a href="#" class="text-xs text-gray-600 block hover:text-primary dark:text-gray-300">@child.Name</a>
+                                    <a href="/category/@child.Id" class="text-xs text-gray-600 block hover:text-primary dark:text-gray-300">@child.Name</a>
                                 }
                             </div>
                         </div>
