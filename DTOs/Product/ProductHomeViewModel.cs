@@ -15,6 +15,8 @@ namespace TiShinShop.DTOs.Product
 
         // Best selling (approximate) products for homepage
         public List<ListViewModel> TopSellingProducts { get; set; } = new();
+
+        public List<string> VitrineImages { get; set; } = new();
     }
 
     public class ListViewModel

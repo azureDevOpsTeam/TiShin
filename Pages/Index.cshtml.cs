@@ -127,14 +127,21 @@ public class IndexModel(ApplicationDbContext context) : PageModel
                 BasePrice = p.BasePrice,
                 FirstImage = p.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? p.FirstImage,
                 SecondImage = p.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? p.SecondImage,
-                Colors = p.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray()
-            })
-            .ToListAsync();
+            Colors = p.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray()
+        })
+        .ToListAsync();
 
         // Fallback: اگر دسته «لباس» خالی بود، جدیدترین محصولات را نشان بده
         if (OutPut.LatestClothes == null || OutPut.LatestClothes.Count == 0)
         {
             OutPut.LatestClothes = OutPut.NewProducts;
         }
+
+        OutPut.VitrineImages = await _context.Vitrines
+            .AsNoTracking()
+            .OrderByDescending(v => v.CreateAt)
+            .Select(v => v.ImageUrl)
+            .Take(4)
+            .ToListAsync();
     }
 }

@@ -1,0 +1,40 @@
+@page
+@model TiShinShop.Pages.SellerPanel.Vitrine.IndexModel
+@{
+    Layout = "_SellerPanelLayout";
+    ViewData["Title"] = "لیست ویترین";
+}
+<div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+    <div>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">لیست ویترین</h2>
+        <p class="text-gray-600 dark:text-gray-400">نمایش آخرین تصاویر ویترین</p>
+    </div>
+    <div class="mt-4 md:mt-0">
+        <a asp-page="/seller-panel/vitrine/Create" class="flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-primary-600 text-white hover:bg-primary-500 shadow-sm dark:bg-primary-500 dark:hover:bg-primary-600">ثبت ویترین</a>
+    </div>
+ </div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    @foreach (var v in Model.Items)
+    {
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-4 border border-gray-200 dark:border-gray-700 relative">
+            <div class="absolute top-3 end-3">
+                <div class="relative group">
+                    <button class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6 dark:text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5Zm0 4.5a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5Zm0 4.5a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5Z" />
+                        </svg>
+                    </button>
+                    <div class="hidden group-hover:block absolute end-0 mt-2 w-32 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg z-10 shadow-lg">
+                        <form method="post" asp-page-handler="Delete" class="px-2 py-2">
+                            <input type="hidden" name="id" value="@v.Id" />
+                            <button type="submit" class="w-full text-start text-sm px-3 py-2 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">حذف</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <figure class="text-center block">
+                <img src="@Url.Content(string.IsNullOrWhiteSpace(v.ImageUrl) ? "~/images/advert/banner-1.jpg" : v.ImageUrl)" class="rounded-xl w-full object-cover" alt="ویترین">
+            </figure>
+        </div>
+    }
+</div>

@@ -1,0 +1,26 @@
+@page
+@model TiShinShop.Pages.SellerPanel.Vitrine.CreateModel
+@{
+    Layout = "_SellerPanelLayout";
+    ViewData["Title"] = "ثبت ویترین";
+}
+<div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+    <div>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">ثبت ویترین</h2>
+        <p class="text-gray-600 dark:text-gray-400">آپلود یک تصویر برای ویترین</p>
+    </div>
+    <div class="mt-4 md:mt-0">
+        <button type="submit" form="create-form" class="flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-primary-600 text-white hover:bg-primary-500 shadow-sm dark:bg-primary-500 dark:hover:bg-primary-600">ثبت</button>
+    </div>
+</div>
+<form id="create-form" method="post" enctype="multipart/form-data" class="grid grid-cols-1 gap-6">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-6 border border-gray-200 dark:border-gray-700">
+        <div class="grid grid-cols-1 gap-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">انتخاب تصویر</label>
+                <input asp-for="Image" type="file" accept="image/*" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                <span asp-validation-for="Image" class="text-red-600 text-sm"></span>
+            </div>
+        </div>
+    </div>
+</form>

@@ -431,18 +431,30 @@
 <section class="py-5">
     <div class="container">
         <div class="grid gap-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1">
-            <a href="">
-                <img src="~/images/advert/landing/five.webp" alt="">
-            </a>
-            <a href="">
-                <img src="~/images/advert/landing/six.webp" alt="">
-            </a>
-            <a href="">
-                <img src="~/images/advert/landing/seven.webp" alt="">
-            </a>
-            <a href="">
-                <img src="~/images/advert/landing/eight.webp" alt="">
-            </a>
+            @if (Model.OutPut.VitrineImages != null && Model.OutPut.VitrineImages.Count > 0)
+            {
+                foreach (var img in Model.OutPut.VitrineImages)
+                {
+                    <a href="">
+                        <img src="@Url.Content(img)" alt="" class="w-full rounded-lg object-cover" style="height:250px">
+                    </a>
+                }
+            }
+            else
+            {
+                <a href="">
+                    <img src="~/images/advert/landing/five.webp" alt="" class="w-full rounded-lg object-cover" style="height:250px">
+                </a>
+                <a href="">
+                    <img src="~/images/advert/landing/six.webp" alt="" class="w-full rounded-lg object-cover" style="height:250px">
+                </a>
+                <a href="">
+                    <img src="~/images/advert/landing/seven.webp" alt="" class="w-full rounded-lg object-cover" style="height:250px">
+                </a>
+                <a href="">
+                    <img src="~/images/advert/landing/eight.webp" alt="" class="w-full rounded-lg object-cover" style="height:250px">
+                </a>
+            }
         </div>
     </div>
 </section>
