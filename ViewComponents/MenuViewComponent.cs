@@ -12,20 +12,18 @@ namespace TiShinShop.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var query = await Task.Run(() => _context.Categories.AsQueryable());
-            // Base categories used for left list and panel grouping (landing.html pattern)
-            var baseCategories = await query
+            var categories = await query
                 .Where(c => c.ParentId == 0)
                 .ToListAsync();
 
-            // Build menu items keyed by each base category id
-            var menuItems = baseCategories
+            var menuItems = await query
+                .Where(c => c.IsBaseMenu)
                 .Select(parent => new MenuItemViewModel
                 {
-                    BaseMenu = baseCategories,
+                    BaseMenu = categories,
                     Parent = parent,
                     Children = query.Where(c => c.ParentId == parent.Id).ToList()
-                })
-                .ToList();
+                }).ToListAsync();
 
             return View(menuItems);
         }
