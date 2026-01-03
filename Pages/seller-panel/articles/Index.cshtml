@@ -1,0 +1,35 @@
+@page
+@model TiShinShop.Pages.SellerPanel.Articles.IndexModel
+@{
+    Layout = "_SellerPanelLayout";
+    ViewData["Title"] = "لیست مقالات";
+}
+<div class="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+    <div>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">لیست مقالات</h2>
+        <p class="text-gray-600 dark:text-gray-400">مدیریت و ویرایش مقالات منتشر شده</p>
+    </div>
+    <div class="mt-4 md:mt-0">
+        <a asp-page="/seller-panel/articles/Create" class="flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-primary-600 text-white hover:bg-primary-500 shadow-sm dark:bg-primary-500 dark:hover:bg-primary-600">ایجاد مقاله</a>
+    </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @foreach (var a in Model.Articles)
+    {
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md dark:shadow-gray-700 p-4 border border-gray-200 dark:border-gray-700 relative">
+            <div class="absolute top-3 end-3 flex items-center space-x-2 space-x-reverse">
+                <a asp-page="/seller-panel/articles/Edit" asp-route-id="@a.Id" class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">ویرایش</a>
+                <form method="post" asp-page-handler="Delete">
+                    <input type="hidden" name="id" value="@a.Id" />
+                    <button type="submit" class="p-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">حذف</button>
+                </form>
+            </div>
+            <figure class="text-center block">
+                <img src="@Url.Content(string.IsNullOrWhiteSpace(a.ImageUrl) ? "~/images/blog/blog-1.jpg" : a.ImageUrl)" class="rounded-xl w-full h-50 object-cover" alt="@a.Title">
+            </figure>
+            <h3 class="text-lg font-bold mt-3 dark:text-white">@a.Title</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">@a.Summary</p>
+            <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">@a.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm")</div>
+        </div>
+    }
+</div>

@@ -17,6 +17,11 @@ namespace TiShinShop.DTOs.Product
         public List<ListViewModel> TopSellingProducts { get; set; } = new();
 
         public List<string> VitrineImages { get; set; } = new();
+
+        public List<ListViewModel> SpecialDiscountProducts { get; set; } = new();
+        public int SpecialDiscountCount { get; set; }
+
+        public List<ArticleListViewModel> LatestArticles { get; set; } = new();
     }
 
     public class ListViewModel
@@ -34,6 +39,18 @@ namespace TiShinShop.DTOs.Product
         public decimal BasePrice { get; set; }
 
         public ColorDataViewModel[] Colors { get; set; }
+        public int? DiscountPercent { get; set; }
+    }
+
+    public class ArticleListViewModel
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Slug { get; set; }
+        public string ImageUrl { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string Summary { get; set; }
+        public int Views { get; set; }
     }
     public class ColorDataViewModel
     {

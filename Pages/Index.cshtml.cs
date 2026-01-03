@@ -29,7 +29,8 @@ public class IndexModel(ApplicationDbContext context) : PageModel
                 BasePrice = current.BasePrice,
                 FirstImage = current.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? current.FirstImage,
                 SecondImage = current.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? current.SecondImage,
-                Colors = current.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray()
+                Colors = current.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray(),
+                DiscountPercent = current.Discount != null && current.Discount.IsActive ? current.Discount.Percentage : (int?)null
             }).ToListAsync();
 
         OutPut.TopVisitProducts = await query
@@ -43,7 +44,8 @@ public class IndexModel(ApplicationDbContext context) : PageModel
                 BasePrice = current.BasePrice,
                 FirstImage = current.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? current.FirstImage,
                 SecondImage = current.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? current.SecondImage,
-                Colors = current.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray()
+                Colors = current.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray(),
+                DiscountPercent = current.Discount != null && current.Discount.IsActive ? current.Discount.Percentage : (int?)null
             }).ToListAsync();
 
         // Approximate best sellers using Visit count (simple proxy)
@@ -58,7 +60,8 @@ public class IndexModel(ApplicationDbContext context) : PageModel
                 BasePrice = current.BasePrice,
                 FirstImage = current.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? current.FirstImage,
                 SecondImage = current.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? current.SecondImage,
-                Colors = current.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray()
+                Colors = current.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray(),
+                DiscountPercent = current.Discount != null && current.Discount.IsActive ? current.Discount.Percentage : (int?)null
             }).ToListAsync();
 
         OutPut.DiscountProducts = await query
@@ -72,7 +75,8 @@ public class IndexModel(ApplicationDbContext context) : PageModel
             BasePrice = current.BasePrice,
             FirstImage = current.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? current.FirstImage,
             SecondImage = current.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? current.SecondImage,
-            Colors = current.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray()
+            Colors = current.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray(),
+            DiscountPercent = current.Discount != null && current.Discount.IsActive ? current.Discount.Percentage : (int?)null
         }).ToListAsync();
 
         // Latest Laptops by category name
@@ -99,7 +103,8 @@ public class IndexModel(ApplicationDbContext context) : PageModel
                 BasePrice = p.BasePrice,
                 FirstImage = p.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? p.FirstImage,
                 SecondImage = p.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? p.SecondImage,
-                Colors = p.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray()
+                Colors = p.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray(),
+                DiscountPercent = p.Discount != null && p.Discount.IsActive ? p.Discount.Percentage : (int?)null
             })
             .ToListAsync();
 
@@ -127,9 +132,10 @@ public class IndexModel(ApplicationDbContext context) : PageModel
                 BasePrice = p.BasePrice,
                 FirstImage = p.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? p.FirstImage,
                 SecondImage = p.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? p.SecondImage,
-            Colors = p.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray()
-        })
-        .ToListAsync();
+                Colors = p.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray(),
+                DiscountPercent = p.Discount != null && p.Discount.IsActive ? p.Discount.Percentage : (int?)null
+            })
+            .ToListAsync();
 
         // Fallback: اگر دسته «لباس» خالی بود، جدیدترین محصولات را نشان بده
         if (OutPut.LatestClothes == null || OutPut.LatestClothes.Count == 0)
@@ -142,6 +148,49 @@ public class IndexModel(ApplicationDbContext context) : PageModel
             .OrderByDescending(v => v.CreateAt)
             .Select(v => v.ImageUrl)
             .Take(4)
+            .ToListAsync();
+
+        var now = DateTime.UtcNow;
+        var discountQuery = _context.Products
+            .Where(p => p.DiscountId != null)
+            .Where(p =>
+                p.Discount != null &&
+                p.Discount.Percentage >= 40 &&
+                (!p.Discount.StartDate.HasValue || now >= p.Discount.StartDate.Value) &&
+                (!p.Discount.EndDate.HasValue || now <= p.Discount.EndDate.Value));
+
+        OutPut.SpecialDiscountCount = await discountQuery.CountAsync();
+        OutPut.SpecialDiscountProducts = await discountQuery
+            .OrderByDescending(p => p.Discount.Percentage)
+            .ThenByDescending(p => p.CreateAt)
+            .Take(5)
+            .Select(p => new ListViewModel
+            {
+                ProductId = p.Id,
+                Title = p.Title,
+                Quantity = p.Quantity,
+                BasePrice = p.BasePrice,
+                FirstImage = p.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? p.FirstImage,
+                SecondImage = p.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? p.SecondImage,
+                Colors = p.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray()
+            })
+            .ToListAsync();
+
+        OutPut.LatestArticles = await _context.Articles
+            .AsNoTracking()
+            .Where(a => a.IsPublished)
+            .OrderByDescending(a => a.CreatedAt)
+            .Take(10)
+            .Select(a => new ArticleListViewModel
+            {
+                Id = a.Id,
+                Title = a.Title,
+                Slug = a.Slug,
+                ImageUrl = a.ImageUrl,
+                CreatedAt = a.CreatedAt,
+                Summary = a.Summary,
+                Views = a.Views
+            })
             .ToListAsync();
     }
 }

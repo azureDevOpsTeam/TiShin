@@ -142,7 +142,10 @@
                                                         <meta itemprop="priceCurrency" content="IRR">
                                                         <span itemprop="price">@((item.BasePrice * 1.1M).ToString("N0"))</span>
                                                     </del>
-                                                    <span class="bg-secondary px-3 rounded-bl-none text-sm rounded-xl text-white ms-3" itemprop="discount">10%</span>
+                                                    @if (item.DiscountPercent.HasValue)
+                                                    {
+                                                        <span class="bg-secondary px-3 rounded-bl-none text-sm rounded-xl text-white ms-3" itemprop="discount">@item.DiscountPercent.Value%</span>
+                                                    }
                                                 </div>
                                                 <span class="text-xl font-bold dark:text-white" itemprop="price" content="@item.BasePrice">@item.BasePrice.ToString("N0") <span class="text-xs">تومان</span></span>
                                             </div>
@@ -241,46 +244,20 @@
                 </div>
                 <div class="lg:!col-span-3 col-span-5 w-full">
                     <div class="flex flex-wrap md:space-y-0 space-y-4 space-x-3 items-center lg:justify-end">
-                        <div itemscope itemtype="https://schema.org/Product"
-                             class="size-20 flex items-center justify-center rounded-full bg-white p-2">
-                            <meta itemprop="productID" content="laptop-1">
-                            <img src="~/images/product/laptop-6.png" loading="lazy"
-                                 alt="لپ تاپ ایسوس ویوو بوک X543 Core i5 8GB - تخفیف 60%" class="inline-block"
-                                 itemprop="image">
-                        </div>
-                        <div itemscope itemtype="https://schema.org/Product"
-                             class="size-20 flex items-center justify-center rounded-full bg-white p-2">
-                            <meta itemprop="productID" content="laptop-1">
-                            <img src="~/images/product/laptop-2.png" loading="lazy"
-                                 alt="لپ تاپ ایسوس ویوو بوک X543 Core i5 8GB - تخفیف 60%" class="inline-block"
-                                 itemprop="image">
-                        </div>
-                        <div itemscope itemtype="https://schema.org/Product"
-                             class="size-20 flex items-center justify-center rounded-full bg-white p-2">
-                            <meta itemprop="productID" content="laptop-1">
-                            <img src="~/images/product/laptop-1.png" loading="lazy"
-                                 alt="لپ تاپ ایسوس ویوو بوک X543 Core i5 8GB - تخفیف 60%" class="inline-block"
-                                 itemprop="image">
-                        </div>
-                        <div itemscope itemtype="https://schema.org/Product"
-                             class="size-20 flex items-center justify-center rounded-full bg-white p-2">
-                            <meta itemprop="productID" content="laptop-1">
-                            <img src="~/images/product/laptop-3.png" loading="lazy"
-                                 alt="لپ تاپ ایسوس ویوو بوک X543 Core i5 8GB - تخفیف 60%" class="inline-block"
-                                 itemprop="image">
-                        </div>
-                        <div itemscope itemtype="https://schema.org/Product"
-                             class="size-20 flex items-center justify-center rounded-full bg-white p-2">
-                            <meta itemprop="productID" content="laptop-1">
-                            <img src="~/images/product/laptop-5.png"
-                                 alt="لپ تاپ ایسوس ویوو بوک X543 Core i5 8GB - تخفیف 60%" class="inline-block"
-                                 loading="lazy" itemprop="image">
-                        </div>
-                        <a href="/products?category=laptops"
-                           class="btn py-4 bg-white rounded-3xl px-5 flex items-center justify-between dark:text-gray-900"
-                           aria-label="مشاهده تمام 40 محصول لپ تاپ با تخفیف ویژه"
+                        @foreach (var item in (Model.OutPut.SpecialDiscountProducts ?? new List<TiShinShop.DTOs.Product.ListViewModel>()))
+                        {
+                            <div itemscope itemtype="https://schema.org/Product"
+                                 class="size-20 flex items-center justify-center rounded-full bg-white p-2">
+                                <meta itemprop="productID" content="@item.ProductId">
+                                <img src="@Url.Content(string.IsNullOrWhiteSpace(item.FirstImage) ? "~/images/product/laptop-6.png" : item.FirstImage)" loading="lazy"
+                                     alt="@item.Title" class="inline-block" itemprop="image">
+                            </div>
+                        }
+                        <a asp-page="/store/discounts/Over40"
+                             class="btn py-4 bg-white rounded-3xl px-5 flex items-center justify-between dark:text-gray-900"
+                           aria-label="مشاهده تمام محصولات با تخفیف بالای 40%"
                            role="button">
-                            بیش از 40 کالا
+                            بیش از @Model.OutPut.SpecialDiscountCount کالا
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                  stroke="currentColor" class="size-4 ms-2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -405,7 +382,10 @@
                                                     <meta itemprop="priceCurrency" content="IRR">
                                                     <span itemprop="price">@((item.BasePrice * 1.1M).ToString("N0"))</span>
                                                 </del>
-                                                <span class="bg-secondary px-3 rounded-bl-none text-sm rounded-xl text-white ms-3" itemprop="discount">10%</span>
+                                                @if (item.DiscountPercent.HasValue)
+                                                {
+                                                    <span class="bg-secondary px-3 rounded-bl-none text-sm rounded-xl text-white ms-3" itemprop="discount">@item.DiscountPercent.Value%</span>
+                                                }
                                             </div>
                                             <span class="text-xl font-bold dark:text-white" itemprop="price" content="@item.BasePrice">@item.BasePrice.ToString("N0") <span class="text-xs">تومان</span></span>
                                         </div>
@@ -571,7 +551,10 @@
                                                     <meta itemprop="priceCurrency" content="IRR">
                                                     <span itemprop="price">@((item.BasePrice * 1.1M).ToString("N0"))</span>
                                                 </del>
-                                                <span class="bg-secondary px-3 rounded-bl-none text-sm rounded-xl text-white ms-3" itemprop="discount">10%</span>
+                                                @if (item.DiscountPercent.HasValue)
+                                                {
+                                                    <span class="bg-secondary px-3 rounded-bl-none text-sm rounded-xl text-white ms-3" itemprop="discount">@item.DiscountPercent.Value%</span>
+                                                }
                                             </div>
                                             <span class="text-xl font-bold dark:text-white" itemprop="price" content="@item.BasePrice">@item.BasePrice.ToString("N0") <span class="text-xs">تومان</span></span>
                                         </div>
@@ -633,218 +616,47 @@
                 </div>
             </header>
         </div>
-        <div class="swiper !px-2.3 blog-carousel">
+        <div class="swiper !px-2.3 blog-carousel hidden">
             <div class="swiper-wrapper items-center" style="padding-bottom: 0 !important;">
-                <div class="swiper-slide space-y-3 px-1.5 py-2" itemprop="itemListElement" itemscope itemtype="https://schema.org/BlogPosting">
-                    <a href="/blog/راهنمای-خرید-موبایل" class="w-full block" itemprop="url">
-                        <article class="p-4 space-y-3 rounded-xl hover:-translate-y-2 transition border border-gray-200 bg-white drop-shadow-md dark:bg-gray-800">
-                            <figure class="text-center block py-4" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
-                                <img src="~/images/blog/blog-1.jpg" class="h-50 rounded-xl w-full block mx-auto object-cover" alt="تصویر راهنمای خرید موبایل" itemprop="contentUrl">
-                                <meta itemprop="caption" content="تصویر راهنمای خرید موبایل">
-                            </figure>
-                            <section class="space-y-5">
-                                <div class="space-y-4">
-                                    <h4 class="relative before:start-0 before:z-[-1] before:rounded-lg before:bg-gray-300 before:absolute before:top-1/2 before:h-px before:w-full before:-translate-y-1/2">
-                                        <span class="bg-secondary text-sm rounded text-white px-3 dark:bg-secondary-300" itemprop="articleSection">تکنولوژی</span>
-                                    </h4>
-                                    <h2 class="text-xl line-clamp-1 font-bold dark:text-white" itemprop="headline">راهنمای خرید موبایل آبان 1402</h2>
+                @foreach (var a in (Model.OutPut.LatestArticles ?? new List<TiShinShop.DTOs.Product.ArticleListViewModel>()))
+                {
+                    <div class="swiper-Fslide space-y-3 px-1.5 py-2" itemprop="itemListElement" itemscope itemtype="https://schema.org/BlogPosting">
+                    <a asp-page="/blog/Article" asp-route-slug="@a.Slug" class="w-full block" itemprop="url">
+                        <article class="p-4 space-y-3 rounded-xl hover:-translate-y-2 transition border border-gray-200 bg-white drop-shadow-md dark:bg-gray-800" itemscope itemtype="https://schema.org/BlogPosting">
+                        <figure class="text-center block py-4" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
+                            <img src="@Url.Content(string.IsNullOrWhiteSpace(a.ImageUrl) ? "~/images/blog/blog-1.jpg" : a.ImageUrl)" class="h-50 rounded-xl w-full block mx-auto object-cover" alt="@a.Title" itemprop="contentUrl">
+                            <meta itemprop="caption" content="@a.Title">
+                        </figure>
+                        <section class="space-y-5">
+                            <div class="space-y-4">
+                                <h4 class="relative before:start-0 before:z-[-1] before:rounded-lg before:bg-gray-300 before:absolute before:top-1/2 before:h-px before:w-full before:-translate-y-1/2">
+                                    <span class="bg-secondary text-sm rounded text-white px-3 dark:bg-secondary-300" itemprop="articleSection">تکنولوژی</span>
+                                </h4>
+                                <h2 class="text-xl line-clamp-1 font-bold dark:text-white" itemprop="headline">@a.Title</h2>
+                            </div>
+                            <div class="flex mt-8 flex-wrap justify-between items-center">
+                                <div class="flex items-center" itemprop="datePublished" content="@a.CreatedAt.ToString("yyyy-MM-dd")">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                    <time class="ms-2 dark:text-white">@a.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd")</time>
                                 </div>
-                                <div class="flex mt-8 flex-wrap justify-between items-center">
-                                    <div class="flex items-center" itemprop="datePublished" content="2024-03-02">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                        <time class="ms-2 dark:text-white">13 اسفند 1403</time>
-                                    </div>
-                                    <div class="flex items-center" itemprop="interactionStatistic" itemscope itemtype="https://schema.org/InteractionCounter">
-                                        <meta itemprop="interactionType" content="https://schema.org/WatchAction">
-                                        <meta itemprop="userInteractionCount" content="128">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                        </svg>
-                                        <time class="ms-2 dark:text-white">128 بازدید</time>
-                                    </div>
+                                <div class="flex items-center" itemprop="interactionStatistic" itemscope itemtype="https://schema.org/InteractionCounter">
+                                    <meta itemprop="interactionType" content="https://schema.org/WatchAction">
+                                    <meta itemprop="userInteractionCount" content="@a.Views">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                    </svg>
+                                    <time class="ms-2 dark:text-white">@a.Views بازدید</time>
                                 </div>
-                            </section>
-                        </article>
+                            </div>
+                        </section>
+                        <p class="text-sm text-gray-700 dark:text-gray-300 line-clamp-2">@a.Summary</p>
+                    </article>
                     </a>
-                </div>
-                <div class="swiper-slide space-y-3 px-1.5 py-2" itemprop="itemListElement" itemscope itemtype="https://schema.org/BlogPosting">
-                    <a href="/blog/راهنمای-خرید-موبایل" class="w-full block" itemprop="url">
-                        <article class="p-4 space-y-3 rounded-xl hover:-translate-y-2 transition border border-gray-200 bg-white drop-shadow-md dark:bg-gray-800">
-                            <figure class="text-center block py-4" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
-                                <img src="~/images/blog/blog-2.jpg" class="h-50 rounded-xl w-full block mx-auto object-cover" alt="تصویر راهنمای خرید موبایل" itemprop="contentUrl">
-                                <meta itemprop="caption" content="تصویر راهنمای خرید موبایل">
-                            </figure>
-                            <section class="space-y-5">
-                                <div class="space-y-4">
-                                    <h4 class="relative before:start-0 before:z-[-1] before:rounded-lg before:bg-gray-300 before:absolute before:top-1/2 before:h-px before:w-full before:-translate-y-1/2">
-                                        <span class="bg-secondary text-sm rounded text-white px-3 dark:bg-secondary-300" itemprop="articleSection">تکنولوژی</span>
-                                    </h4>
-                                    <h2 class="text-xl line-clamp-1 font-bold dark:text-white" itemprop="headline">راهنمای خرید موبایل آبان 1402</h2>
-                                </div>
-                                <div class="flex mt-8 flex-wrap justify-between items-center">
-                                    <div class="flex items-center" itemprop="datePublished" content="2024-03-02">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                        <time class="ms-2 dark:text-white">13 اسفند 1403</time>
-                                    </div>
-                                    <div class="flex items-center" itemprop="interactionStatistic" itemscope itemtype="https://schema.org/InteractionCounter">
-                                        <meta itemprop="interactionType" content="https://schema.org/WatchAction">
-                                        <meta itemprop="userInteractionCount" content="128">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                        </svg>
-                                        <time class="ms-2 dark:text-white">128 بازدید</time>
-                                    </div>
-                                </div>
-                            </section>
-                        </article>
-                    </a>
-                </div>
-                <div class="swiper-slide space-y-3 px-1.5 py-2" itemprop="itemListElement" itemscope itemtype="https://schema.org/BlogPosting">
-                    <a href="/blog/راهنمای-خرید-موبایل" class="w-full block" itemprop="url">
-                        <article class="p-4 space-y-3 rounded-xl hover:-translate-y-2 transition border border-gray-200 bg-white drop-shadow-md dark:bg-gray-800">
-                            <figure class="text-center block py-4" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
-                                <img src="~/images/blog/blog-3.jpg" class="h-50 rounded-xl w-full block mx-auto object-cover" alt="تصویر راهنمای خرید موبایل" itemprop="contentUrl">
-                                <meta itemprop="caption" content="تصویر راهنمای خرید موبایل">
-                            </figure>
-                            <section class="space-y-5">
-                                <div class="space-y-4">
-                                    <h4 class="relative before:start-0 before:z-[-1] before:rounded-lg before:bg-gray-300 before:absolute before:top-1/2 before:h-px before:w-full before:-translate-y-1/2">
-                                        <span class="bg-secondary text-sm rounded text-white px-3 dark:bg-secondary-300" itemprop="articleSection">تکنولوژی</span>
-                                    </h4>
-                                    <h2 class="text-xl line-clamp-1 font-bold dark:text-white" itemprop="headline">راهنمای خرید موبایل آبان 1402</h2>
-                                </div>
-                                <div class="flex mt-8 flex-wrap justify-between items-center">
-                                    <div class="flex items-center" itemprop="datePublished" content="2024-03-02">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                        <time class="ms-2 dark:text-white">13 اسفند 1403</time>
-                                    </div>
-                                    <div class="flex items-center" itemprop="interactionStatistic" itemscope itemtype="https://schema.org/InteractionCounter">
-                                        <meta itemprop="interactionType" content="https://schema.org/WatchAction">
-                                        <meta itemprop="userInteractionCount" content="128">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                        </svg>
-                                        <time class="ms-2 dark:text-white">128 بازدید</time>
-                                    </div>
-                                </div>
-                            </section>
-                        </article>
-                    </a>
-                </div>
-                <div class="swiper-slide space-y-3 px-1.5 py-2" itemprop="itemListElement" itemscope itemtype="https://schema.org/BlogPosting">
-                    <a href="/blog/راهنمای-خرید-موبایل" class="w-full block" itemprop="url">
-                        <article class="p-4 space-y-3 rounded-xl hover:-translate-y-2 transition border border-gray-200 bg-white drop-shadow-md dark:bg-gray-800">
-                            <figure class="text-center block py-4" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
-                                <img src="~/images/blog/blog-4.jpg" class="h-50 rounded-xl w-full block mx-auto object-cover" alt="تصویر راهنمای خرید موبایل" itemprop="contentUrl">
-                                <meta itemprop="caption" content="تصویر راهنمای خرید موبایل">
-                            </figure>
-                            <section class="space-y-5">
-                                <div class="space-y-4">
-                                    <h4 class="relative before:start-0 before:z-[-1] before:rounded-lg before:bg-gray-300 before:absolute before:top-1/2 before:h-px before:w-full before:-translate-y-1/2">
-                                        <span class="bg-secondary text-sm rounded text-white px-3 dark:bg-secondary-300" itemprop="articleSection">تکنولوژی</span>
-                                    </h4>
-                                    <h2 class="text-xl line-clamp-1 font-bold dark:text-white" itemprop="headline">راهنمای خرید موبایل آبان 1402</h2>
-                                </div>
-                                <div class="flex mt-8 flex-wrap justify-between items-center">
-                                    <div class="flex items-center" itemprop="datePublished" content="2024-03-02">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                        <time class="ms-2 dark:text-white">13 اسفند 1403</time>
-                                    </div>
-                                    <div class="flex items-center" itemprop="interactionStatistic" itemscope itemtype="https://schema.org/InteractionCounter">
-                                        <meta itemprop="interactionType" content="https://schema.org/WatchAction">
-                                        <meta itemprop="userInteractionCount" content="128">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                        </svg>
-                                        <time class="ms-2 dark:text-white">128 بازدید</time>
-                                    </div>
-                                </div>
-                            </section>
-                        </article>
-                    </a>
-                </div>
-                <div class="swiper-slide space-y-3 px-1.5 py-2" itemprop="itemListElement" itemscope itemtype="https://schema.org/BlogPosting">
-                    <a href="/blog/راهنمای-خرید-موبایل" class="w-full block" itemprop="url">
-                        <article class="p-4 space-y-3 rounded-xl hover:-translate-y-2 transition border border-gray-200 bg-white drop-shadow-md dark:bg-gray-800">
-                            <figure class="text-center block py-4" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
-                                <img src="~/images/blog/blog-5.jpg" class="h-50 rounded-xl w-full block mx-auto object-cover" alt="تصویر راهنمای خرید موبایل" itemprop="contentUrl">
-                                <meta itemprop="caption" content="تصویر راهنمای خرید موبایل">
-                            </figure>
-                            <section class="space-y-5">
-                                <div class="space-y-4">
-                                    <h4 class="relative before:start-0 before:z-[-1] before:rounded-lg before:bg-gray-300 before:absolute before:top-1/2 before:h-px before:w-full before:-translate-y-1/2">
-                                        <span class="bg-secondary text-sm rounded text-white px-3 dark:bg-secondary-300" itemprop="articleSection">تکنولوژی</span>
-                                    </h4>
-                                    <h2 class="text-xl line-clamp-1 font-bold dark:text-white" itemprop="headline">راهنمای خرید موبایل آبان 1402</h2>
-                                </div>
-                                <div class="flex mt-8 flex-wrap justify-between items-center">
-                                    <div class="flex items-center" itemprop="datePublished" content="2024-03-02">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                        <time class="ms-2 dark:text-white">13 اسفند 1403</time>
-                                    </div>
-                                    <div class="flex items-center" itemprop="interactionStatistic" itemscope itemtype="https://schema.org/InteractionCounter">
-                                        <meta itemprop="interactionType" content="https://schema.org/WatchAction">
-                                        <meta itemprop="userInteractionCount" content="128">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                        </svg>
-                                        <time class="ms-2 dark:text-white">128 بازدید</time>
-                                    </div>
-                                </div>
-                            </section>
-                        </article>
-                    </a>
-                </div>
-                <div class="swiper-slide space-y-3 px-1.5 py-2" itemprop="itemListElement" itemscope itemtype="https://schema.org/BlogPosting">
-                    <a href="/blog/راهنمای-خرید-موبایل" class="w-full block" itemprop="url">
-                        <article class="p-4 space-y-3 rounded-xl hover:-translate-y-2 transition border border-gray-200 bg-white drop-shadow-md dark:bg-gray-800">
-                            <figure class="text-center block py-4" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
-                                <img src="~/images/blog/blog-6.jpg" class="h-50 rounded-xl w-full block mx-auto object-cover" alt="تصویر راهنمای خرید موبایل" itemprop="contentUrl">
-                                <meta itemprop="caption" content="تصویر راهنمای خرید موبایل">
-                            </figure>
-                            <section class="space-y-5">
-                                <div class="space-y-4">
-                                    <h4 class="relative before:start-0 before:z-[-1] before:rounded-lg before:bg-gray-300 before:absolute before:top-1/2 before:h-px before:w-full before:-translate-y-1/2">
-                                        <span class="bg-secondary text-sm rounded text-white px-3 dark:bg-secondary-300" itemprop="articleSection">تکنولوژی</span>
-                                    </h4>
-                                    <h2 class="text-xl line-clamp-1 font-bold dark:text-white" itemprop="headline">راهنمای خرید موبایل آبان 1402</h2>
-                                </div>
-                                <div class="flex mt-8 flex-wrap justify-between items-center">
-                                    <div class="flex items-center" itemprop="datePublished" content="2024-03-02">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                        <time class="ms-2 dark:text-white">13 اسفند 1403</time>
-                                    </div>
-                                    <div class="flex items-center" itemprop="interactionStatistic" itemscope itemtype="https://schema.org/InteractionCounter">
-                                        <meta itemprop="interactionType" content="https://schema.org/WatchAction">
-                                        <meta itemprop="userInteractionCount" content="128">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 dark:text-white">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                        </svg>
-                                        <time class="ms-2 dark:text-white">128 بازدید</time>
-                                    </div>
-                                </div>
-                            </section>
-                        </article>
-                    </a>
-                </div>
+                    </div>
+                }
             </div>
             <div class="swiper-button-next bg-white rounded-full dark:bg-zinc-800 border border-gray-200 !size-12 after:!text-xl px-3 after:text-primary"
                  aria-label="اسلاید بعدی"></div>

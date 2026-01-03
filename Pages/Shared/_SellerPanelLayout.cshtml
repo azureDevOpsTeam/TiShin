@@ -102,6 +102,23 @@
                         </div>
                     </div>
                     <div class="space-y-1 mt-2">
+                        <button type="button" class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700" onclick="toggleMenu('seller-articles-menu', 'seller-articles-arrow')">
+                            <span class="flex items-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline me-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h12M4 18h8" />
+                              </svg>
+                              مقالات
+                            </span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform duration-300" id="seller-articles-arrow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div id="seller-articles-menu" class="hidden me-6 space-y-1">
+                            <a asp-page="/seller-panel/articles/Index" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">لیست مقالات</a>
+                            <a asp-page="/seller-panel/articles/Create" class="block text-sm px-4 py-2 text-gray-900 rounded hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">ایجاد مقاله</a>
+                        </div>
+                    </div>
+                    <div class="space-y-1 mt-2">
                         <button type="button" class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700" onclick="toggleMenu('seller-vitrine-menu', 'seller-vitrine-arrow')">
                             <span class="flex items-center">
                               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline me-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

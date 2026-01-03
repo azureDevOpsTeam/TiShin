@@ -1,0 +1,37 @@
+@page "/blog/{slug}"
+@model TiShinShop.Pages.Blog.ArticleModel
+@{
+    Layout = "_StorefrontLayout";
+    ViewData["Title"] = Model.Item?.Title ?? "مقاله";
+}
+<section class="py-5">
+    <div class="container">
+        <div class="grid grid-cols-12 gap-4">
+            <main class="lg:col-span-8 col-span-12">
+                <article class="p-4 space-y-3 rounded-xl border border-gray-200 bg-white drop-shadow-md dark:bg-gray-800">
+                    <header class="space-y-3">
+                        <h1 class="text-3xl font-black dark:text-white">@Model.Item!.Title</h1>
+                        <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            <time class="ms-2">@Model.Item.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd")</time>
+                        </div>
+                    </header>
+                    <figure class="text-center block py-4">
+                        <img src="@Url.Content(string.IsNullOrWhiteSpace(Model.Item.ImageUrl) ? "~/images/blog/blog-1.jpg" : Model.Item.ImageUrl)" class="rounded-xl w-full block mx-auto object-cover" alt="@Model.Item.Title">
+                    </figure>
+                    <section class="prose max-w-none dark:prose-invert">
+                        @Html.Raw(Model.Item.ContentHtml)
+                    </section>
+                </article>
+            </main>
+            <aside class="lg:col-span-4 col-span-12">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                    <h3 class="font-bold text-lg mb-3">خلاصه</h3>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">@Model.Item.Summary</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>

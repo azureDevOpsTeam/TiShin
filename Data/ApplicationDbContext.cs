@@ -51,6 +51,7 @@ namespace TiShinShop.Data
         public DbSet<ProductReview> ProductReviews { get; set; }
 
         public DbSet<Vitrine> Vitrines { get; set; }
+        public DbSet<Article> Articles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

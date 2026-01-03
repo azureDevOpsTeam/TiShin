@@ -24,30 +24,33 @@ public class CreateModel : PageModel
     public IList<Size> SizesNumeric { get; set; } = new List<Size>();
     public IList<Category> LinkableCategories { get; set; } = new List<Category>();
 
-    public class InputModel
-    {
-        [Required]
-        public string Title { get; set; } = string.Empty;
-        [Required]
-        public string Code { get; set; } = string.Empty;
-        public string Brand { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        [Required]
-        public decimal BasePrice { get; set; }
-        [Required]
-        public int Quantity { get; set; }
+        public class InputModel
+        {
+            [Required]
+            public string Title { get; set; } = string.Empty;
+            [Required]
+            public string Code { get; set; } = string.Empty;
+            public string Brand { get; set; } = string.Empty;
+            public string Description { get; set; } = string.Empty;
+            [Required]
+            public decimal BasePrice { get; set; }
+            [Required]
+            public int Quantity { get; set; }
 
-        public decimal? ShippingCost { get; set; }
+            public decimal? ShippingCost { get; set; }
 
-        public SizeType SelectedSizeType { get; set; } = SizeType.LetterSize;
-        public List<int> SelectedSizeIds { get; set; } = new();
-        public List<int> SelectedColorIds { get; set; } = new();
-        public List<int> SelectedMaterialIds { get; set; } = new();
-        [Required]
-        public int? SelectedCategoryId { get; set; }
+            [Range(0, 100)]
+            public int? DiscountPercent { get; set; }
 
-        public List<IFormFile> Images { get; set; } = new();
-    }
+            public SizeType SelectedSizeType { get; set; } = SizeType.LetterSize;
+            public List<int> SelectedSizeIds { get; set; } = new();
+            public List<int> SelectedColorIds { get; set; } = new();
+            public List<int> SelectedMaterialIds { get; set; } = new();
+            [Required]
+            public int? SelectedCategoryId { get; set; }
+
+            public List<IFormFile> Images { get; set; } = new();
+        }
 
     public async Task OnGet()
     {
@@ -136,6 +139,18 @@ public class CreateModel : PageModel
         }
 
         await _db.SaveChangesAsync();
+
+        if (Input.DiscountPercent.HasValue && Input.DiscountPercent.Value > 0)
+        {
+            var discount = new Discount
+            {
+                Percentage = Input.DiscountPercent.Value
+            };
+            _db.Discounts.Add(discount);
+            await _db.SaveChangesAsync();
+            product.DiscountId = discount.Id;
+            await _db.SaveChangesAsync();
+        }
 
         return RedirectToPage("/seller-panel/Index");
     }
