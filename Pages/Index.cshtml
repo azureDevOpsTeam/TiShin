@@ -138,16 +138,16 @@
                                             </button>
                                             <div class="text-gray-700 flex flex-col items-center">
                                                 <div class="flex justify-between items-center">
-                                                    <del class="text-zinc-400" itemprop="priceSpecification" itemscope itemtype="http://schema.org/UnitPriceSpecification">
-                                                        <meta itemprop="priceCurrency" content="IRR">
-                                                        <span itemprop="price">@((item.BasePrice * 1.1M).ToString("N0"))</span>
-                                                    </del>
-                                                    @if (item.DiscountPercent.HasValue)
-                                                    {
-                                                        <span class="bg-secondary px-3 rounded-bl-none text-sm rounded-xl text-white ms-3" itemprop="discount">@item.DiscountPercent.Value%</span>
-                                                    }
-                                                </div>
-                                                <span class="text-xl font-bold dark:text-white" itemprop="price" content="@item.BasePrice">@item.BasePrice.ToString("N0") <span class="text-xs">تومان</span></span>
+                                                <del class="text-zinc-400" itemprop="priceSpecification" itemscope itemtype="http://schema.org/UnitPriceSpecification">
+                                                    <meta itemprop="priceCurrency" content="IRR">
+                                                    <span itemprop="price">@item.OriginalPrice.ToString("N0")</span>
+                                                </del>
+                                                @if (item.DiscountPercent.HasValue)
+                                                {
+                                                    <span class="bg-secondary px-3 rounded-bl-none text-sm rounded-xl text-white ms-3" itemprop="discount">@item.DiscountPercent.Value%</span>
+                                                }
+                                            </div>
+                                                <span class="text-xl font-bold dark:text-white" itemprop="price" content="@item.FinalPrice">@item.FinalPrice.ToString("N0") <span class="text-xs">تومان</span></span>
                                             </div>
                                         </div>
                                     </footer>
@@ -172,42 +172,36 @@
             </h2>
         </div>
         <div class="grid grid-cols-12 gap-2">
-            <a href="" class="lg:col-span-2 space-y-5 sm:col-span-6 col-span-6 w-full block">
-                <figure class="relative before:shadow-md before:absolute before:top-0 before:start-1/2 before:translate-x-1/2 before:rounded-full before:-z-1 before:w-32 before:h-32 before:bg-gray-200 before:-z-0">
-                    <img class="h-30 mx-auto block" src="~/images/category/landing/laptop/gaming.png" alt="">
-                </figure>
-                <h3 class="text-center text-sm font-bold">لپتاپ گیمینگ</h3>
-            </a>
-            <a href="" class="lg:col-span-2 space-y-5 sm:col-span-6 col-span-6 w-full block">
+            <span class="lg:col-span-2 space-y-5 sm:col-span-6 col-span-6 w-full block">
                 <figure class="relative before:shadow-md before:absolute before:top-0 before:start-1/2 before:translate-x-1/2 before:rounded-full before:-z-1 before:w-32 before:h-32 before:bg-gray-200 before:-z-0">
                     <img class="h-30 mx-auto block" src="~/images/category/landing/laptop/danshjoie.png" alt="">
                 </figure>
-                <h3 class="text-center text-sm font-bold">دانشجویی</h3>
-            </a>
-            <a href="" class="lg:col-span-2 space-y-5 sm:col-span-6 col-span-6 w-full block">
+                <h3 class="text-center text-sm font-bold">انتخاب مطمئن</h3>
+            </span>
+            <span class="lg:col-span-2 space-y-5 sm:col-span-6 col-span-6 w-full block">
                 <figure class="relative before:shadow-md before:absolute before:top-0 before:start-1/2 before:translate-x-1/2 before:rounded-full before:-z-1 before:w-32 before:h-32 before:bg-gray-200 before:-z-0">
                     <img class="h-30 mx-auto block" src="~/images/category/landing/laptop/tarahi.png" alt="">
                 </figure>
-                <h3 class="text-center text-sm font-bold">طراحی و تولید محتوا</h3>
-            </a>
-            <a href="" class="lg:col-span-2 space-y-5 sm:col-span-6 col-span-6 w-full block">
+                <h3 class="text-center text-sm font-bold">تنوع طرح و رنگ</h3>
+            </span>
+            <span class="lg:col-span-2 space-y-5 sm:col-span-6 col-span-6 w-full block">
                 <figure class="relative before:shadow-md before:absolute before:top-0 before:start-1/2 before:translate-x-1/2 before:rounded-full before:-z-1 before:w-32 before:h-32 before:bg-gray-200 before:-z-0">
                     <img class="h-30 mx-auto block" src="~/images/category/landing/laptop/edari.png" alt="">
                 </figure>
-                <h3 class="text-center text-sm font-bold">لپتاپ اداری</h3>
-            </a>
-            <a href="" class="lg:col-span-2 space-y-5 sm:col-span-6 col-span-6 w-full block">
+                <h3 class="text-center text-sm font-bold">تضمین کیفیت</h3>
+            </span>
+            <span class="lg:col-span-2 space-y-5 sm:col-span-6 col-span-6 w-full block">
                 <figure class="relative before:shadow-md before:absolute before:top-0 before:start-1/2 before:translate-x-1/2 before:rounded-full before:-z-1 before:w-32 before:h-32 before:bg-gray-200 before:-z-0">
                     <img class="h-30 mx-auto block" src="~/images/category/landing/laptop/mohandsi.png" alt="">
                 </figure>
-                <h3 class="text-center text-sm font-bold">لپتاپ مهندسی</h3>
-            </a>
-            <a href="" class="lg:col-span-2 space-y-5 sm:col-span-6 col-span-6 w-full block">
+                <h3 class="text-center text-sm font-bold">سفارش سریع و آسان</h3>
+            </span>
+            <span class="lg:col-span-2 space-y-5 sm:col-span-6 col-span-6 w-full block">
                 <figure class="relative before:shadow-md before:absolute before:top-0 before:start-1/2 before:translate-x-1/2 before:rounded-full before:-z-1 before:w-32 before:h-32 before:bg-gray-200 before:-z-0">
                     <img class="h-30 mx-auto block" src="~/images/category/landing/laptop/rozmareh.png" alt="">
                 </figure>
-                <h3 class="text-center text-sm font-bold">لپتاپ روزمره</h3>
-            </a>
+                <h3 class="text-center text-sm font-bold">پشتیبانی 24/7</h3>
+            </span>
         </div>
     </div>
 </section>
@@ -234,7 +228,7 @@
                               itemtype="https://schema.org/Offer">
                            <span itemprop="priceSpecification" itemscope
                                  itemtype="https://schema.org/UnitPriceSpecification">
-                              تا 60% تخفیف تا پایان هفته
+                               از 40% تا 60% تخفیف
                               <meta itemprop="priceCurrency" content="IRR">
                               <meta itemprop="price" content="60000000">
                               <meta itemprop="validThrough" content="2024-08-31">
@@ -249,7 +243,7 @@
                             <div itemscope itemtype="https://schema.org/Product"
                                  class="size-20 flex items-center justify-center rounded-full bg-white p-2">
                                 <meta itemprop="productID" content="@item.ProductId">
-                                <img src="@Url.Content(string.IsNullOrWhiteSpace(item.FirstImage) ? "~/images/product/laptop-6.png" : item.FirstImage)" loading="lazy"
+                                <img style="border-radius: 50%; height: 80px; width: 80px;" src="@Url.Content(string.IsNullOrWhiteSpace(item.FirstImage) ? "~/images/product/laptop-6.png" : item.FirstImage)" loading="lazy"
                                      alt="@item.Title" class="inline-block" itemprop="image">
                             </div>
                         }
@@ -380,14 +374,14 @@
                                             <div class="flex justify-between items-center">
                                                 <del class="text-zinc-400" itemprop="priceSpecification" itemscope itemtype="http://schema.org/UnitPriceSpecification">
                                                     <meta itemprop="priceCurrency" content="IRR">
-                                                    <span itemprop="price">@((item.BasePrice * 1.1M).ToString("N0"))</span>
+                                                    <span itemprop="price">@item.OriginalPrice.ToString("N0")</span>
                                                 </del>
                                                 @if (item.DiscountPercent.HasValue)
                                                 {
                                                     <span class="bg-secondary px-3 rounded-bl-none text-sm rounded-xl text-white ms-3" itemprop="discount">@item.DiscountPercent.Value%</span>
                                                 }
                                             </div>
-                                            <span class="text-xl font-bold dark:text-white" itemprop="price" content="@item.BasePrice">@item.BasePrice.ToString("N0") <span class="text-xs">تومان</span></span>
+                                            <span class="text-xl font-bold dark:text-white" itemprop="price" content="@item.FinalPrice">@item.FinalPrice.ToString("N0") <span class="text-xs">تومان</span></span>
                                         </div>
                                     </div>
                                 </footer>
@@ -549,14 +543,14 @@
                                             <div class="flex justify-between items-center">
                                                 <del class="text-zinc-400" itemprop="priceSpecification" itemscope itemtype="http://schema.org/UnitPriceSpecification">
                                                     <meta itemprop="priceCurrency" content="IRR">
-                                                    <span itemprop="price">@((item.BasePrice * 1.1M).ToString("N0"))</span>
+                                                    <span itemprop="price">@item.OriginalPrice.ToString("N0")</span>
                                                 </del>
                                                 @if (item.DiscountPercent.HasValue)
                                                 {
                                                     <span class="bg-secondary px-3 rounded-bl-none text-sm rounded-xl text-white ms-3" itemprop="discount">@item.DiscountPercent.Value%</span>
                                                 }
                                             </div>
-                                            <span class="text-xl font-bold dark:text-white" itemprop="price" content="@item.BasePrice">@item.BasePrice.ToString("N0") <span class="text-xs">تومان</span></span>
+                                            <span class="text-xl font-bold dark:text-white" itemprop="price" content="@item.FinalPrice">@item.FinalPrice.ToString("N0") <span class="text-xs">تومان</span></span>
                                         </div>
                                     </div>
                                 </footer>
@@ -894,7 +888,7 @@
         </button>
     </div>
     <nav class="relative space-y-4 divide-y divide-gray-200 p-3 overflow-y-scroll h-full" style="padding-left: 0!important;" aria-label="منوی اصلی">
-        <ul class="space-y-2 text-sm">
+        <ul class="space-y-2 text-sm hidden">
             <li class="bg-ul-f7 border border-gray-100 dark:bg-zinc-800 dark:text-white p-2" itemscope
                 itemtype="http://schema.org/SiteNavigationElement">
                 <a href="/" class="block" itemprop="url">صفحه اصلی</a>
@@ -981,6 +975,7 @@
                 <a href="/pages" class="block" itemprop="url">صفحات</a>
             </li>
         </ul>
+        @await Component.InvokeAsync("Menu", new { mobile = true })
     </nav>
 </div>
 <div class="overlay z-40 transition fixed inset-0 bg-black/70 hidden"

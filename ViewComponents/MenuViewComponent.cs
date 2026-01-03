@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TiShinShop.Data;
 using TiShinShop.Entities;
@@ -9,7 +9,7 @@ namespace TiShinShop.ViewComponents
     {
         private readonly ApplicationDbContext _context = context;
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync(bool mobile = false)
         {
             var query = await Task.Run(() => _context.Categories.AsQueryable());
             var categories = await query
@@ -25,6 +25,10 @@ namespace TiShinShop.ViewComponents
                     Children = query.Where(c => c.ParentId == parent.Id).ToList()
                 }).ToListAsync();
 
+            if (mobile)
+            {
+                return View("Mobile", menuItems);
+            }
             return View(menuItems);
         }
     }

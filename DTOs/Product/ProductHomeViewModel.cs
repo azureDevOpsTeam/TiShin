@@ -40,6 +40,8 @@ namespace TiShinShop.DTOs.Product
 
         public ColorDataViewModel[] Colors { get; set; }
         public int? DiscountPercent { get; set; }
+        public decimal OriginalPrice { get; set; }
+        public decimal FinalPrice { get; set; }
     }
 
     public class ArticleListViewModel

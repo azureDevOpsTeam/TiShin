@@ -1,0 +1,47 @@
+@using TiShinShop.ViewComponents
+@model IEnumerable<MenuItemViewModel>
+@{
+}
+@if (Model.Any())
+{
+    <ul class="space-y-2 text-sm">
+        <li class="bg-ul-f7 border border-gray-100 dark:bg-zinc-800 dark:text-white p-2" itemscope itemtype="http://schema.org/SiteNavigationElement">
+            <a href="/" class="block" itemprop="url">صفحه اصلی</a>
+        </li>
+        @foreach (var baseItem in Model.FirstOrDefault()?.BaseMenu ?? new List<TiShinShop.Entities.Category>())
+        {
+            <li class="bg-ul-f7 border border-gray-100 dark:bg-zinc-800 dark:text-white p-2" itemscope itemtype="http://schema.org/SiteNavigationElement">
+                <button class="flex justify-between w-full text-start" onclick="toggleDropdown('menu-mobile-@baseItem.Id')" aria-controls="menu-mobile-@baseItem.Id">
+                    <span itemprop="name">@baseItem.Name</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+                <ul id="menu-mobile-@baseItem.Id" class="hidden bg-gray-200 dark:bg-zinc-900 dark:text-white" role="menu">
+                    @foreach (var group in Model.Where(m => m.Parent.ParentId == baseItem.Id || baseItem.ParentId == 0))
+                    {
+                        <li class="border-b border-gray-300" itemscope itemtype="http://schema.org/SiteNavigationElement">
+                            <button class="flex justify_between w-full px-6 py-2 text-start" onclick="toggleDropdown('submenu-mobile-@group.Parent.Id')" aria-controls="submenu-mobile-@group.Parent.Id">
+                                <span itemprop="name">@group.Parent.Name</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                </svg>
+                            </button>
+                            <ul id="submenu-mobile-@group.Parent.Id" class="hidden bg-gray-100 dark:bg-zinc-500 dark:text-gray-200" role="menu" itemscope itemtype="http://schema.org/ProductCategory">
+                                @foreach (var child in group.Children.Where(c => !c.IsBaseMenu))
+                                {
+                                    <li class="px-8 py-2 border-b border-gray-200" itemprop="name">
+                                        <a href="/category/@child.Id">@child.Name</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+        <li class="bg-ul-f7 border border-gray-100 dark:bg-zinc-800 dark:text-white p-2" itemscope itemtype="http://schema.org/SiteNavigationElement">
+            <a href="/pages" class="block" itemprop="url">صفحات</a>
+        </li>
+    </ul>
+}

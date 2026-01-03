@@ -20,6 +20,8 @@ public class ProductModel : PageModel
     public double AverageRating { get; set; }
     public int ReviewCount { get; set; }
     public decimal FinalPrice { get; set; }
+    public decimal OriginalPrice { get; set; }
+    public int? DiscountPercent { get; set; }
 
     [BindProperty]
     public int SelectedSizeId { get; set; }
@@ -79,10 +81,13 @@ public class ProductModel : PageModel
         ReviewCount = Reviews.Count;
         AverageRating = ReviewCount > 0 ? Reviews.Average(r => r.Rating) : 0;
 
-        // Price calculation with discount if available
+        var shippingCost = 35000m;
         FinalPrice = Item.BasePrice;
+        OriginalPrice = Item.BasePrice + shippingCost;
+        DiscountPercent = null;
         if (Item.Discount != null && Item.Discount.IsActive)
         {
+            DiscountPercent = Item.Discount.Percentage > 0 ? Item.Discount.Percentage : (int?)null;
             if (Item.Discount.FixedAmount.HasValue)
             {
                 var reduction = Item.Discount.FixedAmount.Value;
@@ -99,6 +104,7 @@ public class ProductModel : PageModel
                 FinalPrice = Math.Max(0, Item.BasePrice - reduction);
             }
         }
+        FinalPrice += shippingCost;
 
         return Page();
     }

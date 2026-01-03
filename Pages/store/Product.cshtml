@@ -139,18 +139,24 @@
                         <!-- meta and price -->
                         <section class="lg:col-span-2 col-span-4 w-full">
                             <div class="p-4 bg-white dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-zinc-700 shadow-sm mx-auto">
-                                <!-- Prices -->
                                 <div class="flex items-center space-x-4 justify-between mt-2 mb-2">
                                     <div class="flex items-center">
                                         <div class="text-gray-700 dark:text-zinc-300 flex flex-col items-center">
                                             <div class="flex justify-between items-center">
-                                                @if (Model.FinalPrice < Model.Item.BasePrice)
+                                                @if (Model.OriginalPrice > Model.FinalPrice)
                                                 {
                                                     <del class="text-zinc-400" itemprop="priceSpecification" itemscope itemtype="http://schema.org/UnitPriceSpecification">
                                                         <meta itemprop="priceCurrency" content="IRR">
-                                                        <span itemprop="price">@Model.Item.BasePrice.ToString("N0")</span>
+                                                        <span itemprop="price">@Model.OriginalPrice.ToString("N0")</span>
                                                     </del>
-                                                    <span class="bg-danger px-2 text-sm rounded-xl text-white ms-3">تخفیف</span>
+                                                    @if (Model.DiscountPercent.HasValue)
+                                                    {
+                                                        <span class="bg-secondary px-3 rounded-bl-none text-sm rounded-xl text-white ms-3" itemprop="discount">@Model.DiscountPercent.Value%</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="bg-danger px-2 text-sm rounded-xl text-white ms-3">تخفیف</span>
+                                                    }
                                                 }
                                             </div>
                                             <span class="text-xl font-bold dark:text-white" itemprop="price" content="@Model.FinalPrice">@Model.FinalPrice.ToString("N0")</span>

@@ -17,6 +17,7 @@ public class IndexModel(ApplicationDbContext context) : PageModel
     {
         OutPut = new();
         var query = await Task.Run(() => _context.Products.AsQueryable());
+        var shippingCost = 35000m;
 
         OutPut.NewProducts = await query
             .OrderByDescending(current => current.CreateAt)
@@ -30,7 +31,9 @@ public class IndexModel(ApplicationDbContext context) : PageModel
                 FirstImage = current.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? current.FirstImage,
                 SecondImage = current.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? current.SecondImage,
                 Colors = current.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray(),
-                DiscountPercent = current.Discount != null && current.Discount.IsActive ? current.Discount.Percentage : (int?)null
+                DiscountPercent = current.Discount != null && current.Discount.IsActive ? current.Discount.Percentage : (int?)null,
+                OriginalPrice = current.BasePrice + shippingCost,
+                FinalPrice = (current.BasePrice - ((current.BasePrice * (current.Discount != null && current.Discount.IsActive ? current.Discount.Percentage : 0)) / 100m)) + shippingCost
             }).ToListAsync();
 
         OutPut.TopVisitProducts = await query
@@ -45,7 +48,9 @@ public class IndexModel(ApplicationDbContext context) : PageModel
                 FirstImage = current.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? current.FirstImage,
                 SecondImage = current.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? current.SecondImage,
                 Colors = current.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray(),
-                DiscountPercent = current.Discount != null && current.Discount.IsActive ? current.Discount.Percentage : (int?)null
+                DiscountPercent = current.Discount != null && current.Discount.IsActive ? current.Discount.Percentage : (int?)null,
+                OriginalPrice = current.BasePrice + shippingCost,
+                FinalPrice = (current.BasePrice - ((current.BasePrice * (current.Discount != null && current.Discount.IsActive ? current.Discount.Percentage : 0)) / 100m)) + shippingCost
             }).ToListAsync();
 
         // Approximate best sellers using Visit count (simple proxy)
@@ -61,7 +66,9 @@ public class IndexModel(ApplicationDbContext context) : PageModel
                 FirstImage = current.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? current.FirstImage,
                 SecondImage = current.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? current.SecondImage,
                 Colors = current.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray(),
-                DiscountPercent = current.Discount != null && current.Discount.IsActive ? current.Discount.Percentage : (int?)null
+                DiscountPercent = current.Discount != null && current.Discount.IsActive ? current.Discount.Percentage : (int?)null,
+                OriginalPrice = current.BasePrice + shippingCost,
+                FinalPrice = (current.BasePrice - ((current.BasePrice * (current.Discount != null && current.Discount.IsActive ? current.Discount.Percentage : 0)) / 100m)) + shippingCost
             }).ToListAsync();
 
         OutPut.DiscountProducts = await query
@@ -76,7 +83,9 @@ public class IndexModel(ApplicationDbContext context) : PageModel
             FirstImage = current.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? current.FirstImage,
             SecondImage = current.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? current.SecondImage,
             Colors = current.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray(),
-            DiscountPercent = current.Discount != null && current.Discount.IsActive ? current.Discount.Percentage : (int?)null
+            DiscountPercent = current.Discount != null && current.Discount.IsActive ? current.Discount.Percentage : (int?)null,
+            OriginalPrice = current.BasePrice + shippingCost,
+            FinalPrice = (current.BasePrice - ((current.BasePrice * (current.Discount != null && current.Discount.IsActive ? current.Discount.Percentage : 0)) / 100m)) + shippingCost
         }).ToListAsync();
 
         // Latest Laptops by category name
@@ -104,7 +113,9 @@ public class IndexModel(ApplicationDbContext context) : PageModel
                 FirstImage = p.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? p.FirstImage,
                 SecondImage = p.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? p.SecondImage,
                 Colors = p.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray(),
-                DiscountPercent = p.Discount != null && p.Discount.IsActive ? p.Discount.Percentage : (int?)null
+                DiscountPercent = p.Discount != null && p.Discount.IsActive ? p.Discount.Percentage : (int?)null,
+                OriginalPrice = p.BasePrice + shippingCost,
+                FinalPrice = (p.BasePrice - ((p.BasePrice * (p.Discount != null && p.Discount.IsActive ? p.Discount.Percentage : 0)) / 100m)) + shippingCost
             })
             .ToListAsync();
 
@@ -133,7 +144,9 @@ public class IndexModel(ApplicationDbContext context) : PageModel
                 FirstImage = p.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? p.FirstImage,
                 SecondImage = p.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? p.SecondImage,
                 Colors = p.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray(),
-                DiscountPercent = p.Discount != null && p.Discount.IsActive ? p.Discount.Percentage : (int?)null
+                DiscountPercent = p.Discount != null && p.Discount.IsActive ? p.Discount.Percentage : (int?)null,
+                OriginalPrice = p.BasePrice + shippingCost,
+                FinalPrice = (p.BasePrice - ((p.BasePrice * (p.Discount != null && p.Discount.IsActive ? p.Discount.Percentage : 0)) / 100m)) + shippingCost
             })
             .ToListAsync();
 
@@ -172,7 +185,10 @@ public class IndexModel(ApplicationDbContext context) : PageModel
                 BasePrice = p.BasePrice,
                 FirstImage = p.Images.Select(i => i.ImageUrl).FirstOrDefault() ?? p.FirstImage,
                 SecondImage = p.Images.Select(i => i.ImageUrl).Skip(1).FirstOrDefault() ?? p.SecondImage,
-                Colors = p.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray()
+                Colors = p.Colors.Select(c => new ColorDataViewModel { HexCode = c.Color.HexCode, Title = c.Color.Value }).ToArray(),
+                DiscountPercent = p.Discount != null && p.Discount.IsActive ? p.Discount.Percentage : (int?)null,
+                OriginalPrice = p.BasePrice + shippingCost,
+                FinalPrice = (p.BasePrice - ((p.BasePrice * (p.Discount != null && p.Discount.IsActive ? p.Discount.Percentage : 0)) / 100m)) + shippingCost
             })
             .ToListAsync();
 
